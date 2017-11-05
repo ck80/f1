@@ -1,0 +1,48 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Quali Results</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Year</th>
+	  <th>Country</th>
+	  <th>Position</th>
+	  <th>Driver</th>
+	  
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @quali_results.each do |quali_result| %>
+      <tr>
+        <td><%= quali_result.race.year %></td>
+		<td><%= quali_result.race.country %></td>
+		<td><%= quali_result.position %></td>
+		<td><%= quali_result.driver.abbr_name %></td>
+        <td><%= link_to 'Show', quali_result %></td>
+        <td><%= link_to 'Edit', edit_quali_result_path(quali_result) %></td>
+        <td><%= link_to 'Destroy', quali_result, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Race Result', new_quali_result_path %>
+
+<h2>ADMIN TOOL: Fetch Quali Results</h2>
+<p>Specify the Year and Country in the form below to fetch the results and commit to the DB.</p>
+<%= form_tag getqualiresults_quali_results_path do %>
+  <label for="year">Year</label>
+  <%= text_field_tag :year %>
+  <label for="country">Country</label>
+  <%= text_field_tag :country %>
+ <%= submit_tag "Commit results to DB..." %>
+<% end %>
+
+<h2>Debug: </h2>
+<p>@quali_results.count = <%= @quali_results.count %></P>
+<p>@qualiresultsArray = <%= @qualiresultsArray.inspect %></p>

@@ -1,0 +1,48 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Race Results</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Year</th>
+	  <th>Country</th>
+	  <th>Position</th>
+	  <th>Driver</th>
+	  
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @race_results.each do |race_result| %>
+      <tr>
+        <td><%= race_result.race.year %></td>
+		<td><%= race_result.race.country %></td>
+		<td><%= race_result.position %></td>
+		<td><%= race_result.driver.abbr_name %></td>
+        <td><%= link_to 'Show', race_result %></td>
+        <td><%= link_to 'Edit', edit_race_result_path(race_result) %></td>
+        <td><%= link_to 'Destroy', race_result, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Race Result', new_race_result_path %>
+
+<h2>ADMIN TOOL: Fetch Race Results</h2>
+<p>Specify the Year and Country in the form below to fetch the results and commit to the DB.</p>
+<%= form_tag getraceresults_race_results_path do %>
+  <label for="year">Year</label>
+  <%= text_field_tag :year %>
+  <label for="country">Country</label>
+  <%= text_field_tag :country %>
+ <%= submit_tag "Commit results to DB..." %>
+<% end %>
+
+<h2>Debug: </h2>
+<p>@race_results.count = <%= @race_results.count %></P>
+<p>@resultsArray = <%= @resultsArray.inspect %></p>

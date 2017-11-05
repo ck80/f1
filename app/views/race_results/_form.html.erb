@@ -1,0 +1,22 @@
+<%= form_with(model: race_result, local: true) do |form| %>
+  <% if race_result.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(race_result.errors.count, "error") %> prohibited this race_result from being saved:</h2>
+
+      <ul>
+      <% race_result.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :position %>
+    <%= form.number_field :position, id: :race_result_position %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

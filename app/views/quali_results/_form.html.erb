@@ -1,0 +1,22 @@
+<%= form_with(model: quali_result, local: true) do |form| %>
+  <% if quali_result.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(quali_result.errors.count, "error") %> prohibited this quali_result from being saved:</h2>
+
+      <ul>
+      <% quali_result.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :position %>
+    <%= form.number_field :position, id: :quali_result_position %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

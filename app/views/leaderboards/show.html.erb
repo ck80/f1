@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Year:</strong>
+  <%= @leaderboard.year %>
+</p>
+
+<p>
+  <strong>Total points:</strong>
+  <%= @leaderboard.total_points %>
+</p>
+
+<%= link_to 'Edit', edit_leaderboard_path(@leaderboard) %> |
+<%= link_to 'Back', leaderboards_path %>

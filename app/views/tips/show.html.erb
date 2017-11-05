@@ -1,0 +1,50 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User id:</strong>
+  <%= @tip.user_id %>
+</p>
+
+<p>
+  <strong>Race id:</strong>
+  <%= @tip.race_id %>
+</p>
+
+<p>
+  <strong>Qual first:</strong>
+  <%= @tip.qual_first %>
+</p>
+
+<p>
+  <strong>Qual second:</strong>
+  <%= @tip.qual_second %>
+</p>
+
+<p>
+  <strong>Qual third:</strong>
+  <%= @tip.qual_third %>
+</p>
+
+<p>
+  <strong>Race first:</strong>
+  <%= @tip.race_first %>
+</p>
+
+<p>
+  <strong>Race second:</strong>
+  <%= @tip.race_second %>
+</p>
+
+<p>
+  <strong>Race third:</strong>
+  <%= @tip.race_third %>
+</p>
+
+<p>
+  <strong>Race tenth:</strong>
+  <%= @tip.race_tenth %>
+</p>
+
+
+<%= link_to 'Edit', edit_tip_path(@tip) %> |
+<%= link_to 'Back', tips_path %>

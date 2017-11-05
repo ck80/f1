@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  qual_first: MyString
+  qual_second: MyString
+  qual_third: MyString
+  race_first: MyString
+  race_second: MyString
+  race_third: MyString
+  race_tenth: MyString
+  points: 1
+
+two:
+  qual_first: MyString
+  qual_second: MyString
+  qual_third: MyString
+  race_first: MyString
+  race_second: MyString
+  race_third: MyString
+  race_tenth: MyString
+  points: 1
