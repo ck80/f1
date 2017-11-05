@@ -1,0 +1,28 @@
+<h1>Quali Results: <%=@year + " " + @country%></h1>
+<table>
+	<th>Place</th><th>Car</th><th>Driver</th><th>Team</th>
+	<% @qualiresultsArray.each do |result| %>
+  	<tr>
+		<td><%= result.place %></td>
+		<td><%= result.car %></td>
+		<td><%= result.driver %></td>
+		<td><%= result.team %></td>
+	</tr>
+	<% 
+	x = Driver.find_by(abbr_name: result.driver).id
+	y = Race.find_by(country: @country).id
+	q = QualiResult.new
+	q.position = result.place
+	q.race_id = y
+	q.driver_id = x
+	q.save
+	 %>
+	<% end %>
+</table>
+
+<%= link_to 'Back', quali_results_path %>
+
+<h2>Debug: </h2>
+<p>@qualiresultsArray count = <%= @qualiresultsArray.count %></p>
+<p>@qualiresultsArray inspect = <%= @qualiresultsArray.inspect %></p>	
+<p>@qualiresultsArray methods = <% @qualiresultsArray.public_methods %></p>

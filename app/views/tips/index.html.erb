@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Tips</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>User</th>
+	  <th>Race</th>
+      <th>Qual first</th>
+      <th>Qual second</th>
+      <th>Qual third</th>
+      <th>Race first</th>
+      <th>Race second</th>
+      <th>Race third</th>
+      <th>Race tenth</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tips.each do |tip| %>
+      <tr>
+        <td><%= tip.user_id %></td>
+		<td><%= tip.race_id %></td>
+		<td><%= tip.qual_first %></td>
+        <td><%= tip.qual_second %></td>
+        <td><%= tip.qual_third %></td>
+        <td><%= tip.race_first %></td>
+        <td><%= tip.race_second %></td>
+        <td><%= tip.race_third %></td>
+        <td><%= tip.race_tenth %></td>
+        <td><%= link_to 'Show', tip %></td>
+        <td><%= link_to 'Edit', edit_tip_path(tip) %></td>
+        <td><%= link_to 'Destroy', tip, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Tip', new_tip_path %>
+
+

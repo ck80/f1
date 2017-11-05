@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  year: 1
+  race_number: 1
+  country: MyString
+
+two:
+  year: 1
+  race_number: 1
+  country: MyString

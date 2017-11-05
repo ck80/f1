@@ -1,0 +1,62 @@
+<%= form_with(model: tip, local: true) do |form| %>
+  <% if tip.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(tip.errors.count, "error") %> prohibited this tip from being saved:</h2>
+
+      <ul>
+      <% tip.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :user %><br />
+    <%= form.select :user_id, options_for_select(@users.map{ |u| [u.name, u.id] }, {:include_blank => 'name of your blank prompt'}) %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :race %><br />
+    <%= form.select :race_id, options_for_select(@races.map{ |r| [r.country, r.id] }) %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :qual_first %>
+    <%= form.select :qual_first, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }) %>
+  </div>
+
+  <div class="field">
+    <%= form.label :qual_second %>
+    <%= form.text_field :qual_second, id: :tip_qual_second %>
+  </div>
+
+  <div class="field">
+    <%= form.label :qual_third %>
+    <%= form.text_field :qual_third, id: :tip_qual_third %>
+  </div>
+
+  <div class="field">
+    <%= form.label :race_first %>
+    <%= form.text_field :race_first, id: :tip_race_first %>
+  </div>
+
+  <div class="field">
+    <%= form.label :race_second %>
+    <%= form.text_field :race_second, id: :tip_race_second %>
+  </div>
+
+  <div class="field">
+    <%= form.label :race_third %>
+    <%= form.text_field :race_third, id: :tip_race_third %>
+  </div>
+
+  <div class="field">
+    <%= form.label :race_tenth %>
+    <%= form.text_field :race_tenth, id: :tip_race_tenth %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
