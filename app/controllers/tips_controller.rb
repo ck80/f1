@@ -1,18 +1,36 @@
 class TipsController < ApplicationController
-  before_action :set_tip, only: [:show, :edit, :update, :destroy]
-
+  before_action :get_tip, only: [:show, :edit, :update, :destroy]
+  before_action :check_auth, only: [:destroy]
+  
+  def get_tip
+    @tip = Tip.find(params[:id])
+  end
+  
+  def check_auth
+    if session[:user_id] != @tip.user_id
+      flash[:notice] = "Sorry, you can't edit this tip"
+      redirect_to(tips_path)
+    end
+  end
+  
   # GET /tips
   # GET /tips.json
   def index
-    @tips = Tip.all
-    @users = User.all
-    @races = Race.all
-    @drivers = Driver.all
+    if params[:name]
+      @user = User.where(name: params[:name]).first
+      @tips = @user.tips
+    else
+      @tips = Tip.all
+      @users = User.all
+      @races = Race.all
+      @drivers = Driver.all
+    end
   end
 
   # GET /tips/1
   # GET /tips/1.json
   def show
+
   end
 
   # GET /tips/new
@@ -28,7 +46,7 @@ class TipsController < ApplicationController
     @users = User.all
     @races = Race.all
     @drivers = Driver.all
-    @tips = Tip.all
+
   end
 
   # POST /tips
@@ -73,9 +91,6 @@ class TipsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_tip
-      @tip = Tip.find(params[:id])
-    end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def tip_params

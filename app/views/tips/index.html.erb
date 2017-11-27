@@ -21,8 +21,8 @@
   <tbody>
     <% @tips.each do |tip| %>
       <tr>
-        <td><%= tip.user_id %></td>
-		<td><%= tip.race_id %></td>
+        <td><%= tip.user.name %></td>
+		<td><%= tip.race.country %></td>
 		<td><%= tip.qual_first %></td>
         <td><%= tip.qual_second %></td>
         <td><%= tip.qual_third %></td>
@@ -41,5 +41,3 @@
 <br>
 
 <%= link_to 'New Tip', new_tip_path %>
-
-
