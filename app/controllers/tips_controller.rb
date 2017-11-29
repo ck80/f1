@@ -2,8 +2,7 @@ class TipsController < ApplicationController
   before_action :authenticate_user!
   before_action :get_tip, only: [:show, :edit, :update, :destroy]
   before_action :check_auth, only: [:destroy]
-  
-  
+
   def get_tip
     @tip = Tip.find(params[:id])
   end
