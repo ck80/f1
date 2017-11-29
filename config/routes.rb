@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   devise_for :admins, path: 'admin', skip: :registrations
   devise_for :users
-  resources :sessions
   resources :leaderboards
   resources :users
   resources :tips
