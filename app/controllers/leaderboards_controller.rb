@@ -5,6 +5,7 @@ class LeaderboardsController < ApplicationController
   # GET /leaderboards.json
   def index
     @leaderboards = Leaderboard.all
+    @users = User.all
   end
 
   # GET /leaderboards/1
@@ -15,6 +16,7 @@ class LeaderboardsController < ApplicationController
   # GET /leaderboards/new
   def new
     @leaderboard = Leaderboard.new
+    @users = User.all
   end
 
   # GET /leaderboards/1/edit
@@ -25,7 +27,7 @@ class LeaderboardsController < ApplicationController
   # POST /leaderboards.json
   def create
     @leaderboard = Leaderboard.new(leaderboard_params)
-
+    @users = User.all
     respond_to do |format|
       if @leaderboard.save
         format.html { redirect_to @leaderboard, notice: 'Leaderboard was successfully created.' }
