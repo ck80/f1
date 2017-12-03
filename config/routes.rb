@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   end 
   resources :drivers
   get '/tipper/:name', to: 'tips#index', as: 'tipper'
-
+  post 'home/action'
   root to: "leaderboards#index"
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
