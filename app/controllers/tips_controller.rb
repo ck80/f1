@@ -17,15 +17,8 @@ class TipsController < ApplicationController
   # GET /tips
   # GET /tips.json
   def index
-    if params[:name]
-      @user = User.where(name: params[:name]).first
-      @tips = @user.tips
-    else
-      @tips = Tip.all
-      @users = User.all
-      @races = Race.all
-      @drivers = Driver.all
-    end
+      @tips = Tip.where(user_id: current_user.id)
+      @user = User.find_by(id: current_user.id)
   end
 
   # GET /tips/1
@@ -37,6 +30,7 @@ class TipsController < ApplicationController
   # GET /tips/new
   def new
     @tip = Tip.new
+    @user = User.find_by(id: current_user.id)
     @users = User.all
     @races = Race.all
     @drivers = Driver.all
@@ -54,7 +48,10 @@ class TipsController < ApplicationController
   # POST /tips.json
   def create
     @tip = Tip.new(tip_params)
-
+    @user = User.find_by(id: current_user.id)
+    @users = User.all
+    @races = Race.all
+    @drivers = Driver.all
     respond_to do |format|
       if @tip.save
         format.html { redirect_to @tip, notice: 'Tip was successfully created.' }
