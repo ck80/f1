@@ -2,7 +2,6 @@
   <% if tip.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(tip.errors.count, "error") %> prohibited this tip from being saved:</h2>
-
       <ul>
       <% tip.errors.full_messages.each do |message| %>
         <li><%= message %></li>
@@ -10,14 +9,15 @@
       </ul>
     </div>
   <% end %>
-
+  <p>debug: updating tips for: <%= @user.name %> (<%= @user.email %>) User ID <%= @user.id %></p>
+  
   <div class="field">
-    <%= form.label :user %><br />
-    <%= form.select :user_id, options_for_select(@users.map{ |u| [u.name, u.id] }) %>
+    <%= form.label :user %>
+    <%= form.select :user_id, options_for_select([[@user.name, @user.id]], @user.id) %>
   </div>
   
   <div class="field">
-    <%= form.label :race %><br />
+    <%= form.label :race %>
     <%= form.select :race_id, options_for_select(@races.map{ |r| [r.country, r.id] }) %>
   </div>
   
