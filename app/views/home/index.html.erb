@@ -1,5 +1,5 @@
 <h1>Formula 1 - Kuntry Tippers</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<p>Registered Tipsters:</p>
 
 <table>
   <thead>
@@ -19,6 +19,12 @@
     <% end %>
   </tbody>
 </table>
-<h2>ADMIN Section:</h2>
-<p>Fetch results tool (please be patient as this can take some time to complete): <%= link_to 'Call Action', home_action_path, method: :post %></p>
 
+<h2>Where to next?</h2>
+<p>Submit your tips -> <%= link_to 'Tips', tips_path %>
+<%= current_user.email %>
+<% if current_user.email = "chris.kelada@gmail.com" %>
+	<h2>ADMIN Section:</h2>
+	<p>Fetch results tool (please be patient as this can take some time to complete): <%= link_to 'Call Action', home_action_path, method: :post %></p>
+<% else %>
+<% end %>
