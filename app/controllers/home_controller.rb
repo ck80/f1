@@ -1,4 +1,13 @@
 class HomeController < ApplicationController
+
+  def index
+    @users = User.all
+  end
+  
+  def show
+    @users = User.all
+  end
+  
   class Entry
   	def initialize(race_country, place, car, driver, team)
   		@race_country = race_country
@@ -12,10 +21,6 @@ class HomeController < ApplicationController
   	attr_reader :car
     attr_reader :driver
     attr_reader :team
-  end
-  
-  def index
-    @users = User.all
   end
   
   def action

@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  get 'home/index'
-
-  devise_for :admins, path: 'admin', skip: :registrations
   devise_for :users, :controllers => {:registrations => "users/registrations"}
   resources :leaderboards
   resources :users
@@ -21,7 +18,6 @@ Rails.application.routes.draw do
   resources :drivers
   get '/tipper/:name', to: 'tips#index', as: 'tipper'
   post 'home/action'
-  root to: "home#index"
-
+  root 'home#index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
