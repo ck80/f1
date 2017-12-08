@@ -26,9 +26,6 @@
   	  <p class="alert alert-danger"><%= alert %></p>
 
 	<% end %>
-	<% if user_signed_in? %>
-	User is <%= current_user.email %>
-	<% end %>
     <%= yield %>
   </body>
 </html>
