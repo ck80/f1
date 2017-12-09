@@ -9,15 +9,23 @@
       </ul>
     </div>
   <% end %>
-  
+  debug = <%= params[:action] %>
   <div class="field">
     <%= form.label :user %>
-    <%= form.select :user_id, options_for_select([[@user.name, @user.id]], @user.id) %>
+	<% if params[:action] == "edit" %>
+		<%= form.select :user_id, options_for_select([[@tip.user.name, @tip.user_id]], @tip.user_id) %>
+	<% else %>
+    	<%= form.select :user_id, options_for_select(@users.map{ |u| [u.name, u.id] }, @tip.user_id) %>		
+	<% end %>
   </div>
   
   <div class="field">
     <%= form.label :race %>
-    <%= form.select :race_id, options_for_select(@races.map{ |r| [r.country, r.id] }, @tip.race_id) %>
+	<% if params[:action] == "edit" %>
+    	<%= form.select :race_id, options_for_select([[@tip.race.country, @tip.race_id]], @tip.race_id) %>
+	<% else %>
+    	<%= form.select :race_id, options_for_select(@races.map{ |r| [r.country, r.id] }, @tip.race_id) %>
+	<% end %>
   </div>
   
   <div class="field">
@@ -56,6 +64,7 @@
   </div>
 
   <div class="actions">
+	<%= form.hidden_field :updated_by, :value => current_user.email %>
     <%= form.submit %>
   </div>
 <% end %>

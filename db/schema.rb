@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171209041241) do
+ActiveRecord::Schema.define(version: 20171209050430) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(version: 20171209041241) do
     t.datetime "updated_at", null: false
     t.integer "user_id"
     t.integer "race_id"
+    t.string "updated_by"
     t.index ["race_id"], name: "index_tips_on_race_id"
     t.index ["user_id"], name: "index_tips_on_user_id"
   end

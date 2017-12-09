@@ -3,7 +3,7 @@ class Tip < ApplicationRecord
   belongs_to :race
   validates_associated :user
   validates_associated :race
-  validates :qual_first, :qual_second, :qual_third, :race_first, :race_second, :race_third, :race_tenth, presence: true
+  validates :qual_first, :qual_second, :qual_third, :race_first, :race_second, :race_third, :race_tenth, :updated_by, presence: true
   validates :race_id, uniqueness: { scope: :user_id, message: ": you already have an entry for this race, please edit the existing tip instread of create a new one." }
   validate :unique_entries_on_race_tip_post
 ##  validates :race_id, uniqueness: { scope: :year, message: "should have once per year" }  
