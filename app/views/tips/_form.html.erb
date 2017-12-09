@@ -9,7 +9,6 @@
       </ul>
     </div>
   <% end %>
-  <p>debug: updating tips for: <%= @user.name %> (<%= @user.email %>) User ID <%= @user.id %></p>
   
   <div class="field">
     <%= form.label :user %>
@@ -18,42 +17,42 @@
   
   <div class="field">
     <%= form.label :race %>
-    <%= form.select :race_id, options_for_select(@races.map{ |r| [r.country, r.id] }) %>
+    <%= form.select :race_id, options_for_select(@races.map{ |r| [r.country, r.id] }, @tip.race_id) %>
   </div>
   
   <div class="field">
     <%= form.label :qual_first %>
-    <%= form.select :qual_first, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort), include_blank: 'Qualify 1st'  %>
+    <%= form.select :qual_first, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.qual_first), include_blank: "Qualify 1st" %>
   </div>
 
   <div class="field">
     <%= form.label :qual_second %>
-	<%= form.select :qual_second, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort), include_blank: 'Qualify 2nd' %>
+	<%= form.select :qual_second, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.qual_second), include_blank: 'Qualify 2nd' %>
   </div>
 
   <div class="field">
     <%= form.label :qual_third %>
-    <%= form.select :qual_third, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort), include_blank: 'Qualify 3rd' %>
+    <%= form.select :qual_third, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.qual_third), include_blank: 'Qualify 3rd' %>
   </div>
 
   <div class="field">
     <%= form.label :race_first %>
-	<%= form.select :race_first, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort), include_blank: 'Race 1st' %>
+	<%= form.select :race_first, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.race_first), include_blank: 'Race 1st' %>
   </div>
 
   <div class="field">
     <%= form.label :race_second %>
-	<%= form.select :race_second, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort), include_blank: 'Race 2nd' %>
+	<%= form.select :race_second, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.race_second), include_blank: 'Race 2nd' %>
   </div>
 
   <div class="field">
     <%= form.label :race_third %>
-    <%= form.select :race_third, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort), include_blank: 'Race 3rd' %>
+    <%= form.select :race_third, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.race_third), include_blank: 'Race 3rd' %>
   </div>
 
   <div class="field">
     <%= form.label :race_tenth %>
-    <%= form.select :race_tenth, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort), include_blank: 'Race 10th' %>
+    <%= form.select :race_tenth, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.race_tenth), include_blank: 'Race 10th' %>
   </div>
 
   <div class="actions">
