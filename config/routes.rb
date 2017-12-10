@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :tips
   resources :races
   resources :home
+  resources :points
   resources :race_results do
     collection do
       post 'getraceresults'
@@ -17,7 +18,8 @@ Rails.application.routes.draw do
   end 
   resources :drivers
   get '/tipper/:name', to: 'tips#index', as: 'tipper'
-  post 'home/action'
+  post 'home/fetch_results_action'
+  post 'home/update_race_tip_points'
   root 'home#index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

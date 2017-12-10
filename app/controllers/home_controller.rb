@@ -23,7 +23,7 @@ class HomeController < ApplicationController
     attr_reader :team
   end
   
-  def action
+  def fetch_result_action
     # load HTML parser
     require 'rubygems'
     require 'nokogiri'
@@ -141,5 +141,39 @@ class HomeController < ApplicationController
       end
     end
 #    render plain: @allqualiresultsArray #+ @allraceresultsArray
+  end
+  
+  def update_race_tip_points
+    @tips = Tip.all
+    
+    #calculate quali points
+    
+
+    #look for tip qual_first abbr_name
+    #a = Tip.find_by(user_id: 6, race_id: 1).qual_first
+    #look for position in quali_results
+    #b = RaceResult.find_by(race_id: 1, driver_id: (Driver.find_by(abbr_name: a).id)).position
+    @points = []
+    @tips.each do |tip|
+      q1st_points = Point.find_by(item: "q1st").points - RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by!(abbr_name: (tip.qual_first)).id)).position
+      q2nd_points = Point.find_by(item: "q2nd").points - RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by!(abbr_name: (tip.qual_second)).id)).position
+      q3rd_points = Point.find_by(item: "q3rd").points - RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by!(abbr_name: (tip.qual_third)).id)).position
+      r1st_points = Point.find_by(item: "r1st").points - RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by!(abbr_name: (tip.race_first)).id)).position
+      r2nd_points = Point.find_by(item: "r2nd").points - RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by!(abbr_name: (tip.race_second)).id)).position
+      r3rd_points = Point.find_by(item: "r3rd").points - RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by!(abbr_name: (tip.race_third)).id)).position
+      r10th_points = Point.find_by(item: "r10th").points - RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by!(abbr_name: (tip.race_tenth)).id)).position
+      total_points = q1st_points + q2nd_points + q3rd_points + r1st_points + r2nd_points + r3rd_points + r10th_points
+      @points << total_points       
+    end
+    
+    #RaceResult.find_by(race_id: 1, driver_id: (Driver.find_by(abbr_name: (Tip.find_by(user_id: 6, race_id: 1).qual_first)).id)).position
+    
+    #lookup points
+    #c = Point.find_by(item: "q1st").points
+    #calculate points
+    #d = c - b
+    
+    
+    render plain: @points
   end
 end

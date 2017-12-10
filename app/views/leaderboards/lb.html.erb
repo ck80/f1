@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<h1>LB</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Year</th>      
+	  <th>User</th>
+      <th>Total points</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.leaderboards.year %></td>
+		<td><%= user.email %></td>
+        <td><%= user.leaderboards.total_points %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

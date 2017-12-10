@@ -12,7 +12,7 @@
   <% end %>
 
   <div class="field">
-    <%= form.label :user %><br />
+    <%= form.label :user_id %><br />
     <%= form.select :user_id, options_for_select(@users.map{ |u| [u.name, u.id] }, {:include_blank => 'name of your blank prompt'}) %>
   </div>
   

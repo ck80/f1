@@ -71,6 +71,6 @@ class LeaderboardsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def leaderboard_params
-      params.require(:leaderboard).permit(:year, :total_points)
+      params.require(:leaderboard).permit(:year, :total_points, :user_id)
     end
 end

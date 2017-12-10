@@ -25,6 +25,7 @@
 
 <% if current_user.admin? %>
 <h2>ADMIN Section:</h2>
-<p>Fetch results tool (please be patient as this can take some time to complete): <%= link_to 'Call Action', home_action_path, method: :post %></p>
+<p>Fetch results tool (please be patient as this can take some time to complete): <%= link_to 'Fetch Results', home_fetch_results_action_path, method: :post %></p>
+<p>Update race tip points tool: <%= link_to 'Update Race Tip Points', home_update_race_tip_points_path, method: :post %>
 <% end %>
 

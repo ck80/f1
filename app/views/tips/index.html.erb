@@ -14,6 +14,7 @@
       <th>Race second</th>
       <th>Race third</th>
       <th>Race tenth</th>
+	  <th>Race Points</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -30,6 +31,7 @@
         <td><%= tip.race_second %></td>
         <td><%= tip.race_third %></td>
         <td><%= tip.race_tenth %></td>
+        <td><%= tip.points %></td>
         <td><%= link_to 'Show', tip %></td>
         <td><%= link_to 'Edit', edit_tip_path(tip) %></td>
         <td><%= link_to 'Destroy', tip, method: :delete, data: { confirm: 'Are you sure?' } %></td>

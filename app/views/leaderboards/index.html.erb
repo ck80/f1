@@ -16,7 +16,7 @@
     <% @leaderboards.each do |leaderboard| %>
       <tr>
         <td><%= leaderboard.year %></td>
-		<td><%= leaderboard.users.name %></td>
+		<td><%= leaderboard.user.name %></td>
         <td><%= leaderboard.total_points %></td>
         <td><%= link_to 'Show', leaderboard %></td>
         <td><%= link_to 'Edit', edit_leaderboard_path(leaderboard) %></td>
