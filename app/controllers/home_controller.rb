@@ -103,6 +103,43 @@ class HomeController < ApplicationController
       @allraceresultsArray << @raceresultsArray  
       $i +=1
     end
-    render plain: @allqualiresultsArray + @allraceresultsArray
+    
+#    render plain: @allqualiresultsArray 
+    
+    # commit results to DB
+    @allqualiresultsArray.each do |race|
+      race.each do |result|
+        result.race_country
+        result.place
+        result.car
+        result.driver
+        result.team
+        x = Driver.find_by(abbr_name: result.driver).id
+        y = Race.find_by(country: result.race_country).id
+        r = QualiResult.new
+        r.position = result.place
+        r.race_id = y
+        r.driver_id = x
+        r.save
+      end
+    end
+    
+    @allraceresultsArray.each do |race|
+      race.each do |result|
+        result.race_country
+        result.place
+        result.car
+        result.driver
+        result.team
+        x = Driver.find_by(abbr_name: result.driver).id
+        y = Race.find_by(country: result.race_country).id
+        r = RaceResult.new
+        r.position = result.place
+        r.race_id = y
+        r.driver_id = x
+        r.save
+      end
+    end
+#    render plain: @allqualiresultsArray #+ @allraceresultsArray
   end
 end
