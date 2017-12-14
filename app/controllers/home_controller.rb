@@ -220,6 +220,6 @@ class HomeController < ApplicationController
       $i +=1  
     end
     
-    render plain: @nestedpointsArray
+    render plain: @nestedpointsArray.join("\n")
   end
 end
