@@ -23,6 +23,38 @@ class HomeController < ApplicationController
     attr_reader :team
   end
   
+  def fetch_quali_start_action
+    # load HTML parser
+    require 'rubygems'
+    require 'nokogiri'
+    require 'open-uri'
+    
+    # fetch F1 HTML page including list of races
+    page = "https://www.formula1.com/en/championship/races/2017/Australia.html"
+    doc = Nokogiri::HTML(open(page))
+    section=doc.css('.bold\ time')
+    element=section.last.text.split.first
+    
+    # put element into an array @resultsArray
+    @resultsArray = []
+    $i = 0
+    while $i < element.length
+      item = element[$i]["href"]
+      @resultsArray << item
+      $i +=1
+    end
+
+    # pull out countries for each race and drop any non-race items from the array.  We are left with a clean list of countries in @raceArray
+    @raceArray = []
+    $i = 0
+    while $i < @resultsArray.length-2 # minus 2 to drop non-race elements
+      race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
+      @raceArray << race
+      $i +=1
+    end  
+  end
+
+
   def fetch_result_action
     # load HTML parser
     require 'rubygems'
@@ -217,9 +249,14 @@ class HomeController < ApplicationController
       end
       @pointsHash = {user: tip.user.email, race: tip.race.country, points: @pointsArray, race_points: @pointsArray.sum }
       @nestedpointsArray << @pointsHash
+      tip.update(qual_first_points: (@pointsHash[:points][0]), qual_second_points: (@pointsHash[:points][1]), qual_third_points: (@pointsHash[:points][2]), \
+      race_first_points: (@pointsHash[:points][3]), race_second_points: (@pointsHash[:points][4]), race_third_points: (@pointsHash[:points][5]), \
+      race_tenth_points: (@pointsHash[:points][6]), race_total_points: (@pointsHash[:points].sum))
       $i +=1  
     end
     
-    render plain: @nestedpointsArray.join("\n")
+    #render plain: @nestedpointsArray.join("\n")
+
+    
   end
 end

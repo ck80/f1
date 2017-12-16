@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171210111554) do
+ActiveRecord::Schema.define(version: 20171215124816) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -95,6 +95,14 @@ ActiveRecord::Schema.define(version: 20171210111554) do
     t.integer "user_id"
     t.integer "race_id"
     t.string "updated_by"
+    t.integer "qual_first_points"
+    t.integer "qual_second_points"
+    t.integer "qual_third_points"
+    t.integer "race_first_points"
+    t.integer "race_second_points"
+    t.integer "race_third_points"
+    t.integer "race_tenth_points"
+    t.integer "race_total_points"
     t.index ["race_id"], name: "index_tips_on_race_id"
     t.index ["user_id"], name: "index_tips_on_user_id"
   end

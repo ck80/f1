@@ -2,36 +2,74 @@
 
 <h1>Tips</h1>
 
-<table>
+
+
+
+<style type="text/css">
+.TFtable{
+  width:100%; 
+  border-collapse:collapse; 
+}
+.TFtable thead{ 
+  padding:7px; text-align: centre; border:#4e95f4 1px solid; 
+}
+.TFtable td{ 
+  padding:7px; border:#4e95f4 1px solid;
+}
+/* provide some minimal visual accomodation for IE8 and below */
+.TFtable tr{
+  background: #e8e5e5; border:#4e95f4 1px solid;
+}
+/*  Define the background color for all the ODD background rows  */
+.TFtable tr:nth-child(odd){ 
+  background: #f7f4f4;
+}
+/*  Define the background color for all the EVEN background rows  */
+.TFtable tr:nth-child(even){
+  background: #e5e5e5;
+}
+.TFtable tr:hover {background-color: #c6c4c4;}
+</style>
+<div style="overflow-x:auto;">
+
+<table class="TFtable">
+  <thead>
+    <th colspan="3"></th>
+    <th colspan="3">Qualificaitons</th>
+    <th colspan="4">Race</th>
+    <th colspan="4"></th>
+  </thead>
   <thead>
     <tr>
-	  <th>User</th>
-	  <th>Race</th>
-      <th>Qual first</th>
-      <th>Qual second</th>
-      <th>Qual third</th>
-      <th>Race first</th>
-      <th>Race second</th>
-      <th>Race third</th>
-      <th>Race tenth</th>
-	  <th>Race Points</th>
-      <th colspan="3"></th>
+      <th>User</th>
+      <th>Race</th>
+      <th>Country</th>
+      <th>Q 1st</th>
+      <th>Q 2nd</th>
+      <th>Q 3rd</th>
+      <th>R 1st</th>
+      <th>R 2nd</th>
+      <th>R 3rd</th>
+      <th>R 10th</th>
+      <th>Score</th>
+      <th colspan="3">Actions</th>
     </tr>
   </thead>
 
   <tbody>
-    <% @tips.each do |tip| %>
+    <% @tips.order(:race_id).each do |tip| %>
       <tr>
-        <td><%= tip.user.email %></td>
-		<td><%= tip.race.country %></td>
-		<td><%= tip.qual_first %></td>
-        <td><%= tip.qual_second %></td>
-        <td><%= tip.qual_third %></td>
-        <td><%= tip.race_first %></td>
-        <td><%= tip.race_second %></td>
-        <td><%= tip.race_third %></td>
-        <td><%= tip.race_tenth %></td>
-        <td><%= tip.points %></td>
+        <td><%= tip.user.name %></td>
+		    <td><%= tip.race_id %></td>
+        <td><%= tip.race.country %></td>
+        <td style="color:<%= if tip.qual_first_points == Point.find_by(item: "q1st").points then "#2a8e01" elsif tip.qual_first_points == 0 then "#e20202" elsif tip.qual_first_points > 0 then "#0792ef" end %>" ><%= tip.qual_first %> | <%= tip.qual_first_points %></td>
+        <td style="color:<%= if tip.qual_second_points == Point.find_by(item: "q2nd").points then "#2a8e01" elsif tip.qual_second_points == 0 then "#e20202" elsif tip.qual_second_points > 0 then "#0792ef" end %>" ><%= tip.qual_second %> | <%= tip.qual_second_points %></td>
+        <td style="color:<%= if tip.qual_third_points == Point.find_by(item: "q3rd").points then "#2a8e01" elsif tip.qual_third_points == 0 then "#e20202" elsif tip.qual_third_points > 0 then "#0792ef" end %>" ><%= tip.qual_third %> | <%= tip.qual_third_points %></td>
+        <td style="color:<%= if tip.race_first_points == Point.find_by(item: "r1st").points then "#2a8e01" elsif tip.race_first_points == 0 then "#e20202" elsif tip.race_first_points > 0 then "#0792ef" end %>" ><%= tip.race_first %> | <%= tip.race_first_points %></td>
+        <td style="color:<%= if tip.race_second_points == Point.find_by(item: "r2nd").points then "#2a8e01" elsif tip.race_second_points == 0 then "#e20202" elsif tip.race_second_points > 0 then "#0792ef" end %>" ><%= tip.race_second %> | <%= tip.race_second_points %></td>
+        <td style="color:<%= if tip.race_third_points == Point.find_by(item: "r3rd").points then "#2a8e01" elsif tip.race_third_points == 0 then "#e20202" elsif tip.race_third_points > 0 then "#0792ef" end %>" ><%= tip.race_third %> | <%= tip.race_third_points %></td>
+        <td style="color:<%= if tip.race_tenth_points == Point.find_by(item: "r10th").points then "#2a8e01" elsif tip.race_tenth_points == 0 then "#e20202" elsif tip.race_tenth_points > 0 then "#0792ef" end %>" ><%= tip.race_tenth %> | <%= tip.race_tenth_points %></td>
+        <td><%= tip.race_total_points %></td>
         <td><%= link_to 'Show', tip %></td>
         <td><%= link_to 'Edit', edit_tip_path(tip) %></td>
         <td><%= link_to 'Destroy', tip, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -39,7 +77,8 @@
     <% end %>
   </tbody>
 </table>
-  
+
+</div>
 <br>
 
 <%= link_to 'New Tip', new_tip_path %>

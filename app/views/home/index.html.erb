@@ -1,27 +1,24 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Formula 1 - Kuntry Tippers</h1>
-<p>Registered Tipsters:</p>
+<h2>Leaderboard:</h2>
 
 <table>
   <thead>
     <tr>
-      <th>User</th>      
-	  <th>email</th>
-      <th colspan="3"></th>
+      <th>User</th>
+      <th>Points</th>
     </tr>
   </thead>
-
+  <% User.all.order(name: :asc).each do |u| %>
   <tbody>
-    <% @users.each do |user| %>
-      <tr>
-        <td><%= user.name %></td>
-		<td><%= user.email %></td>
-      </tr>
+    <tr>
+      <td><%= u.name %></td>
+      <td><%= Tip.where(user_id: u.id).sum(:race_total_points) %></td>
+    </tr>
     <% end %>
   </tbody>
 </table>
-
 
 <% if current_user.admin? %>
 <h2>ADMIN Section:</h2>
