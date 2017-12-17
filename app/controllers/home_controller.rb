@@ -23,156 +23,39 @@ class HomeController < ApplicationController
     attr_reader :team
   end
   
-  def fetch_quali_start_action
+  def update_race_start
     # load HTML parser
     require 'rubygems'
-    require 'nokogiri'
     require 'open-uri'
+
+    # load ical parser
+    require 'icalendar'
     
-    # fetch F1 HTML page including list of races
-    page = "https://www.formula1.com/en/championship/races/2017/Australia.html"
-    doc = Nokogiri::HTML(open(page))
-    section=doc.css('.bold\ time')
-    element=section.last.text.split.first
+    cal_file = open("https://www.formula1.com/sp/static/f1/2017/calendar/ical.ics")
+    cals = Icalendar.parse(cal_file)
+    cal = cals.first
     
-    # put element into an array @resultsArray
-    @resultsArray = []
-    $i = 0
-    while $i < element.length
-      item = element[$i]["href"]
-      @resultsArray << item
-      $i +=1
+    @event_data = []
+    $i = 3
+    while $i < cal.events.length
+      event_uid = cal.events[$i].uid
+      event_summary = cal.events[$i].summary.force_encoding(Encoding::UTF_8) #force encoding to utf-8 to resolve issue due to ical ascii-8 format
+      event_quali_start = cal.events[$i].dtstart
+      h = {event_uid: event_uid, event_summary: event_summary, event_quali_start: event_quali_start}
+      @event_data << h
+      $i +=5
     end
 
-    # pull out countries for each race and drop any non-race items from the array.  We are left with a clean list of countries in @raceArray
-    @raceArray = []
-    $i = 0
-    while $i < @resultsArray.length-2 # minus 2 to drop non-race elements
-      race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
-      @raceArray << race
-      $i +=1
-    end  
-  end
-
-
-  def fetch_result_action
-    # load HTML parser
-    require 'rubygems'
-    require 'nokogiri'
-    require 'open-uri'
-    
-    # fetch F1 HTML page including list of races
-    page = "https://www.formula1.com/en/championship/races/2017.html"
-    doc = Nokogiri::HTML(open(page))
-    section=doc.css('.inner-wrap')
-    element=section.css('a')
-    
-    # put element into an array @resultsArray
-    @resultsArray = []
-    $i = 0
-    while $i < element.length
-      item = element[$i]["href"]
-      @resultsArray << item
-      $i +=1
+    $i=0
+    while $i < @event_data.length
+      race = Race.find_by(race_number: $i+1)
+      race.ical_uid = @event_data[$i][:event_uid]
+      race.ical_dtstart = @event_data[$i][:event_quali_start].to_datetime
+      race.ical_summary = @event_data[$i][:event_summary]
+      race.save
+      $i+=1
     end
 
-    # pull out countries for each race and drop any non-race items from the array.  We are left with a clean list of countries in @raceArray
-    @raceArray = []
-    $i = 0
-    while $i < @resultsArray.length-2 # minus 2 to drop non-race elements
-      race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
-      @raceArray << race
-      $i +=1
-    end
-    
-    # now fetch qualification and race results for each race and store in @allqualiresultsArray and @allraceresultsArray
-    @allqualiresultsArray = []
-    @allraceresultsArray = []
-    $i = 0
-    while $i < @raceArray.length
-      
-      @quali_results = QualiResult.joins(:race, :driver)
-      @country = @raceArray[$i]
-      @year = 2017
-      seasonstartid = 959 # first race id
-      raceid = seasonstartid + $i
-      page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
-      doc = Nokogiri::HTML(open(page))   
-      
-      table=doc.css('table.resultsarchive-table')
-      rows=table.css('tr')
-      
-      @qualiresultsArray = []
-      $j = 1
-      while $j < rows.length
-        race_country = @country
-        place = rows[$j].css('td')[1].text
-        car = rows[$j].css('td')[2].text
-        driver = rows[$j].css('td')[3].text.split.last
-        team = rows[$j].css('td')[4].text
-        @qualiresultsArray << Entry.new(race_country, place, car, driver, team)
-        $j +=1
-      end
-      @allqualiresultsArray << @qualiresultsArray
-      
-      page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/race-result.html"
-      doc = Nokogiri::HTML(open(page))   
-    
-      table=doc.css('table.resultsarchive-table')
-      rows=table.css('tr')
-    
-      @raceresultsArray = []  
-      $j = 1
-      while $j < rows.length
-        race_country = @country
-        place = rows[$j].css('td')[1].text
-        car = rows[$j].css('td')[2].text
-        driver = rows[$j].css('td')[3].text.split.last
-        team = rows[$j].css('td')[4].text
-        @raceresultsArray << Entry.new(race_country, place, car, driver, team)
-        $j +=1
-      end
-      @allraceresultsArray << @raceresultsArray  
-      $i +=1
-    end
-    
-#    render plain: @allqualiresultsArray 
-    
-    # commit results to DB
-    @allqualiresultsArray.each do |race|
-      race.each do |result|
-        result.race_country
-        result.place
-        result.car
-        result.driver
-        result.team
-        x = Driver.find_by(abbr_name: result.driver).id
-        y = Race.find_by(country: result.race_country).id
-        r = QualiResult.new
-        r.position = result.place
-        r.race_id = y
-        r.driver_id = x
-        r.save
-      end
-    end
-    
-    @allraceresultsArray.each do |race|
-      race.each do |result|
-        result.race_country
-        result.place
-        result.car
-        result.driver
-        result.team
-        x = Driver.find_by(abbr_name: result.driver).id
-        y = Race.find_by(country: result.race_country).id
-        r = RaceResult.new
-        r.position = result.place
-        r.race_id = y
-        r.driver_id = x
-        r.save
-      end
-    end
-#    render plain: @allqualiresultsArray #+ @allraceresultsArray
   end
   
   def update_race_tip_points
@@ -256,7 +139,131 @@ class HomeController < ApplicationController
     end
     
     #render plain: @nestedpointsArray.join("\n")
-
     
   end
+
+  def fetch_results_action
+    # load HTML parser
+    require 'rubygems'
+    require 'nokogiri'
+    require 'open-uri'
+    
+    # fetch F1 HTML page including list of races
+    page = "https://www.formula1.com/en/championship/races/2017.html"
+    doc = Nokogiri::HTML(open(page))
+    section=doc.css('.inner-wrap')
+    element=section.css('a')
+    
+    # put element into an array @resultsArray
+    @resultsArray = []
+    $i = 0
+    while $i < element.length
+      item = element[$i]["href"]
+      @resultsArray << item
+      $i +=1
+    end
+
+    # pull out countries for each race and drop any non-race items from the array.  We are left with a clean list of countries in @raceArray
+    @raceArray = []
+    $i = 0
+    while $i < @resultsArray.length-2 # minus 2 to drop non-race elements
+      race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
+      @raceArray << race
+      $i +=1
+    end
+    
+    # now fetch qualification and race results for each race and store in @allqualiresultsArray and @allraceresultsArray
+    @allqualiresultsArray = []
+    @allraceresultsArray = []
+    $i = 0
+    while $i < @raceArray.length
+      
+      @quali_results = QualiResult.joins(:race, :driver)
+      @country = @raceArray[$i]
+      @year = 2017
+      seasonstartid = 959 # first race id
+      raceid = seasonstartid + $i
+      page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
+      doc = Nokogiri::HTML(open(page))   
+      
+      table=doc.css('table.resultsarchive-table')
+      rows=table.css('tr')
+      
+      @qualiresultsArray = []
+      $j = 1
+      while $j < rows.length
+        race_country = @country
+        place = rows[$j].css('td')[1].text
+        car = rows[$j].css('td')[2].text
+        driver = rows[$j].css('td')[3].text.split.last
+        team = rows[$j].css('td')[4].text
+        @qualiresultsArray << Entry.new(race_country, place, car, driver, team)
+        $j +=1
+      end
+      @allqualiresultsArray << @qualiresultsArray
+      
+      page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/race-result.html"
+      doc = Nokogiri::HTML(open(page))   
+    
+      table=doc.css('table.resultsarchive-table')
+      rows=table.css('tr')
+    
+      @raceresultsArray = []  
+      $j = 1
+      while $j < rows.length
+        race_country = @country
+        place = rows[$j].css('td')[1].text
+        car = rows[$j].css('td')[2].text
+        driver = rows[$j].css('td')[3].text.split.last
+        team = rows[$j].css('td')[4].text
+        @raceresultsArray << Entry.new(race_country, place, car, driver, team)
+        $j +=1
+      end
+      @allraceresultsArray << @raceresultsArray  
+      $i +=1
+    end
+    
+    # render plain: @allqualiresultsArray 
+    
+    # commit results to DB
+    @allqualiresultsArray.each do |race|
+      race.each do |result|
+        result.race_country
+        result.place
+        result.car
+        result.driver
+        result.team
+        x = Driver.find_by(abbr_name: result.driver).id
+        y = Race.find_by(country: result.race_country).id
+        r = QualiResult.new
+        r.position = result.place
+        r.race_id = y
+        r.driver_id = x
+        r.save
+      end
+    end
+    
+    @allraceresultsArray.each do |race|
+      race.each do |result|
+        result.race_country
+        result.place
+        result.car
+        result.driver
+        result.team
+        x = Driver.find_by(abbr_name: result.driver).id
+        y = Race.find_by(country: result.race_country).id
+        r = RaceResult.new
+        r.position = result.place
+        r.race_id = y
+        r.driver_id = x
+        r.save
+      end
+    end
+    # render plain: @allqualiresultsArray #+ @allraceresultsArray
+  end
+
+  def fetch_results
+    render plain: "hi everyone, im here!"
+  end
+
 end
