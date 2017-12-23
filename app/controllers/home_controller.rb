@@ -297,6 +297,48 @@ class HomeController < ApplicationController
 
   end
 
+  def fetch_races
+    # load HTML parser
+    require 'rubygems'
+    require 'nokogiri'
+    require 'open-uri'
+    
+    # fetch F1 HTML page including list of races
+    page = "https://www.formula1.com/en/championship/races/2017.html"
+    doc = Nokogiri::HTML(open(page))
+    section=doc.css('.inner-wrap')
+    element=section.css('a')
+    
+    # put element into an array @resultsArray
+    @resultsArray = []
+    $i = 0
+    while $i < element.length
+      item = element[$i]["href"]
+      @resultsArray << item
+      $i +=1
+    end
+
+    # pull out countries for each race and drop any non-race items from the array.  We are left with a clean list of countries in @raceArray
+    @raceArray = []
+    $i = 0
+    while $i < @resultsArray.length-2 # minus 2 to drop non-race elements
+      race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
+      @raceArray << race
+      $i +=1
+    end
+
+    $i = 1
+    @raceArray.each do |race|
+      x = Race.new
+      x.year = 2017
+      x.race_number = $i
+      x.country = race
+      x.save
+      $i +=1
+    end
+
+  end
+
   def account_upgrade
     u = User.find_by(name: current_user.name)
     u.admin = true
