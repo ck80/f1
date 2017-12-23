@@ -20,6 +20,8 @@ Rails.application.routes.draw do
   get '/tipper/:name', to: 'tips#index', as: 'tipper'
   post 'home/fetch_results_action'
   post 'home/fetch_results'
+  post 'home/fetch_drivers'
+  post 'home/account_upgrade'
   post 'home/update_race_tip_points'
   post 'home/update_race_start'
   root 'home#index'

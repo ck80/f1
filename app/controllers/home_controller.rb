@@ -262,8 +262,44 @@ class HomeController < ApplicationController
     # render plain: @allqualiresultsArray #+ @allraceresultsArray
   end
 
-  def fetch_results
-    render plain: "hi everyone, im here!"
+  def fetch_drivers
+    # load HTML parser
+    require 'rubygems'
+    require 'nokogiri'
+    require 'open-uri'
+    
+    # fetch F1 HTML page including list of races
+    page = "https://www.formula1.com/en/results.html/2017/drivers.html"
+    doc = Nokogiri::HTML(open(page))
+    section=doc.css('.table-wrap')
+    teamelement=section.css('a')
+    
+    # put driverelement into an array @resultsArray
+    @driversArray = []
+    driverHash = {}
+    $i = 0
+    while $i < teamelement.length
+      if $i.even?
+        driverHash = {driverfirstname: teamelement[$i].css('span')[0].text, driverlastname: teamelement[$i].css('span')[1].text, drivershortname: teamelement[$i].css('span')[2].text, driverteam: teamelement[$i+1].text}
+      end
+      @driversArray << driverHash
+      $i +=2
+    end
+
+    @driversArray.each do |driver|
+      x = Driver.new
+      x.year = 2017
+      x.name = driver[:driverfirstname] + " " + driver[:driverlastname]
+      x.abbr_name = driver[:drivershortname]
+      x.team = driver[:driverteam]
+      x.save
+    end
+
   end
 
+  def account_upgrade
+    u = User.find_by(name: current_user.name)
+    u.admin = true
+    u.save
+  end
 end
