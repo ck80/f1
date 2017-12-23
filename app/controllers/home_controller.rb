@@ -460,4 +460,52 @@ class HomeController < ApplicationController
     u.admin = true
     u.save
   end
+
+  def update_points_table
+    ## set up points table
+
+    # q1st points
+    p = Point.new
+    p.item = "q1st"
+    p.points = 5
+    p.save
+    
+    # q2nd points
+    p = Point.new
+    p.item = "q2nd"
+    p.points = 3
+    p.save
+
+    # q3rd points
+    p = Point.new
+    p.item = "q3rd"
+    p.points = 1
+    p.save
+
+    # r1st points
+    p = Point.new
+    p.item = "r1st"
+    p.points = 25
+    p.save
+
+    # r2nd points
+    p = Point.new
+    p.item = "r2nd"
+    p.points = 18
+    p.save
+
+    # r3rd points
+    p = Point.new
+    p.item = "r3rd"
+    p.points = 15
+    p.save
+
+    # r10th points
+    p = Point.new
+    p.item = "r10th"
+    p.points = 15
+    p.save
+  
+  end
+
 end
