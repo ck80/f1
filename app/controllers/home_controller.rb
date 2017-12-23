@@ -197,9 +197,10 @@ class HomeController < ApplicationController
         race_country = @country
         place = rows[$j].css('td')[1].text
         car = rows[$j].css('td')[2].text
+        driver_full_name = rows[$j].css('td')[3].css('span')[0].text + " " + rows[$j].css('td')[3].css('span')[1].text          
         driver = rows[$j].css('td')[3].text.split.last
         team = rows[$j].css('td')[4].text
-        @qualiresultsArray << Entry.new(race_country, place, car, driver, team)
+        @qualiresultsArray << Entry.new(race_country, place, car, driver_full_name, driver, team)
         $j +=1
       end
       @allqualiresultsArray << @qualiresultsArray
@@ -219,7 +220,7 @@ class HomeController < ApplicationController
         driver_full_name = rows[$j].css('td')[3].css('span')[0].text + " " + rows[$j].css('td')[3].css('span')[1].text
         driver = rows[$j].css('td')[3].text.split.last
         team = rows[$j].css('td')[4].text
-        @raceresultsArray << Entry.new(race_country, place, car, driver, team)
+        @raceresultsArray << Entry.new(race_country, place, car, driver_full_name, driver, team)
         $j +=1
       end
       @allraceresultsArray << @raceresultsArray  
@@ -269,7 +270,7 @@ class HomeController < ApplicationController
   def fetch_drivers_by_races
     ## added this function to ensure drivers not listed on drivers URL are added to Driver table
     ## by scanning for all drivers in qualies and in races and adding them to the table
-    
+
     # load HTML parser
     require 'rubygems'
     require 'nokogiri'
