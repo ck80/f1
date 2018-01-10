@@ -22,7 +22,7 @@ class TipsController < ApplicationController
       @user = User.all
     else
       @tips = Tip.where(user_id: current_user.id)
-      @user = User.find_by(id: current_user.id)
+      @user = current_user
     end
   end
 
@@ -34,7 +34,7 @@ class TipsController < ApplicationController
   # GET /tips/new
   def new
     @tip = Tip.new
-    @user = User.find_by(id: current_user.id)
+    @user = current_user
     @users = User.all
     @races = Race.all
     @drivers = Driver.all
@@ -43,7 +43,7 @@ class TipsController < ApplicationController
   # GET /tips/1/edit
   def edit
     @users = User.all
-    @user = User.find_by(id: current_user.id)
+    @user = current_user
     @races = Race.all
     @drivers = Driver.all
 
@@ -53,7 +53,7 @@ class TipsController < ApplicationController
   # POST /tips.json
   def create
     @tip = Tip.new(tip_params)
-    @user = User.find_by(id: current_user.id)
+    @user = current_user
     @users = User.all
     @races = Race.all
     @drivers = Driver.all
@@ -72,7 +72,7 @@ class TipsController < ApplicationController
   # PATCH/PUT /tips/1.json
   def update
     @users = User.all
-    @user = User.find_by(id: current_user.id)
+    @user = current_user
     @races = Race.all
     @drivers = Driver.all
     respond_to do |format|

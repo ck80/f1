@@ -14,9 +14,11 @@
     <%= form.label :user %>
     <% if current_user.admin? %>
       <%= form.select :user_id, options_for_select(@users.map{ |u| [u.name, u.id] }, @tip.user_id) %>
-    <% else %>
+    <% elsif params[:action] == "edit" %>
       <%= form.select :user_id, options_for_select([[@tip.user.name, @tip.user_id]], @tip.user_id) %>
-	  <% end %>
+    <% else %>
+      <%= form.select :user_id, options_for_select([[current_user.name, current_user.id]], @tip.user_id) %>
+    <% end %>
   </div>
   
   <div class="field">
