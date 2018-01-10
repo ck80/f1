@@ -12,20 +12,20 @@
   debug = <%= params[:action] %>
   <div class="field">
     <%= form.label :user %>
-	<% if params[:action] == "edit" %>
-		<%= form.select :user_id, options_for_select([[@tip.user.name, @tip.user_id]], @tip.user_id) %>
-	<% else %>
-    	<%= form.select :user_id, options_for_select(@users.map{ |u| [u.name, u.id] }, @tip.user_id) %>		
-	<% end %>
+    <% if current_user.admin? %>
+      <%= form.select :user_id, options_for_select(@users.map{ |u| [u.name, u.id] }, @tip.user_id) %>
+    <% else %>
+      <%= form.select :user_id, options_for_select([[@tip.user.name, @tip.user_id]], @tip.user_id) %>
+	  <% end %>
   </div>
   
   <div class="field">
     <%= form.label :race %>
-	<% if params[:action] == "edit" %>
+	  <% if params[:action] == "edit" %>
     	<%= form.select :race_id, options_for_select([[@tip.race.country, @tip.race_id]], @tip.race_id) %>
-	<% else %>
+	  <% else %>
     	<%= form.select :race_id, options_for_select(@races.map{ |r| [r.country, r.id] }, @tip.race_id) %>
-	<% end %>
+	  <% end %>
   </div>
   
   <div class="field">
