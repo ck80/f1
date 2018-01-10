@@ -28,3 +28,6 @@
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# Ignore local variables file
+/config/initializers/dev_variables.rb
