@@ -192,9 +192,9 @@ class HomeController < ApplicationController
       @quali_results = QualiResult.joins(:race, :driver)
       @country = @raceArray[$i]
       if @year == 2017 then
-        seasonstartid = 959 # first race id
+        seasonstartid = 959 # first race id for season 2017
       elsif @year == 2018 then
-        seasonstartid = 979 # first race id
+        seasonstartid = 979 # first race id for season 2018
       end
       raceid = seasonstartid + $i
       page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
@@ -321,9 +321,9 @@ class HomeController < ApplicationController
       @quali_results = QualiResult.joins(:race, :driver)
       @country = @raceArray[$i]
       if @year == 2017 then
-        seasonstartid = 959 # first race id
+        seasonstartid = 959 # first race id for season 2017
       elsif @year == 2018 then
-        seasonstartid = 979 # first race id
+        seasonstartid = 979 # first race id for season 2018
       end
       raceid = seasonstartid + $i
       page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
