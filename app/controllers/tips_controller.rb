@@ -45,16 +45,16 @@ class TipsController < ApplicationController
     @tip = Tip.new
     @user = current_user
     @users = User.all
-    @races = Race.all
-    @drivers = Driver.all
+    @races = Race.where(year: @year)
+    @drivers = Driver.where(year: @year)
   end
 
   # GET /tips/1/edit
   def edit
     @users = User.all
     @user = current_user
-    @races = Race.all
-    @drivers = Driver.all
+    @races = Race.where(year: @year)
+    @drivers = Driver.where(year: @year)
 
   end
 
@@ -64,8 +64,8 @@ class TipsController < ApplicationController
     @tip = Tip.new(tip_params)
     @user = current_user
     @users = User.all
-    @races = Race.all
-    @drivers = Driver.all
+    @races = Race.where(year: @year)
+    @drivers = Driver.where(year: @year)
     respond_to do |format|
       if @tip.save
         format.html { redirect_to @tip, notice: 'Tip was successfully created.' }
@@ -82,8 +82,8 @@ class TipsController < ApplicationController
   def update
     @users = User.all
     @user = current_user
-    @races = Race.all
-    @drivers = Driver.all
+    @races = Race.where(year: @year)
+    @drivers = Driver.where(year: @year)
     respond_to do |format|
       if @tip.update(tip_params)
         format.html { redirect_to @tip, notice: 'Tip was successfully updated.' }
