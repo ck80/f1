@@ -37,10 +37,7 @@ end
 
 def update_race_tip_points
   @tips = Tip.all
-  
-  #calculate quali points
 
-  
   @nestedpointsArray = []
   $i = 0
   @tips.each do |tip|
@@ -115,7 +112,5 @@ def update_race_tip_points
     race_tenth_points: (@pointsHash[:points][6]), race_total_points: (@pointsHash[:points].sum))
     $i +=1  
   end
-  
-  #render plain: @nestedpointsArray.join("\n")
-  
+
 end

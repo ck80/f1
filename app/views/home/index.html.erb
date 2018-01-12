@@ -29,7 +29,7 @@
 <div style="overflow-x:auto;">
 
 <h1>Formula 1 - Kuntry Tippers</h1>
-<h2>Leaderboard:</h2>
+<h2>SEASON <%= @year %> Leaderboard:</h2>
 
 <table class="TFtable">
   <thead>
@@ -42,7 +42,7 @@
   <tbody>
     <tr>
       <td><%= u.name %></td>
-      <td><%= Tip.where(user_id: u.id).sum(:race_total_points) %></td>
+      <td><%= Tip.joins(:race).where(user_id: u.id, 'races.year' => @year).sum(:race_total_points) %></td>
     </tr>
     <% end %>
   </tbody>
@@ -64,8 +64,11 @@
   <p>Fetch drivers by races tool: <%= link_to 'Fetch Drivers by Races', home_fetch_drivers_by_races_path, method: :post %></p>
   <p>Fetch results tool (please be patient as this can take some time to complete): <%= link_to 'Fetch Results', home_fetch_results_action_path, method: :post %></p>
   <p>Update race tip points tool: <%= link_to 'Update Race Tip Points', home_update_race_tip_points_path, method: :post %></p>
-
   <% end %>
+<% else%>
+  <h2>ADMIN Section:</h2>
+  <p><%= link_to '2017 Season Admin Page', home_index_path("2017"), method: :get %></p>
+  <p><%= link_to '2018 Season Admin Page', home_index_path("2018"), method: :get %></p>
 <% end %>
   
 <% if current_user.admin? then %>

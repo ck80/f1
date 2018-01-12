@@ -6,9 +6,9 @@ class TipsController < ApplicationController
 
   def get_year
     if params[:year].present? then
-      @year = params[:year]
+      @year = params[:year].to_s
     else
-      @year = Time.current.year
+      @year = Time.current.year.to_s
     end
   end
   
@@ -22,7 +22,7 @@ class TipsController < ApplicationController
       redirect_to(tips_path)
     end
   end
-  
+
   # GET /tips
   # GET /tips.json
   def index
@@ -68,7 +68,7 @@ class TipsController < ApplicationController
     @drivers = Driver.where(year: @year)
     respond_to do |format|
       if @tip.save
-        format.html { redirect_to @tip, notice: 'Tip was successfully created.' }
+        format.html { redirect_to tips_path, notice: 'Tip was successfully created.' }
         format.json { render :show, status: :created, location: @tip }
       else
         format.html { render :new }
@@ -86,7 +86,7 @@ class TipsController < ApplicationController
     @drivers = Driver.where(year: @year)
     respond_to do |format|
       if @tip.update(tip_params)
-        format.html { redirect_to @tip, notice: 'Tip was successfully updated.' }
+        format.html { redirect_to tips_path, notice: 'Tip was successfully updated.' }
         format.json { render :show, status: :ok, location: @tip }
       else
         format.html { render :edit }

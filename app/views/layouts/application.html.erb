@@ -11,9 +11,9 @@
 	<body>
 	
 		<p class="navbar-text pull-right">
-  	  	<%= link_to "Home", root_path %> |
-  		<%= link_to "Tips", tips_path(Time.current.year) %> |
+  	  <%= link_to "Home", root_path %> |
 	  <% if user_signed_in? %>
+			<%= link_to "Tips", tips_path(if @year.nil? then Time.current.year.to_s else @year end) %> |
 	    Logged in as <strong><%= current_user.email %></strong>.
 	    <%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %> |
 	    <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>

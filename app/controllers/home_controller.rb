@@ -191,9 +191,9 @@ class HomeController < ApplicationController
       
       @quali_results = QualiResult.joins(:race, :driver)
       @country = @raceArray[$i]
-      if @year == 2017 then
+      if @year == "2017" then
         seasonstartid = 959 # first race id for season 2017
-      elsif @year == 2018 then
+      elsif @year == "2018" then
         seasonstartid = 979 # first race id for season 2018
       end
       raceid = seasonstartid + $i
@@ -320,9 +320,9 @@ class HomeController < ApplicationController
       
       @quali_results = QualiResult.joins(:race, :driver)
       @country = @raceArray[$i]
-      if @year == 2017 then
+      if @year == "2017" then
         seasonstartid = 959 # first race id for season 2017
-      elsif @year == 2018 then
+      elsif @year == "2018" then
         seasonstartid = 979 # first race id for season 2018
       end
       raceid = seasonstartid + $i

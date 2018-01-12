@@ -1,6 +1,6 @@
 
 
-<h1>Tips</h1>
+<h1>SEASON <%= @year %> Tips</h1>
 
 <style type="text/css">
 .TFtable{
@@ -57,7 +57,7 @@
     <% @tips.order(:race_id).each do |tip| %>
       <tr>
         <td><%= tip.user.name %></td>
-		    <td><%= tip.race_id %></td>
+		    <td><%= tip.race.race_number %></td>
         <td><%= tip.race.country %></td>
         <td style="color:<%= if tip.qual_first_points == nil then "black" elsif tip.qual_first_points == Point.find_by(item: "q1st").points then "#2a8e01" elsif tip.qual_first_points == 0 then "#e20202" elsif tip.qual_first_points > 0 then "#0792ef" end %>" ><%= tip.qual_first %> | <%= tip.qual_first_points %></td>
         <td style="color:<%= if tip.qual_second_points == nil then "black" elsif tip.qual_second_points == Point.find_by(item: "q2nd").points then "#2a8e01" elsif tip.qual_second_points == 0 then "#e20202" elsif tip.qual_second_points > 0 then "#0792ef" end %>" ><%= tip.qual_second %> | <%= tip.qual_second_points %></td>
