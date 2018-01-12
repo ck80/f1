@@ -1,4 +1,13 @@
 class HomeController < ApplicationController
+  before_action :get_year
+
+  def get_year
+    if params[:year].present? then
+      @year = params[:year].to_s
+    else
+      @year = Time.current.year.to_s
+    end
+  end
 
   def index
     @users = User.all
@@ -33,7 +42,7 @@ class HomeController < ApplicationController
     # load ical parser
     require 'icalendar'
     
-    cal_file = open("https://www.formula1.com/sp/static/f1/2017/calendar/ical.ics")
+    cal_file = open("https://www.formula1.com/sp/static/f1/" + @year + "/calendar/ical.ics")
     cals = Icalendar.parse(cal_file)
     cal = cals.first
     
@@ -50,7 +59,7 @@ class HomeController < ApplicationController
 
     $i=0
     while $i < @event_data.length
-      race = Race.find_by(race_number: $i+1)
+      race = Race.where(year: @year).find_by(race_number: $i+1)
       race.ical_uid = @event_data[$i][:event_uid]
       race.ical_dtstart = @event_data[$i][:event_quali_start].to_datetime
       race.ical_summary = @event_data[$i][:event_summary]
@@ -151,7 +160,7 @@ class HomeController < ApplicationController
     require 'open-uri'
     
     # fetch F1 HTML page including list of races
-    page = "https://www.formula1.com/en/championship/races/2017.html"
+    page = "https://www.formula1.com/en/championship/races/" + @year + ".html"
     doc = Nokogiri::HTML(open(page))
     section=doc.css('.inner-wrap')
     element=section.css('a')
@@ -182,8 +191,11 @@ class HomeController < ApplicationController
       
       @quali_results = QualiResult.joins(:race, :driver)
       @country = @raceArray[$i]
-      @year = 2017
-      seasonstartid = 959 # first race id
+      if @year == 2017 then
+        seasonstartid = 959 # first race id
+      elsif @year == 2018 then
+        seasonstartid = 979 # first race id
+      end
       raceid = seasonstartid + $i
       page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
       doc = Nokogiri::HTML(open(page))   
@@ -277,7 +289,7 @@ class HomeController < ApplicationController
     require 'open-uri'
     
     # fetch F1 HTML page including list of races
-    page = "https://www.formula1.com/en/championship/races/2017.html"
+    page = "https://www.formula1.com/en/championship/races/" + @year + ".html"
     doc = Nokogiri::HTML(open(page))
     section=doc.css('.inner-wrap')
     element=section.css('a')
@@ -308,8 +320,11 @@ class HomeController < ApplicationController
       
       @quali_results = QualiResult.joins(:race, :driver)
       @country = @raceArray[$i]
-      @year = 2017
-      seasonstartid = 959 # first race id
+      if @year == 2017 then
+        seasonstartid = 959 # first race id
+      elsif @year == 2018 then
+        seasonstartid = 979 # first race id
+      end
       raceid = seasonstartid + $i
       page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
       doc = Nokogiri::HTML(open(page))   
@@ -357,7 +372,7 @@ class HomeController < ApplicationController
     @allqualiresultsArray.each do |race|
       race.each do |result|
         d = Driver.new
-        d.year = 2017
+        d.year = @year
         d.name = result.driver_full_name
         d.abbr_name = result.driver
         d.team = result.team
@@ -368,7 +383,7 @@ class HomeController < ApplicationController
     @allraceresultsArray.each do |race|
       race.each do |result|
         d = Driver.new
-        d.year = 2017
+        d.year = @year
         d.name = result.driver_full_name
         d.abbr_name = result.driver
         d.team = result.team
@@ -385,7 +400,7 @@ class HomeController < ApplicationController
     require 'open-uri'
     
     # fetch F1 HTML page including list of races
-    page = "https://www.formula1.com/en/results.html/2017/drivers.html"
+    page = "https://www.formula1.com/en/results.html/" + @year + "/drivers.html"
     doc = Nokogiri::HTML(open(page))
     section=doc.css('.table-wrap')
     teamelement=section.css('a')
@@ -404,7 +419,7 @@ class HomeController < ApplicationController
 
     @driversArray.each do |driver|
       x = Driver.new
-      x.year = 2017
+      x.year = @year
       x.name = driver[:driverfirstname] + " " + driver[:driverlastname]
       x.abbr_name = driver[:drivershortname]
       x.team = driver[:driverteam]
@@ -420,7 +435,7 @@ class HomeController < ApplicationController
     require 'open-uri'
     
     # fetch F1 HTML page including list of races
-    page = "https://www.formula1.com/en/championship/races/2017.html"
+    page = "https://www.formula1.com/en/championship/races/" + @year + ".html"
     doc = Nokogiri::HTML(open(page))
     section=doc.css('.inner-wrap')
     element=section.css('a')
@@ -437,7 +452,7 @@ class HomeController < ApplicationController
     # pull out countries for each race and drop any non-race items from the array.  We are left with a clean list of countries in @raceArray
     @raceArray = []
     $i = 0
-    while $i < @resultsArray.length-2 # minus 2 to drop non-race elements
+    while $i < @resultsArray.length-(if @year == "2017" then 2 elsif @year == "2018" then 1 end) # drop non-race elements to clean up array
       race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
       @raceArray << race
       $i +=1
@@ -446,7 +461,7 @@ class HomeController < ApplicationController
     $i = 1
     @raceArray.each do |race|
       x = Race.new
-      x.year = 2017
+      x.year = @year
       x.race_number = $i
       x.country = race
       x.save

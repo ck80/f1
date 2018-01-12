@@ -68,11 +68,11 @@
         <td style="color:<%= if tip.race_tenth_points == nil then "black" elsif tip.race_tenth_points == Point.find_by(item: "r10th").points then "#2a8e01" elsif tip.race_tenth_points == 0 then "#e20202" elsif tip.race_tenth_points > 0 then "#0792ef" end %>" ><%= tip.race_tenth %> | <%= tip.race_tenth_points %></td>
         <td><%= tip.race_total_points %></td>
         <% if current_user.admin? %>
-        <td><%= link_to 'Show', tip %></td>
+        <td><%= link_to 'Show', tip_path(id: tip) %></td>
         <% end %>
-        <td><%= if tip.race.ical_dtstart.future? then link_to 'Edit', edit_tip_path(tip) else "Closed" end %></td>
+        <td><%= if tip.race.ical_dtstart.future? then link_to 'Edit', edit_tip_path(id: tip) else "Closed" end %></td>
         <% if current_user.admin? %>
-        <td><%= link_to 'Destroy', tip, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Destroy', tip_path(id: tip), method: :delete, data: { confirm: 'Are you sure?' } %></td>
         <% end %>
       </tr>
     <% end %>
@@ -84,4 +84,6 @@
 
 <%= link_to 'New Tip', new_tip_path %>
 
-
+<% if current_user.admin? then %>
+<p>Debug: @year = <%= @year %></p>
+<% end %>

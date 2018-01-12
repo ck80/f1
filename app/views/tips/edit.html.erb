@@ -2,5 +2,5 @@
 
 <%= render 'form', tip: @tip %>
 
-<%= link_to 'Show', @tip %> |
+<%= link_to 'Show', tip_path(id: @tip) %> |
 <%= link_to 'Back', tips_path %>

@@ -1,8 +1,17 @@
 class TipsController < ApplicationController
   before_action :authenticate_user!
   before_action :get_tip, only: [:show, :edit, :update, :destroy]
+  before_action :get_year
   before_action :check_auth, only: [:destroy]
 
+  def get_year
+    if params[:year].present? then
+      @year = params[:year]
+    else
+      @year = Time.current.year
+    end
+  end
+  
   def get_tip
     @tip = Tip.find(params[:id])
   end
@@ -18,10 +27,10 @@ class TipsController < ApplicationController
   # GET /tips.json
   def index
     if current_user.admin?
-      @tips = Tip.all
+      @tips = Tip.joins(:race).where('races.year' => @year)
       @user = User.all
     else
-      @tips = Tip.where(user_id: current_user.id)
+      @tips = Tip.where(user_id: current_user.id).joins(:race).where('races.year' => @year)
       @user = current_user
     end
   end
