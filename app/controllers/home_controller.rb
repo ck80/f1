@@ -13,6 +13,9 @@ class HomeController < ApplicationController
     @users = User.all
   end
   
+  def test
+  end
+
   def show
     @users = User.all
   end

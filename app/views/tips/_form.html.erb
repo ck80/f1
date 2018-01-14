@@ -1,4 +1,4 @@
-<%= form_with(model: tip, local: true, url: if params[:action] == "new" then nil else tip_path end ) do |form| %>
+<%= form_with(model: tip, local: true, url: if params[:action] == "new" then nil elsif params[:action] == "create" then nil else tip_path end ) do |form| %>
   <% if tip.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(tip.errors.count, "error") %> prohibited this tip from being saved:</h2>
@@ -10,65 +10,75 @@
     </div>
   <% end %>
   <% if current_user.admin? then %>
-    debug = <%= params[:action] %>
+    debug: form acrtion = <%= params[:action] %>
   <% end %>
-  <div class="field">
-    <%= form.label :user %>
-    <% if current_user.admin? %>
-      <%= form.select :user_id, options_for_select(@users.map{ |u| [u.name, u.id] }, @tip.user_id) %>
-    <% elsif params[:action] == "edit" %>
-      <%= form.select :user_id, options_for_select([[@tip.user.name, @tip.user_id]], @tip.user_id) %>
-    <% else %>
-      <%= form.select :user_id, options_for_select([[current_user.name, current_user.id]], @tip.user_id) %>
-    <% end %>
+  <div class="section"><span>1</span>Race Details</div>
+  <div class="inner-wrap">
+    <div class="field">
+      <%= form.label :user %>
+      <% if current_user.admin? %>
+        <%= form.select :user_id, options_for_select(@users.map{ |u| [u.name, u.id] }, @tip.user_id) %>
+      <% elsif params[:action] == "edit" %>
+        <%= form.select :user_id, options_for_select([[@tip.user.name, @tip.user_id]], @tip.user_id) %>
+      <% else %>
+        <%= form.select :user_id, options_for_select([[current_user.name, current_user.id]], @tip.user_id) %>
+      <% end %>
+    </div>
+    <div class="field">
+      <%= form.label :race %>
+      <% if params[:action] == "edit" %>
+        <%= form.select :race_id, options_for_select([[@tip.race.country, @tip.race_id]], @tip.race_id) %>
+      <% else %>
+        <%= form.select :race_id, options_for_select(@races.map{ |r| [r.country, r.id] }, @tip.race_id) %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="section"><span>2</span>Qualifications</div>
+  <div class="inner-wrap">
+    <div class="field">
+      <%= form.label :qual_first %>
+      <%= form.select :qual_first, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.qual_first), include_blank: "Qualify 1st" %>
+    </div>
+
+    <div class="field">
+      <%= form.label :qual_second %>
+    <%= form.select :qual_second, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.qual_second), include_blank: 'Qualify 2nd' %>
+    </div>
+
+    <div class="field">
+      <%= form.label :qual_third %>
+      <%= form.select :qual_third, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.qual_third), include_blank: 'Qualify 3rd' %>
+    </div>
+  </div>
+
+  <div class="section"><span>3</span>Race</div>
+  <div class="inner-wrap">
+    <div class="field">
+      <%= form.label :race_first %>
+    <%= form.select :race_first, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.race_first), include_blank: 'Race 1st' %>
+    </div>
+
+    <div class="field">
+      <%= form.label :race_second %>
+    <%= form.select :race_second, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.race_second), include_blank: 'Race 2nd' %>
+    </div>
+
+    <div class="field">
+      <%= form.label :race_third %>
+      <%= form.select :race_third, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.race_third), include_blank: 'Race 3rd' %>
+    </div>
+
+    <div class="field">
+      <%= form.label :race_tenth %>
+      <%= form.select :race_tenth, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.race_tenth), include_blank: 'Race 10th' %>
+    </div>
   </div>
   
-  <div class="field">
-    <%= form.label :race %>
-	  <% if params[:action] == "edit" %>
-    	<%= form.select :race_id, options_for_select([[@tip.race.country, @tip.race_id]], @tip.race_id) %>
-	  <% else %>
-    	<%= form.select :race_id, options_for_select(@races.map{ |r| [r.country, r.id] }, @tip.race_id) %>
-	  <% end %>
-  </div>
-  
-  <div class="field">
-    <%= form.label :qual_first %>
-    <%= form.select :qual_first, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.qual_first), include_blank: "Qualify 1st" %>
-  </div>
-
-  <div class="field">
-    <%= form.label :qual_second %>
-	<%= form.select :qual_second, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.qual_second), include_blank: 'Qualify 2nd' %>
-  </div>
-
-  <div class="field">
-    <%= form.label :qual_third %>
-    <%= form.select :qual_third, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.qual_third), include_blank: 'Qualify 3rd' %>
-  </div>
-
-  <div class="field">
-    <%= form.label :race_first %>
-	<%= form.select :race_first, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.race_first), include_blank: 'Race 1st' %>
-  </div>
-
-  <div class="field">
-    <%= form.label :race_second %>
-	<%= form.select :race_second, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.race_second), include_blank: 'Race 2nd' %>
-  </div>
-
-  <div class="field">
-    <%= form.label :race_third %>
-    <%= form.select :race_third, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.race_third), include_blank: 'Race 3rd' %>
-  </div>
-
-  <div class="field">
-    <%= form.label :race_tenth %>
-    <%= form.select :race_tenth, options_for_select(@drivers.map{ |d| [d.abbr_name, d.abbr_name] }.sort, @tip.race_tenth), include_blank: 'Race 10th' %>
-  </div>
-
-  <div class="actions">
-	  <%= form.hidden_field :updated_by, :value => current_user.email %>
-    <%= form.submit %>
+  <div class="button-section">
+    <div class="actions">
+      <%= form.hidden_field :updated_by, :value => current_user.email %>
+      <%= form.submit %>
+    </div>
   </div>
 <% end %>

@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <style type="text/css">
 .TFtable{
   width:100%; 
@@ -26,11 +24,9 @@
 .TFtable tr:hover {background-color: #c6c4c4;}
 </style>
 
-<div style="overflow-x:auto;">
 
 <h1>Formula 1 - Kuntry Tippers</h1>
 <h2>SEASON <%= @year %> Leaderboard:</h2>
-
 <table class="TFtable">
   <thead>
     <tr>
@@ -48,7 +44,6 @@
   </tbody>
 </table>
 
-</div>
 
 <% if User.find_by(admin: true).nil? %>
 <p>STEP 1: Account upgrade tool: <%= link_to 'Account Upgrade', home_account_upgrade_path, method: :post %></p>
@@ -56,6 +51,7 @@
 
   <% if current_user.admin? %>
     <% if params[:year].present? then %>
+      <p></p>
       <h2>SEASON <%= @year %> ADMIN Section:</h2>
       <p>STEP 2: Fetch drivers tool: <%= link_to 'Fetch Drivers', home_fetch_drivers_path, method: :post %></p>
       <p>STEP 3: Fetch races tool: <%= link_to 'Fetch Races', home_fetch_races_path, method: :post %></p>
@@ -65,6 +61,7 @@
       <p>Fetch results tool (please be patient as this can take some time to complete): <%= link_to 'Fetch Results', home_fetch_results_action_path, method: :post %></p>
       <p>Update race tip points tool: <%= link_to 'Update Race Tip Points', home_update_race_tip_points_path, method: :post %></p>
   <% else%>
+    <p></p>
     <h2>ADMIN Section:</h2>
     <p><%= link_to '2017 Season Admin Page', home_index_path("2017"), method: :get %></p>
     <p><%= link_to '2018 Season Admin Page', home_index_path("2018"), method: :get %></p>

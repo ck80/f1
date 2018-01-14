@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'home/test'
+
   devise_for :users, :controllers => {:registrations => "users/registrations"}
   resources :leaderboards
   resources :users
