@@ -26,7 +26,7 @@ a:active {
 <html>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3mobile.css">
-	<div class="container">
+	<div class="container-fluid">
 		<head>
 			<title>F1 Tips</title>
 			<%= csrf_meta_tags %>
@@ -37,7 +37,7 @@ a:active {
 		</head>
 
 		<body>
-			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light ">
 				<%= link_to "F1 Tips", root_path, style: "color:black", class: "btn btn-inverse"%>
 				<% if user_signed_in? %>
 
