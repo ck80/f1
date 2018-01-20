@@ -1,7 +1,7 @@
 
 
 <h1>SEASON <%= @year %> Tips</h1>
-
+<div style="overflow-x:auto;">
 <table class="TFtable">
   <thead class="TFtable">
     <th colspan="3"></th>
@@ -51,6 +51,7 @@
     <% end %>
   </tbody>
 </table>
+</dev>
 <%= link_to 'New Tip', new_tip_path, class: "btn"%>
 
 <% if current_user.admin? then %>
