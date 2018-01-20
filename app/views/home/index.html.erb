@@ -63,8 +63,8 @@
   <% else%>
     <p></p>
     <h2>ADMIN Section:</h2>
-    <p><%= link_to '2017 Season Admin Page', home_index_path("2017"), method: :get %></p>
-    <p><%= link_to '2018 Season Admin Page', home_index_path("2018"), method: :get %></p>
+    <p><%= link_to '2017 Season Admin Page', home_index_path("2017"), method: :get, class: "btn", style: "color:red"%></p>
+    <p><%= link_to '2018 Season Admin Page', home_index_path("2018"), method: :get, class: "btn", style: "color:red" %></p>
   <% end %>
   <p>Debug: @year = <%= @year %></p>
 <% end %>
