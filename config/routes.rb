@@ -32,6 +32,7 @@ Rails.application.routes.draw do
   end 
   resources :drivers
   get '/tipper/:name', to: 'tips#index', as: 'tipper'
+  get '/pages/:page', to: 'pages#show'
   #get '/(:year)/tips', to: 'tips#index'
 
   root 'home#index'
