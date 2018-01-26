@@ -43,8 +43,8 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <% @race_results = RaceResult.joins(:race).where('races.year' => season, 'races.country' => race_country.country) %>
-                    <% @quali_results = QualiResult.joins(:race).where('races.year' => season, 'races.country' => race_country.country) %>
+                    <% @race_results = RaceResult.joins(:race).where('races.year' => season, 'races.country' => race_country.country).sort %>
+                    <% @quali_results = QualiResult.joins(:race).where('races.year' => season, 'races.country' => race_country.country).sort %>
                     <% $x=0 %>
                     <% while $x < @race_results.length do %>
                     <tr class="TFtable">
