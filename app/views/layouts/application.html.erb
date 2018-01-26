@@ -37,8 +37,8 @@ a:active {
 		</head>
 
 		<body>
-			<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light ">
-				<%= link_to "F1 Tips", root_path, style: "color:black", class: "btn btn-inverse"%>
+			<nav class="navbar sticky-top navbar-expand-md navbar-dark bg-primary ">
+				<%= link_to "F1 Tips", root_path, style: "color:white", class: "btn btn-inverse"%>
 				<% if user_signed_in? %>
 
 				<% else %>
@@ -49,28 +49,25 @@ a:active {
 				</button>
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
-				<li class="nav-item active">
-					<%= link_to "Home", root_path, style: "color:black", class: "btn btn-inverse"%>
-				</li>
 				<% if user_signed_in? %>
 				<li class="nav-item active">
-					<%= link_to "Tips", tips_path(if @year.nil? then Time.current.year.to_s else @year end), class: "btn" %>
+					<%= link_to "Tips", tips_path(if @year.nil? then Time.current.year.to_s else @year end), style: "color:white", class: "btn" %>
 				</li>
 				<li class="nav-item active pull-right">
-					<%= link_to "Rules", "/pages/rules", class: "btn btn-inverse"%>
+					<%= link_to "Rules", "/pages/rules", style: "color:white", style: "color:white", class: "btn btn-inverse"%>
 				</li>
 				<li>
-					<%= link_to 'Edit profile', edit_user_registration_path, class: "btn btn-inverse" %>
+					<%= link_to 'Edit profile', edit_user_registration_path, style: "color:white", class: "btn btn-inverse" %>
 				</li>
 				<li class="nav-item">
-					<%= link_to "Logout", destroy_user_session_path, method: :delete, class: "btn btn-inverse" %>
+					<%= link_to "Logout", destroy_user_session_path, method: :delete, style: "color:white", class: "btn btn-inverse" %>
 				</li>
 				<% else %>
 				<li class="nav-item active pull-right">
-					<a><%= link_to "Sign up", new_user_registration_path, class: "btn btn-inverse hover"%></a>
+					<a><%= link_to "Sign up", new_user_registration_path, style: "color:white", class: "btn btn-inverse hover"%></a>
 				</li>
 				<li class="nav-item active pull-right">
-					<%= link_to "Login", new_user_session_path, class: "btn btn-inverse"%>
+					<%= link_to "Login", new_user_session_path, style: "color:white", class: "btn btn-inverse"%>
 				</li>
 				</ul>
 				<% end %>

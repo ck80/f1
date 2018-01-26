@@ -5,6 +5,8 @@ class RaceResultsController < ApplicationController
   # GET /race_results.json
   def index
     @race_results = RaceResult.joins(:race, :driver)
+    @quali_results = QualiResult.joins(:race, :driver)
+
   end
 
   # GET /race_results/1

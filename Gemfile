@@ -18,7 +18,7 @@ gem 'puma'
 # gem 'sass-rails', '~> 5.0'
 
 # bootstrap
-gem 'bootstrap', '~> 4.0.0.beta3'
+gem 'bootstrap', '~> 4.0.0'
 gem 'sprockets-rails', :require => 'sprockets/railtie'
 gem 'jquery-rails'
 

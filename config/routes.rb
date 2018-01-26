@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   scope ':year' do
     resources :tips
     resources :home
+    resources :race_results
     post 'home/fetch_results_action'
     post 'home/fetch_results'
     post 'home/fetch_drivers'
