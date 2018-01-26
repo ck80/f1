@@ -3,30 +3,42 @@
 <table class="TFtable">
   <thead class="TFtable">
     <% if current_user.admin? %>
-    <th colspan="3"></th>
+      <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">User</th>
+      <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Race</th>
+      <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Country</th>
     <% else %>
-    <th colspan="2"></th>
+      <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Race</th>
+      <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Country</th>
     <% end %>
-    <th colspan="3">Qualificaitons</th>
-    <th colspan="4">Race</th>
-    <th colspan="4"></th>
+    <th colspan="3" style="text-align:center; border:#4e95f4 1px solid">Qualificaitons</th>
+    <th colspan="4" style="text-align:center; border:#4e95f4 1px solid">Race</th>
+    <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Score</th>
+    <% if current_user.admin? %>
+      <th colspan="3" style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Actions</th>
+    <% else %>
+      <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Actions</th>
+    <% end %>
   </thead>
   <thead class="TFtable">
     <tr class="TFtable">
       <% if current_user.admin? %>
-      <th>User</th>
+        <th style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th>
       <% end %>
-      <th>Race</th>
-      <th>Country</th>
-      <th>Q1</th>
-      <th>Q2</th>
-      <th>Q3</th>
-      <th>R1</th>
-      <th>R2</th>
-      <th>R3</th>
-      <th>R10h</th>
-      <th>Score</th>
-      <th colspan="3">Actions</th>
+      <th style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th>
+      <th style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-left:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th>
+      <th style="text-align:center; border:#4e95f4 1px solid">Q1</th>
+      <th style="text-align:center; border:#4e95f4 1px solid">Q2</th>
+      <th style="text-align:center; border:#4e95f4 1px solid">Q3</th>
+      <th style="text-align:center; border:#4e95f4 1px solid">R1</th>
+      <th style="text-align:center; border:#4e95f4 1px solid">R2</th>
+      <th style="text-align:center; border:#4e95f4 1px solid">R3</th>
+      <th style="text-align:center; border:#4e95f4 1px solid">R10h</th>
+      <th style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th>
+      <% if current_user.admin? %>
+        <th colspan="3" style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-left:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th>
+      <% else %>
+        <th style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-left:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th>
+      <% end %>
     </tr>
   </thead>
 
@@ -36,7 +48,7 @@
         <% if current_user.admin? %>
         <td><%= tip.user.name %></td>
 		    <% end %>
-        <td><%= tip.race.race_number %></td>
+        <td style="text-align:center"><%= tip.race.race_number %></td>
         <td><%= tip.race.country %></td>
         <td style="color:<%= if tip.qual_first_points == nil then "black" elsif tip.qual_first_points == Point.find_by(item: "q1st").points then "#2a8e01" elsif tip.qual_first_points == 0 then "#e20202" elsif tip.qual_first_points > 0 then "#0792ef" end %>" ><%= tip.qual_first %> | <%= tip.qual_first_points %></td>
         <td style="color:<%= if tip.qual_second_points == nil then "black" elsif tip.qual_second_points == Point.find_by(item: "q2nd").points then "#2a8e01" elsif tip.qual_second_points == 0 then "#e20202" elsif tip.qual_second_points > 0 then "#0792ef" end %>" ><%= tip.qual_second %> | <%= tip.qual_second_points %></td>
@@ -45,7 +57,7 @@
         <td style="color:<%= if tip.race_second_points == nil then "black" elsif tip.race_second_points == Point.find_by(item: "r2nd").points then "#2a8e01" elsif tip.race_second_points == 0 then "#e20202" elsif tip.race_second_points > 0 then "#0792ef" end %>" ><%= tip.race_second %> | <%= tip.race_second_points %></td>
         <td style="color:<%= if tip.race_third_points == nil then "black" elsif tip.race_third_points == Point.find_by(item: "r3rd").points then "#2a8e01" elsif tip.race_third_points == 0 then "#e20202" elsif tip.race_third_points > 0 then "#0792ef" end %>" ><%= tip.race_third %> | <%= tip.race_third_points %></td>
         <td style="color:<%= if tip.race_tenth_points == nil then "black" elsif tip.race_tenth_points == Point.find_by(item: "r10th").points then "#2a8e01" elsif tip.race_tenth_points == 0 then "#e20202" elsif tip.race_tenth_points > 0 then "#0792ef" end %>" ><%= tip.race_tenth %> | <%= tip.race_tenth_points %></td>
-        <td><%= tip.race_total_points %></td>
+        <td style="text-align:center"><%= tip.race_total_points %></td>
         <% if current_user.admin? %>
         <td><%= link_to 'Show', tip_path(id: tip) %></td>
         <% end %>
