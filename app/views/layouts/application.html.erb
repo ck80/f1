@@ -37,7 +37,7 @@ a:active {
 		</head>
 
 		<body>
-			<nav class="navbar sticky-top navbar-expand-md navbar-dark bg-primary ">
+			<nav class="navbar static-top navbar-expand-md navbar-dark bg-primary ">
 				<%= link_to "F1 Tips", root_path, style: "color:white", class: "btn btn-inverse"%>
 				<% if user_signed_in? %>
 
@@ -55,6 +55,9 @@ a:active {
 				</li>
 				<li class="nav-item active pull-right">
 					<%= link_to "Rules", "/pages/rules", style: "color:white", style: "color:white", class: "btn btn-inverse"%>
+				</li>
+				<li class="nav-item active pull-right">
+					<%= link_to "Race Results", "/pages/raceresults", style: "color:white", style: "color:white", class: "btn btn-inverse"%>
 				</li>
 				<li>
 					<%= link_to 'Edit profile', edit_user_registration_path, style: "color:white", class: "btn btn-inverse" %>
