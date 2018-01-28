@@ -16,5 +16,5 @@
 //= require jquery_ujs
 //= require popper
 //= require bootstrap
-//= require jquery/jquery.tablesorter
+//= require jquery-tablesorter
 //= require_tree .
