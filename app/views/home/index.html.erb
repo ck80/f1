@@ -1,4 +1,13 @@
 <h2>Season <%= @year %> Leaderboard:</h2>
+
+<script type="text/javascript" id="js">$(document).ready(function() {
+	// call the tablesorter plugin
+	$("table").tablesorter({
+		// sort on the first column and third column, order asc
+		sortList: [[1,1],[0,0]]
+	});
+}); </script>
+
 <table class="TFtable" data-toggle="table">
   <thead>
     <tr>
@@ -6,8 +15,8 @@
       <th>Points</th>
     </tr>
   </thead>
-  <% User.all.order(name: :asc).each do |u| %>
   <tbody>
+  <% User.all.order(name: :asc).each do |u| %>
     <tr>
       <td><%= u.name %></td>
       <td><%= Tip.joins(:race).where(user_id: u.id, 'races.year' => @year).sum(:race_total_points) %></td>
@@ -15,7 +24,6 @@
     <% end %>
   </tbody>
 </table>
-
 
 <% if User.find_by(admin: true).nil? %>
 <p>STEP 1: Account upgrade tool: <%= link_to 'Account Upgrade', home_account_upgrade_path, method: :post %></p>

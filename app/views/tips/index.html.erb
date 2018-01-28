@@ -1,5 +1,12 @@
 <h1>Season <%= @year %> Tips</h1>
 <div style="overflow-x:auto;">
+<script type="text/javascript" id="js">$(document).ready(function() {
+	// call the tablesorter plugin
+	$("table").tablesorter({
+		// sort on the first column and third column, order asc
+		sortList: [[1,0],[0,0]]
+	});
+}); </script>
 <table class="TFtable">
   <thead class="TFtable">
     <% if current_user.admin? %>
