@@ -24,69 +24,73 @@ a:active {
 </style>
 
 <html>
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3mobile.css">
-	<div class="container-fluid">
-		<head>
-			<title>F1 Tips</title>
-			<%= csrf_meta_tags %>
+	<!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-			<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-			<%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-			<style><%= yield :stylesheets %></style>
-		</head>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-		<body>
-			<nav class="navbar static-top navbar-expand-md navbar-dark bg-primary ">
-				<%= link_to "F1 Tips", root_path, style: "color:white", class: "btn btn-inverse"%>
-				<% if user_signed_in? %>
+	<head>
+		<title>F1 Tips</title>
+		<%= csrf_meta_tags %>
 
-				<% else %>
+		<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+		<%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+		<style><%= yield :stylesheets %></style>
+	</head>
 
-				<% end %>
-				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav mr-auto">
-				<% if user_signed_in? %>
-				<li class="nav-item active">
-					<%= link_to "Tips", tips_path(if @year.nil? then Time.current.year.to_s else @year end), style: "color:white", class: "btn" %>
-				</li>
-				<li class="nav-item active pull-right">
-					<%= link_to "Rules", "/pages/rules", style: "color:white", class: "btn btn-inverse"%>
-				</li>
-				<li class="nav-item active pull-right">
-					<%= link_to "Race Results", "/pages/raceresults", style: "color:white", class: "btn btn-inverse"%>
-				</li>
-				<li>
-					<%= link_to 'Edit profile', edit_user_registration_path, style: "color:white", class: "btn btn-inverse" %>
-				</li>
-				<li class="nav-item">
-					<%= link_to "Logout", destroy_user_session_path, method: :delete, style: "color:white", class: "btn btn-inverse" %>
-				</li>
-				<% else %>
-				<li class="nav-item active pull-right">
-					<a><%= link_to "Sign up", new_user_registration_path, style: "color:white", class: "btn btn-inverse hover"%></a>
-				</li>
-				<li class="nav-item active pull-right">
-					<%= link_to "Login", new_user_session_path, style: "color:white", class: "btn btn-inverse"%>
-				</li>
-				</ul>
-				<% end %>
-				</div>
-			</nav>
+	<body>
+		<nav class="navbar sticky-top navbar-expand-md navbar-dark bg-primary ">
+			<%= link_to "F1 Tips", root_path, style: "color:white", class: "btn btn-inverse"%>
+			<% if user_signed_in? %>
 
-			<% if notice %>
-				<p class="alert alert-success"><%= notice %></p>
+			<% else %>
+
 			<% end %>
-			
-			<% if alert %>
-				<p class="alert alert-danger"><%= alert %></p>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+			<% if user_signed_in? %>
+			<li class="nav-item active">
+				<%= link_to "Tips", tips_path(if @year.nil? then Time.current.year.to_s else @year end), style: "color:white", class: "btn" %>
+			</li>
+			<li class="nav-item active pull-right">
+				<%= link_to "Rules", "/pages/rules", style: "color:white", class: "btn btn-inverse"%>
+			</li>
+			<li class="nav-item active pull-right">
+				<%= link_to "Race Results", "/pages/raceresults", style: "color:white", class: "btn btn-inverse"%>
+			</li>
+			<li>
+				<%= link_to 'Edit profile', edit_user_registration_path, style: "color:white", class: "btn btn-inverse" %>
+			</li>
+			<li class="nav-item">
+				<%= link_to "Logout", destroy_user_session_path, method: :delete, style: "color:white", class: "btn btn-inverse" %>
+			</li>
+			<% else %>
+			<li class="nav-item active pull-right">
+				<a><%= link_to "Sign up", new_user_registration_path, style: "color:white", class: "btn btn-inverse hover"%></a>
+			</li>
+			<li class="nav-item active pull-right">
+				<%= link_to "Login", new_user_session_path, style: "color:white", class: "btn btn-inverse"%>
+			</li>
+			</ul>
 			<% end %>
-			
-			<%#= image_tag "f1-cartoon.jpg" %>
-			<%= yield %>
-		</body>
-	</div>
+			</div>
+		</nav>
+
+		<% if notice %>
+			<p class="alert alert-success"><%= notice %></p>
+		<% end %>
+		
+		<% if alert %>
+			<p class="alert alert-danger"><%= alert %></p>
+		<% end %>
+		<div class="container-fluid">
+		<%#= image_tag "f1-cartoon.jpg" %>
+		<%= yield %>
+		</div>
+	</body>
 </html>
