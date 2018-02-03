@@ -9,28 +9,17 @@
 }); </script>
 <table class="TFtable">
   <thead class="TFtable">
-    <% if current_user.admin? %>
-      <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">User</th>
-      <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Race</th>
-      <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Country</th>
-    <% else %>
-      <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Race</th>
-      <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Country</th>
-    <% end %>
+    <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">User</th>
+    <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Race</th>
+    <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Country</th>
     <th colspan="3" style="text-align:center; border:#4e95f4 1px solid">Qualificaitons</th>
     <th colspan="4" style="text-align:center; border:#4e95f4 1px solid">Race</th>
     <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Score</th>
-    <% if current_user.admin? %>
-      <th colspan="3" style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Actions</th>
-    <% else %>
-      <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Actions</th>
-    <% end %>
+    <th colspan="3" style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Actions</th>
   </thead>
   <thead class="TFtable">
     <tr class="TFtable">
-      <% if current_user.admin? %>
-        <th style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th>
-      <% end %>
+      <th style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th>
       <th style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th>
       <th style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-left:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th>
       <th style="text-align:center; border:#4e95f4 1px solid">Q1</th>
@@ -41,20 +30,14 @@
       <th style="text-align:center; border:#4e95f4 1px solid">R3</th>
       <th style="text-align:center; border:#4e95f4 1px solid">R10h</th>
       <th style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th>
-      <% if current_user.admin? %>
-        <th colspan="3" style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-left:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th>
-      <% else %>
-        <th style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-left:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th>
-      <% end %>
+      <th colspan="3" style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-left:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @tips.order(:race_id).each do |tip| %>
       <tr>
-        <% if current_user.admin? %>
         <td><%= tip.user.name %></td>
-		    <% end %>
         <td style="text-align:center"><%= tip.race.race_number %></td>
         <td><%= tip.race.country %></td>
         <td style="color:<%= if tip.qual_first_points == nil then "black" elsif tip.qual_first_points == Point.find_by(item: "q1st").points then "#2a8e01" elsif tip.qual_first_points == 0 then "#e20202" elsif tip.qual_first_points > 0 then "#0792ef" end %>" ><%= tip.qual_first %> | <%= tip.qual_first_points %></td>
@@ -82,5 +65,4 @@
 <%= link_to 'New Tip', new_tip_path, class: "btn btn-primary"%>
 
 </div>
-
 
