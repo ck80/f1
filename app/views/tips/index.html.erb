@@ -1,4 +1,4 @@
-<h1>Season <%= @year %> Tips</h1>
+<h2>Season <%= @year %> Tips</h2>
 <div style="overflow-x:auto;">
 <script type="text/javascript" id="js">$(document).ready(function() {
 	// call the tablesorter plugin
@@ -70,18 +70,17 @@
         <% end %>
         <td><%= if tip.race.ical_dtstart.future? then link_to 'Edit', edit_tip_path(id: tip) else "Closed" end %></td>
         <% if current_user.admin? %>
-        <td><%= link_to 'Destroy', tip_path(id: tip), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Delete', tip_path(id: tip), method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %></td>
         <% end %>
       </tr>
     <% end %>
   </tbody>
 </table>
 </dev>
-<%= link_to 'New Tip', new_tip_path, class: "btn"%>
+</br>
 
-<% if current_user.admin? then %>
-<p>Debug: @year = <%= @year %></p>
-<% end %>
+<%= link_to 'New Tip', new_tip_path, class: "btn btn-primary"%>
+
 </div>
 
 

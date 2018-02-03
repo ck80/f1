@@ -1,7 +1,7 @@
 <%= form_with(model: tip, local: true, url: if params[:action] == "new" then nil elsif params[:action] == "create" then nil else tip_path end ) do |form| %>
   <% if tip.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(tip.errors.count, "error") %> prohibited this tip from being saved:</h2>
+    <div id="error_explanation" class="alert alert-danger">
+      <h4><strong><%= pluralize(tip.errors.count, "error") %></strong> prohibited this tip from being saved:</h4>
       <ul>
       <% tip.errors.full_messages.each do |message| %>
         <li><%= message %></li>
@@ -9,10 +9,8 @@
       </ul>
     </div>
   <% end %>
-  <% if current_user.admin? then %>
-    debug: form acrtion = <%= params[:action] %>
-  <% end %>
-  <div class="section"><span>1</span>Race Details</div>
+
+  <div class="section" ><span>1</span>Race Details</div>
   <div class="inner-wrap">
     <div class="field">
       <%= form.label :user %>

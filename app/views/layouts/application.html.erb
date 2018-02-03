@@ -1,25 +1,9 @@
 <!DOCTYPE html>
 <style>
-/* unvisited link */
-a:link {
-    color: grey;
-		
-}
-
-/* visited link */
-a:visited {
-    color: grey;
-}
-
 /* mouse over link */
 a:hover {
     color: black;
 		font-weight: bold;
-}
-
-/* selected link */
-a:active {
-    color: yellow;
 }
 </style>
 
@@ -43,11 +27,6 @@ a:active {
 	<body>
 		<nav class="navbar sticky-top navbar-expand-md navbar-dark bg-primary ">
 			<%= link_to "F1 Tips", root_path, style: "color:white", class: "btn btn-inverse"%>
-			<% if user_signed_in? %>
-
-			<% else %>
-
-			<% end %>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -88,6 +67,7 @@ a:active {
 		<% if alert %>
 			<p class="alert alert-danger"><%= alert %></p>
 		<% end %>
+		
 		<div class="container-fluid">
 		<%#= image_tag "f1-cartoon.jpg" %>
 		<%= yield %>
