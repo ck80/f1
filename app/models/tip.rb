@@ -6,6 +6,7 @@ class Tip < ApplicationRecord
   validates :qual_first, :qual_second, :qual_third, :race_first, :race_second, :race_third, :race_tenth, :updated_by, presence: true
   validates :race_id, uniqueness: { scope: :user_id, message: ": you already have an entry for this race, please edit the existing tip instread of create a new one." }
   validate :unique_entries_on_race_tip_post
+  validate :new_tip_cannot_be_past_quali_start
   after_save :update_race_tip_points
 ##  validates :race_id, uniqueness: { scope: :year, message: "should have once per year" }  
 end
@@ -33,6 +34,11 @@ def unique_entries_on_race_tip_post
     errors.add(:qual_third, "- has to be unique")
     false
   end 
+end
+
+def new_tip_cannot_be_past_quali_start
+  errors.add(:race_id, "- can't submit new tip after qualification session start time") if
+    Time.current > race.ical_dtstart
 end
 
 def update_race_tip_points
