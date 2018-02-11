@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 20171217030714) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -44,7 +47,7 @@ ActiveRecord::Schema.define(version: 20171217030714) do
     t.integer "total_points"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.bigint "user_id"
     t.index ["user_id"], name: "index_leaderboards_on_user_id"
   end
 
@@ -67,8 +70,8 @@ ActiveRecord::Schema.define(version: 20171217030714) do
     t.integer "position"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "race_id"
-    t.integer "driver_id"
+    t.bigint "race_id"
+    t.bigint "driver_id"
     t.index ["driver_id"], name: "index_race_results_on_driver_id"
     t.index ["race_id"], name: "index_race_results_on_race_id"
   end
@@ -95,8 +98,8 @@ ActiveRecord::Schema.define(version: 20171217030714) do
     t.integer "points"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
-    t.integer "race_id"
+    t.bigint "user_id"
+    t.bigint "race_id"
     t.string "updated_by"
     t.integer "qual_first_points"
     t.integer "qual_second_points"
@@ -129,4 +132,9 @@ ActiveRecord::Schema.define(version: 20171217030714) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "leaderboards", "users"
+  add_foreign_key "race_results", "drivers"
+  add_foreign_key "race_results", "races"
+  add_foreign_key "tips", "races"
+  add_foreign_key "tips", "users"
 end
