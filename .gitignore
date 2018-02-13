@@ -31,3 +31,10 @@
 
 # Ignore local variables file
 /config/initializers/dev_variables.rb
+
+# Ignore encrypted secrets key file.
+config/secrets.yml.key
+
+# Ignore local environments file
+f1appdevenv.env
+f1appprodenv.env
