@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
-  get 'home/test'
 
   devise_for :users, :controllers => {:registrations => "users/registrations"}
-  resources :leaderboards
+  # resources :leaderboards
   resources :users
   scope ':year' do
     resources :tips
@@ -18,23 +17,23 @@ Rails.application.routes.draw do
     post 'home/update_race_tip_points'
     post 'home/update_race_start'
   end
-  resources :races
+ # resources :races
  # resources :home
-  resources :points
-  resources :race_results do
-    collection do
-      post 'getraceresults'
-    end
-  end 
-  resources :quali_results do
-    collection do
-      post 'getqualiresults'
-    end
-  end 
-  resources :drivers
-  get '/tipper/:name', to: 'tips#index', as: 'tipper'
+ # resources :points
+ # resources :race_results do
+ #   collection do
+ #     post 'getraceresults'
+ #   end
+ # end 
+ # resources :quali_results do
+ #   collection do
+ #     post 'getqualiresults'
+ #   end
+ # end 
+ # resources :drivers
+ # get '/tipper/:name', to: 'tips#index', as: 'tipper'
   get '/pages/:page', to: 'pages#show'
-  #get '/(:year)/tips', to: 'tips#index'
+ # get '/(:year)/tips', to: 'tips#index'
 
   root 'home#index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
