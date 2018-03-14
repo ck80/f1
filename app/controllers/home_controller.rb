@@ -457,9 +457,8 @@ class HomeController < ApplicationController
       x = Driver.new
       x.year = @year
       x.name = driverHash[:drivername]
-      x.abbr_name = "nil"
+      x.abbr_name = (x.name.split.second + if x.name.split.third.nil? then "" else x.name.split.third end)[0..2].upcase
       x.team = driverHash[:driverteam]
-      x
       x.save
       $i +=1
     end
