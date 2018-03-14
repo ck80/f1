@@ -435,6 +435,37 @@ class HomeController < ApplicationController
 
   end
 
+  def fetch_drivers_by_championship
+    # load HTML parser
+    require 'rubygems'
+    require 'nokogiri'
+    require 'open-uri'
+    
+    # fetch F1 HTML page including list of races
+    page = "https://www.formula1.com/en/championship/drivers.html"
+    doc = Nokogiri::HTML(open(page))
+    section=doc.css('figcaption')
+    driverelement=section.css('h1')
+    teamelement=section.css('p')
+    
+    # put driverelement into an array @resultsArray
+    @driversArray = []
+    driverHash = {}
+    $i = 0
+    while $i < driverelement.length
+      driverHash = {drivername: driverelement[$i].text, driverteam: teamelement[$i].text.split.join(" ") }
+      x = Driver.new
+      x.year = @year
+      x.name = driverHash[:drivername]
+      x.abbr_name = "nil"
+      x.team = driverHash[:driverteam]
+      x
+      x.save
+      $i +=1
+    end
+
+  end
+
   def fetch_races
     # load HTML parser
     require 'rubygems'
