@@ -35,7 +35,7 @@
   </thead>
 
   <tbody>
-    <% @tips.order(:race_id).each do |tip| %>
+    <% @tips.each do |tip| %>
       <tr>
         <td><%= tip.user.name %></td>
         <td style="text-align:center"><%= tip.race.race_number %></td>
