@@ -1,4 +1,4 @@
-ruby {
+node {
     def app
 
     stage('Clone repository') {
