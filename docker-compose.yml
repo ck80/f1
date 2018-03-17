@@ -1,11 +1,11 @@
 version: '3'
 services:
-  db:
-    image: postgres
-    volumes:
-      - postgresData:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+#  db:
+#    image: postgres
+#    volumes:
+#      - postgresData:/var/lib/postgresql/data
+#    ports:
+#      - "5432:5432"
 #  web_prod:
 #    build: .
 #    command: bundle exec rails s -e production -p 3080 -b '0.0.0.0'
@@ -25,10 +25,10 @@ services:
       - .:/myapp
     ports:
       - "3000:3000"
-    depends_on:
-      - db
+#    depends_on:
+#      - db
     env_file:
       - f1appdevenv.env
 
-volumes:
-  postgresData:
+#volumes:
+#  postgresData:
