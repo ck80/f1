@@ -36,11 +36,7 @@ node {
     }
 
     stage('Deploy'){
-
-        sshagent (credentials: ['server-ssh-keys']) {
         echo 'ssh to web server and tell it to pull new image'
         sh 'ssh root@192.168.1.10 /mnt/user/rubydev/f1dev/dockerRun.sh'
-        sh "ssh root@192.168.1.10 \"echo ${env.BUILD_ID}\""
-        } 
     }
 }
