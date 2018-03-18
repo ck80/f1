@@ -4,13 +4,15 @@ services:
     image: postgres
     volumes:
       - postgresData:/var/lib/postgresql/data
+      - /mnt/user/appdata/postgres/db_backups:/home/backups/database/postgresql
     ports:
       - "5432:5432"
 
   web_prod:
     image: registry.agoralogic.com:5000/ck80/f1tips:30
-    command: bundle exec rails s -e production -p 3080 -b '0.0.0.0'
-#    volumes:
+    command: bundle exec rails s -e production -p 3000 -b '0.0.0.0'
+    volumes:
+      - ${PWD}/config/secrets.yml.key:/myapp/config/secrets.yml.key
 #      - .:/myapp
     ports:
       - "3000:3000"
@@ -21,7 +23,7 @@ services:
 
   web_dev:
     image: registry.agoralogic.com:5000/ck80/f1tips:latest
-    command: bundle exec rails s -e development -p 3000 -b '0.0.0.0'
+    command: bundle exec rails s -e development -p 3080 -b '0.0.0.0'
 #    volumes:
 #      - .:/myapp
     ports:
