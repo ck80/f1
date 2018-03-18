@@ -34,4 +34,10 @@ node {
             app.push("latest")
         }
     }
+
+    stage('Deploy'){
+
+        echo 'ssh to web server and tell it to pull new image'
+        sh 'ssh root@192.168.1.10 /mnt/user/rubydev/f1dev/dockerRun.sh'
+    }
 }
