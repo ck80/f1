@@ -22,8 +22,8 @@ services:
   web_dev:
     image: registry.agoralogic.com:5000/ck80/f1tips:latest
     command: bundle exec rails s -e development -p 3000 -b '0.0.0.0'
-    volumes:
-      - .:/myapp
+#    volumes:
+#      - .:/myapp
     ports:
       - "3000:3000"
     depends_on:
