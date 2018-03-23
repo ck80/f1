@@ -25,7 +25,7 @@ a:hover {
 	</head>
 
 	<body>
-		<nav class="navbar sticky-top navbar-expand-md navbar-dark" <%=if RAILS_ENV=development then 'style="background-color: #ff555b' else 'bg-primary' end %>">
+		<nav class="navbar sticky-top navbar-expand-md navbar-dark" <%=if RAILS_ENV=development then "style='background-color: #ff555b'" else "bg-primary" end %>">
 			<%= link_to "F1 Tips", root_path, style: "color:white", class: "btn btn-inverse"%>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
