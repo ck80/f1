@@ -38,3 +38,6 @@ config/secrets.yml.key
 # Ignore local environments file
 f1appdevenv.env
 f1appprodenv.env
+
+# Ignore local database.yml for mac
+config/database.yml
