@@ -256,8 +256,8 @@ class HomeController < ApplicationController
         result.car
         result.driver
         result.team
-        x = Driver.find_by(abbr_name: result.driver, year: @year).id
-        y = Race.find_by(country: result.race_country, year: @year).id
+        x = Driver.find_by!(abbr_name: result.driver, year: @year).id
+        y = Race.find_by!(country: result.race_country, year: @year).id
         if result.place != 0 then
           r = QualiResult.find_or_initialize_by(race_id: y, position: result.place)
           r.driver_id = x
@@ -278,8 +278,8 @@ class HomeController < ApplicationController
         result.car
         result.driver
         result.team
-        x = Driver.find_by(abbr_name: result.driver, year: @year).id
-        y = Race.find_by(country: result.race_country, year: @year).id
+        x = Driver.find_by!(abbr_name: result.driver, year: @year).id
+        y = Race.find_by!(country: result.race_country, year: @year).id
         if result.place != 0 then
           r = RaceResult.find_or_initialize_by(race_id: y, position: result.place)
           r.driver_id = x
