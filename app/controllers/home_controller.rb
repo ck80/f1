@@ -258,16 +258,21 @@ class HomeController < ApplicationController
         result.team
         x = Driver.find_by!(abbr_name: result.driver, year: @year).id
         y = Race.find_by!(country: result.race_country, year: @year).id
-        if result.place != 0 then
-          r = QualiResult.find_or_initialize_by(race_id: y, position: result.place)
-          r.driver_id = x
-          r.save
-        else
-          r = QualiResult.find_or_initialize_by(race_id: y, driver_id: x, position: result.place)
-          # r.position = result.place
-          # r.race_id = y
-          r.save
-        end
+        r = QualiResult.new
+        r.position = result.place
+        r.race_id = y
+        r.driver_id = x
+        r.save
+#        if result.place != 0 then
+#          r = QualiResult.find_or_initialize_by(position: result.place, race_id: y)
+#          r.driver_id = x
+#          r.save
+#        else
+#          r = QualiResult.find_or_initialize_by(position: result.place, race_id: y, driver_id: x)
+#          # r.position = result.place
+#          # r.race_id = y
+#          r.save
+#        end
       end
     end
     
@@ -280,16 +285,21 @@ class HomeController < ApplicationController
         result.team
         x = Driver.find_by!(abbr_name: result.driver, year: @year).id
         y = Race.find_by!(country: result.race_country, year: @year).id
-        if result.place != 0 then
-          r = RaceResult.find_or_initialize_by(race_id: y, position: result.place)
-          r.driver_id = x
-          r.save
-        else
-          r = RaceResult.find_or_initialize_by(race_id: y, driver_id: x, position: result.place)
-          # r.position = result.place
-          # r.race_id = y
-          r.save
-        end
+        r = RaceResult.new
+        r.position = result.place
+        r.race_id = y
+        r.driver_id = x
+        r.save
+#        if result.place != 0 then
+#          r = RaceResult.find_by( position: result.place, race_id: y)
+#          r.driver_id = x
+#          r.save
+#        else
+#          r = RaceResult.find_by(position: result.place, race_id: y, driver_id: x)
+#          # r.position = result.place
+#          # r.race_id = y
+#          r.save
+#        end
       end
     end
     # render plain: @allqualiresultsArray #+ @allraceresultsArray
