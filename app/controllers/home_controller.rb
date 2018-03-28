@@ -118,7 +118,7 @@ class HomeController < ApplicationController
         then 0
       elsif RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_first), year: @year).id)).position == 0
         then 0
-      elsif Point.find_by(item: "r1st").points - (1 - RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_first), year: @year, year: @year).id)).position).abs < 0
+      elsif Point.find_by(item: "r1st").points - (1 - RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_first), year: @year).id)).position).abs < 0
         then 0
       else Point.find_by(item: "r1st").points - (1 - RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_first), year: @year).id)).position).abs
       end
