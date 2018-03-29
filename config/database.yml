@@ -5,16 +5,24 @@
 #   gem 'sqlite3'
 #
 default: &default
-  adapter: postgresql
-  encoding: unicode
-  host: db
-  username: postgres
-  password:
-  pool: 5
+#  adapter: postgresql
+#  encoding: unicode
+#  host: db
+#  username: postgres
+#  password:
+#  pool: 5
 
+# use postgres for when running on container
+#development:
+#  <<: *default
+#  database: myapp_development
+
+# use sqlite for when running on mac
 development:
-  <<: *default
-  database: myapp_development
+  adapter: sqlite3
+  database: db/myapp_development.sqlite3
+  pool: 5
+  timeout: 5000
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -26,4 +34,5 @@ test:
 production:
   <<: *default
   database: myapp_production
+
 
