@@ -43,6 +43,8 @@ def new_tip_cannot_be_past_quali_start
 end
 
 def update_race_tip_points
+  # set @year as for some reason it does not carry accross from tips_controller... this is a temporary bandaid as it only works for current year.
+  @year = Time.current.year.to_s
   @tips = Tip.all
 
   @nestedpointsArray = []
