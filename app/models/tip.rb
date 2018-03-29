@@ -1,5 +1,4 @@
 class Tip < ApplicationRecord
-  before_action :get_year
   belongs_to :user
   belongs_to :race
   validates_associated :user
@@ -12,13 +11,6 @@ class Tip < ApplicationRecord
 ##  validates :race_id, uniqueness: { scope: :year, message: "should have once per year" }  
 end
 
-def get_year
-  if params[:year].present? then
-    @year = params[:year].to_s
-  else
-    @year = Time.current.year.to_s
-  end
-end
 
 def unique_entries_on_race_tip_post
   #avoid duplicate entried for qualies and race tips
