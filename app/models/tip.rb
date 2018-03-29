@@ -45,7 +45,7 @@ end
 def update_race_tip_points
   # set @year as for some reason it does not carry accross from tips_controller... this is a temporary bandaid as it only works for current year.
   @year = Time.current.year.to_s
-  @tips = Tip.all
+  @tips = Tip.joins(:race).where('races.year': @year)
 
   @nestedpointsArray = []
   $i = 0

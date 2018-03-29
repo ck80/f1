@@ -77,11 +77,10 @@ class HomeController < ApplicationController
   end
   
   def update_race_tip_points
-    @tips = Tip.all
+    @tips = Tip.joins(:race).where('races.year': @year)
     
     #calculate quali points
 
-    
     @nestedpointsArray = []
     $i = 0
     @tips.each do |tip|
@@ -148,9 +147,9 @@ class HomeController < ApplicationController
       elsif RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_tenth), year: @year).id)).position == 10
         then 15
       end
-      @pointsHash = {user: tip.user.email, race: tip.race.country, points: @pointsArray, year: tip.race.year, race_points: @pointsArray.sum }
+      @pointsHash = {user: tip.user.email, race: tip.race.country, points: @pointsArray, race_points: @pointsArray.sum }
       @nestedpointsArray << @pointsHash
-      tip.update(qual_first_points: (@pointsHash[:points][0]), qual_second_points: (@pointsHash[:points][1]), qual_third_points: (@pointsHash[:points][2]), \
+      tip.update_columns(qual_first_points: (@pointsHash[:points][0]), qual_second_points: (@pointsHash[:points][1]), qual_third_points: (@pointsHash[:points][2]), \
       race_first_points: (@pointsHash[:points][3]), race_second_points: (@pointsHash[:points][4]), race_third_points: (@pointsHash[:points][5]), \
       race_tenth_points: (@pointsHash[:points][6]), race_total_points: (@pointsHash[:points].sum))
       $i +=1  
