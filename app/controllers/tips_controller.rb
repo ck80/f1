@@ -32,7 +32,7 @@ class TipsController < ApplicationController
     else
       @user = current_user
       @tips = Tip.joins(:race).where("races.year = ? AND user_id = ?", @year, @user.id)
-      @tips = @tips + Tip.joins(:race).where("races.year = ? AND races.ical_dtstart < ?", @year, Time.current)
+      @tips = @tips + Tip.joins(:race).where("races.year = ? AND races.ical_dtstart < ? AND user_id != ?", @year, Time.current, @user.id)
     end
   end
 
