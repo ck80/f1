@@ -6,7 +6,7 @@ class Tip < ApplicationRecord
   validates :qual_first, :qual_second, :qual_third, :race_first, :race_second, :race_third, :race_tenth, :updated_by, presence: true
   validates :race_id, uniqueness: { scope: :user_id, message: ": you already have an entry for this race, please edit the existing tip instread of create a new one." }
   validate :unique_entries_on_race_tip_post
-  validate :new_tip_cannot_be_past_quali_start, unless: 'user.admin? = true'
+  validate :new_tip_cannot_be_past_quali_start, unless: 'user.admin?'
   after_save :update_race_tip_points
 ##  validates :race_id, uniqueness: { scope: :year, message: "should have once per year" }  
 end
