@@ -10,10 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180311060631) do
-
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+ActiveRecord::Schema.define(version: 20180331112632) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -85,6 +82,7 @@ ActiveRecord::Schema.define(version: 20180311060631) do
     t.string "ical_uid"
     t.datetime "ical_dtstart"
     t.string "ical_summary"
+    t.string "img"
   end
 
   create_table "tips", force: :cascade do |t|
@@ -113,6 +111,15 @@ ActiveRecord::Schema.define(version: 20180311060631) do
     t.index ["user_id"], name: "index_tips_on_user_id"
   end
 
+  create_table "tracks", force: :cascade do |t|
+    t.string "country"
+    t.string "circuit"
+    t.integer "laps"
+    t.string "svg"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -139,9 +146,4 @@ ActiveRecord::Schema.define(version: 20180311060631) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "leaderboards", "users"
-  add_foreign_key "race_results", "drivers"
-  add_foreign_key "race_results", "races"
-  add_foreign_key "tips", "races"
-  add_foreign_key "tips", "users"
 end
