@@ -70,11 +70,11 @@ a:hover {
           <path class="f1-svg-track__outline" d="<%= @next_race.img %>"></path>
         </svg>
       </div>
-      <div class="col" style="margin-left:35px">
+      <div class="col" style="margin-left:20px">
         </br><h4 class="text-white">Next Race</h4>
         <h6 class="text-white">Race <%= @next_race.race_number %> | <%= @next_race.country %></h6></br>
         <h6 class="text-white">Qualifing Session:</h6>
-        <h6 class="text-white"><%= @next_race.ical_dtstart.strftime("%A, %B%e %R") %></h6>
+        <p class="text-white"><%= @next_race.ical_dtstart.strftime("%A, %B%e %R") %></h6>
       </div>
     </div>
     <% end %>
