@@ -60,6 +60,7 @@ a:hover {
 			</div>
 		</nav>
     <% if request.path_info.exclude?('users')%>
+    <% if request.path_info.exclude?('tips/new')%>
 		<% if user_signed_in? %>
     <% @next_race = Race.where("ical_dtstart >= ?", Time.now).order(ical_dtstart: :asc).first %>
     <div class="row no-gutters" style="background-image: url(<%= asset_path 'carbon-black.jpg' %>) ">
@@ -76,6 +77,7 @@ a:hover {
         <h6 class="text-white"><%= @next_race.ical_dtstart.strftime("%A, %B%e %R") %></h6>
       </div>
     </div>
+    <% end %>
     <% end %>
     <% end %>
   	<% if notice %>
