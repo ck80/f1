@@ -78,7 +78,7 @@ a:hover {
               </svg>
             </div>
             <div class="col" style="margin-left:15px">
-              </br><h4 class="text-white">Last Race</h4>
+              </br><h5 class="text-white">Last Race</h5>
               <h6 class="text-white">Race <%= @last_race.race_number %> | <%= @last_race.country %></h6></br>
               <h6 class="text-white">Round Winner:</h6>
               <h6 class="text-white"><%= @last_race.tips.order(race_total_points: :desc).first.user.name %> | <%= @last_race.tips.order(race_total_points: :desc).first.race_total_points %> points</h6>
@@ -94,7 +94,7 @@ a:hover {
               </svg>
             </div>
             <div class="col" style="margin-left:15px">
-              </br><h4 class="text-white">Next Race</h4>
+              </br><h5 class="text-white">Next Race</h5>
               <h6 class="text-white">Race <%= @next_race.race_number %> | <%= @next_race.country %></h6></br>
               <h6 class="text-white">Qualifing Session:</h6>
               <h6 class="text-white"><%= @next_race.ical_dtstart.strftime("%A, %B%e %R") %></h6>
@@ -110,7 +110,7 @@ a:hover {
               </svg>
             </div>
             <div class="col" style="margin-left:15px">
-              </br><h4 class="text-white">Upcoming Race</h4>
+              </br><h5 class="text-white">Upcoming Race</h5>
               <h6 class="text-white">Race <%= @next_next_race.race_number %> | <%= @next_next_race.country %></h6></br>
               <h6 class="text-white">Qualifing Session:</h6>
               <h6 class="text-white"><%= @next_next_race.ical_dtstart.strftime("%A, %B%e %R") %></h6>
