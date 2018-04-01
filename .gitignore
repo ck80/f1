@@ -30,7 +30,7 @@
 !.elasticbeanstalk/*.global.yml
 
 # Ignore local variables file
-/config/initializers/dev_variables.rb
+config/initializers/dev_variables.rb
 
 # Ignore encrypted secrets key file.
 config/secrets.yml.key
