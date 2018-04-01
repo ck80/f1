@@ -62,21 +62,74 @@ a:hover {
     <% if request.path_info.exclude?('users')%>
     <% if request.path_info.exclude?('tips/new')%>
 		<% if user_signed_in? %>
+    <% @last_race = Race.where("ical_dtstart <= ?", Time.now).order(ical_dtstart: :asc).last %>
     <% @next_race = Race.where("ical_dtstart >= ?", Time.now).order(ical_dtstart: :asc).first %>
-    <div class="row no-gutters" style="background-image: url(<%= asset_path 'carbon-black.jpg' %>) ">
-      <div class="col">
-        <!-- svg track images originally sourced from http://www.skysports.com/f1/grandprix/azerbaijan/circuit-guide -->
-        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="175" viewBox="0 0 500 375" fill=red stroke-width=0 class="f1-svg-track">
-          <path class="f1-svg-track__outline" d="<%= @next_race.img %>"></path>
-        </svg>
+    <% @next_next_race = Race.where("ical_dtstart >= ?", Time.now).order(ical_dtstart: :asc).second %>
+
+    <!-- testing carousel format for upcoming races banner -->
+    <div id="TracksControls" class="carousel slide" data-ride="carousel" data-interval="false">
+      <div class="carousel-inner">
+        <div class="carousel-item">
+          <div class="row no-gutters" style="background-image: url(<%= asset_path 'carbon-black.jpg' %>) ">
+            <div class="col">
+              <!-- svg track images originally sourced from http://www.skysports.com/f1/grandprix/azerbaijan/circuit-guide -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="175" viewBox="0 0 500 375" fill=red stroke-width=0 class="f1-svg-track">
+                <path class="f1-svg-track__outline" d="<%= @last_race.img %>"></path>
+              </svg>
+            </div>
+            <div class="col" style="margin-left:35px">
+              </br><h4 class="text-white">Last Race</h4>
+              <h6 class="text-white">Race <%= @last_race.race_number %> | <%= @last_race.country %></h6></br>
+              <h6 class="text-white">Round Winner:</h6>
+              <h6 class="text-white"><%= @last_race.tips.order(race_total_points: :desc).first.user.name %> | <%= @last_race.tips.order(race_total_points: :desc).first.race_total_points %> points</h6>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item active">
+          <div class="row no-gutters" style="background-image: url(<%= asset_path 'carbon-black.jpg' %>) ">
+            <div class="col">
+              <!-- svg track images originally sourced from http://www.skysports.com/f1/grandprix/azerbaijan/circuit-guide -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="175" viewBox="0 0 500 375" fill=red stroke-width=0 class="f1-svg-track">
+                <path class="f1-svg-track__outline" d="<%= @next_race.img %>"></path>
+              </svg>
+            </div>
+            <div class="col" style="margin-left:35px">
+              </br><h4 class="text-white">Next Race</h4>
+              <h6 class="text-white">Race <%= @next_race.race_number %> | <%= @next_race.country %></h6></br>
+              <h6 class="text-white">Qualifing Session:</h6>
+              <h6 class="text-white"><%= @next_race.ical_dtstart.strftime("%A, %B%e %R") %></h6>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="row no-gutters" style="background-image: url(<%= asset_path 'carbon-black.jpg' %>) ">
+            <div class="col">
+              <!-- svg track images originally sourced from http://www.skysports.com/f1/grandprix/azerbaijan/circuit-guide -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="175" viewBox="0 0 500 375" fill=red stroke-width=0 class="f1-svg-track">
+                <path class="f1-svg-track__outline" d="<%= @next_next_race.img %>"></path>
+              </svg>
+            </div>
+            <div class="col" style="margin-left:35px">
+              </br><h4 class="text-white">Upcoming Race</h4>
+              <h6 class="text-white">Race <%= @next_next_race.race_number %> | <%= @next_next_race.country %></h6></br>
+              <h6 class="text-white">Qualifing Session:</h6>
+              <h6 class="text-white"><%= @next_next_race.ical_dtstart.strftime("%A, %B%e %R") %></h6>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="col" style="margin-left:35px">
-        </br><h4 class="text-white">Next Race</h4>
-        <h6 class="text-white">Race <%= @next_race.race_number %> | <%= @next_race.country %></h6></br>
-        <h6 class="text-white">Qualifing Session:</h6>
-        <h6 class="text-white"><%= @next_race.ical_dtstart.strftime("%A, %B%e %R") %></h6>
-      </div>
+      <a class="carousel-control-prev" href="#TracksControls" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#TracksControls" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
     </div>
+  </div>
+    
+
     <% end %>
     <% end %>
     <% end %>
