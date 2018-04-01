@@ -21,7 +21,8 @@ gem 'puma'
 gem 'bootstrap', '~> 4.0.0'
 gem 'sprockets-rails', :require => 'sprockets/railtie'
 gem 'jquery-rails'
-gem 'jquery-tablesorter', '~> 1.24', '>= 1.24.3'
+gem 'jquery-ui-rails'
+gem 'jquery-tablesorter', '~> 1.25'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
