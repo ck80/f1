@@ -2,15 +2,14 @@
 <div style="overflow-x:auto;">
 
 <script type="text/javascript" id="js">$(document).ready(function() {
-	// call the tablesorter plugin
-	$("tiptable").tablesorter({
-		// sort on the first column and third column, order asc
-		sortList: [[1,0],[10,0]]
-	});
-});
-</script>
+  // call the tablesorter plugin
+  $("table").tablesorter({
+    // sort on the first column and third column, order asc
+    sortList: [[1,0],[11,1]]
+  });
+}); </script>
 
-<table class="TFtable">
+<table class="TFtable" data-toggle="table">
   <thead class="TFtable">
     <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">User</th>
     <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Race</th>
