@@ -1,13 +1,17 @@
 <h2>Season <%= @year %> Tips</h2>
 <div style="overflow-x:auto;">
+
 <script type="text/javascript" id="js">$(document).ready(function() {
-	// call the tablesorter plugin
-	$("table").tablesorter({
-		// sort on the first column and third column, order asc
-		sortList: [[1,0],[0,0]],
-		widgets: [ 'scroller' ],
+
+  $('.tablesorter').tablesorter({
+    // sort on the first column and third column, order asc
+    sortList: [[1,0],[0,0]],
+    theme: 'jui',
+    showProcessing: true,
+    headerTemplate : '{content} {icon}',
+    widgets: [ 'uitheme', 'zebra', 'scroller' ],
     widgetOptions : {
-      scroller_height : 300,
+      scroller_height : 2,
       // scroll tbody to top after sorting
       scroller_upAfterSort: true,
       // pop table header into view while scrolling up the page
@@ -18,23 +22,22 @@
       // scroll_idPrefix was removed in v2.18.0
       // scroller_idPrefix : 's_'
     }
-	});
-}); 
+  });
 
-var startFixedColumns = 2;
+  var startFixedColumns = 2;
 
   $('#fixed-columns-table').tablesorter({
     theme: 'jui',
     showProcessing: true,
     headerTemplate : '{content} {icon}',
-    widgets: [ 'uitheme', 'zebra', 'filter', 'scroller' ],
+    widgets: [ 'uitheme', 'zebra', 'scroller' ],
     widgetOptions : {
       // scroll tbody to top after sorting
       scroller_upAfterSort: true,
       // pop table header into view while scrolling up the page
       scroller_jumpToHeader: true,
 
-      scroller_height : 300,
+      scroller_height : 3,
       // set number of columns to fix
       scroller_fixedColumns : startFixedColumns,
       // add a fixed column overlay for styling
@@ -65,9 +68,9 @@ var startFixedColumns = 2;
   $( '.fixed-columns' ).text( startFixedColumns );
 
 });
-
 </script>
-<table class="TFtable">
+
+<table id="fixed-columns-table" class="TFtable">
   <thead class="TFtable">
     <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">User</th>
     <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Race</th>
