@@ -27,7 +27,7 @@ class TipsController < ApplicationController
   # GET /tips.json
   def index
     if current_user.admin?
-      @tips = Tip.joins(:race).where('races.year' => @year)
+      @tips = Tip.joins(:race).where('races.year' => @year).order('races.race_number ASC')
       @user = User.all
     else
       @user = current_user
