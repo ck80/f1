@@ -3,74 +3,15 @@
 
 <script type="text/javascript" id="js">$(document).ready(function() {
 
-  $('.tablesorter').tablesorter({
+  $("table").tablesorter({
     // sort on the first column and third column, order asc
     sortList: [[1,0],[0,0]],
-    theme: 'jui',
-    showProcessing: true,
-    headerTemplate : '{content} {icon}',
-    widgets: [ 'uitheme', 'zebra', 'scroller' ],
-    widgetOptions : {
-      scroller_height : 2,
-      // scroll tbody to top after sorting
-      scroller_upAfterSort: true,
-      // pop table header into view while scrolling up the page
-      scroller_jumpToHeader: true,
-      // In tablesorter v2.19.0 the scroll bar width is auto-detected
-      // add a value here to override the auto-detected setting
-      scroller_barWidth : null
-      // scroll_idPrefix was removed in v2.18.0
-      // scroller_idPrefix : 's_'
     }
   });
-
-  var startFixedColumns = 2;
-
-  $('#fixed-columns-table').tablesorter({
-    theme: 'jui',
-    showProcessing: true,
-    headerTemplate : '{content} {icon}',
-    widgets: [ 'uitheme', 'zebra', 'scroller' ],
-    widgetOptions : {
-      // scroll tbody to top after sorting
-      scroller_upAfterSort: true,
-      // pop table header into view while scrolling up the page
-      scroller_jumpToHeader: true,
-
-      scroller_height : 3,
-      // set number of columns to fix
-      scroller_fixedColumns : startFixedColumns,
-      // add a fixed column overlay for styling
-      scroller_addFixedOverlay : false,
-      // add hover highlighting to the fixed column (disable if it causes slowing)
-      scroller_rowHighlight : 'hover',
-
-      // bar width is now calculated; set a value to override
-      scroller_barWidth : null
-    }
-  });
-
-  // use jQuery UI slider to change the fixed column size
-  $( '#slider' ).slider({
-    value : startFixedColumns,
-    min   : 0,
-    max   : 4,
-    step  : 1,
-    slide : function( event, ui ) {
-      // page indicator
-      $( '.fixed-columns' ).text( ui.value );
-      // method to update the fixed column size
-      $( '#fixed-columns-table').trigger( 'setFixedColumnSize', ui.value );
-    }
-  });
-
-  // update column value display
-  $( '.fixed-columns' ).text( startFixedColumns );
-
 });
 </script>
 
-<table id="fixed-columns-table" class="TFtable">
+<table class="TFtable">
   <thead class="TFtable">
     <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">User</th>
     <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Race</th>
