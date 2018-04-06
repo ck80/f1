@@ -46,17 +46,16 @@ class TipsController < ApplicationController
     @tip = Tip.new
     @user = current_user
     @users = User.all
-    @races = Race.where(year: @year)
-    @drivers = Driver.where(year: @year)
+    @races = Race.where(year: @year).order('race_number ASC')
+    @drivers = Driver.where(year: @year).order('abbr_name ASC')
   end
 
   # GET /tips/1/edit
   def edit
     @users = User.all
     @user = current_user
-    @races = Race.where(year: @year)
-    @drivers = Driver.where(year: @year)
-
+    @races = Race.where(year: @year).order('race_number ASC')
+    @drivers = Driver.where(year: @year).order('abbr_name ASC')
   end
 
   # POST /tips
@@ -65,8 +64,8 @@ class TipsController < ApplicationController
     @tip = Tip.new(tip_params)
     @user = current_user
     @users = User.all
-    @races = Race.where(year: @year)
-    @drivers = Driver.where(year: @year)
+    @races = Race.where(year: @year).order('race_number ASC')
+    @drivers = Driver.where(year: @year).order('abbr_name ASC')
     respond_to do |format|
       if @tip.save
         format.html { redirect_to tips_path, notice: 'Tip was successfully created.' }
@@ -83,8 +82,8 @@ class TipsController < ApplicationController
   def update
     @users = User.all
     @user = current_user
-    @races = Race.where(year: @year)
-    @drivers = Driver.where(year: @year)
+    @races = Race.where(year: @year).order('race_number ASC')
+    @drivers = Driver.where(year: @year).order('abbr_name ASC')
     respond_to do |format|
       if @tip.update(tip_params)
         format.html { redirect_to tips_path, notice: 'Tip was successfully updated.' }
