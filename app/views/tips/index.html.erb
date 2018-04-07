@@ -59,7 +59,7 @@
           </tr>
         </thead>
         <tbody>
-          <% @tips.where(race_id: r.id).each do |tip| %>
+          <% @tips.where(race_id: r.id).try(:each) do |tip| %>
             <tr>
               <td><%= tip.user.name %></td>
               <td style="text-align:center"><%= tip.race.race_number %></td>
