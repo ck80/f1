@@ -59,7 +59,9 @@
           </tr>
         </thead>
         <tbody>
-          <% @tips.where(race_id: r.id).try(:each) do |tip| %>
+          <% @tips = Tip.joins(:race).where("races.year = ? AND user_id = ? AND race_id = ?", @year, @user.id, r.id) %>
+          <% @tips = @tips + Tip.joins(:race).where("races.year = ? AND races.ical_dtstart < ? AND user_id != ? AND race+id = ?", @year, Time.current, @user.id, r.id) %>
+          <% @tips.where(race_id: r.id).each do |tip| %>
             <tr>
               <td><%= tip.user.name %></td>
               <td style="text-align:center"><%= tip.race.race_number %></td>
