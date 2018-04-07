@@ -1,5 +1,5 @@
 <h2><%= @year %> Tips</h2>
-<div style="overflow-x:auto;">
+
 <script type="text/javascript" id="js">$(document).ready(function() {
   // call the tablesorter plugin
   $("table").tablesorter({
@@ -15,9 +15,9 @@
   <div class="carousel-inner">
       <% @race.each do |r| %>
       <% if r.race_number == @next_race.race_number then %>
-        <div class="carousel-item active">
+        <div class="carousel-item active" style="overflow-x:auto;">
       <% else %>
-        <div class="carousel-item">
+        <div class="carousel-item" style="overflow-x:auto;">
       <% end %>
       <h5>Race <%= r.race_number.to_s + " - " + r.country  %></h5>
       <table class="TFtable" data-toggle="table">
@@ -82,7 +82,7 @@
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="sr-only">Next</span>
   </a>
-</div>
+
   
 </br>
 
