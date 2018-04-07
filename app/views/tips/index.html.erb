@@ -59,8 +59,11 @@
           </tr>
         </thead>
         <tbody>
-          <% @tips = Tip.joins(:race).where("races.year = ? AND user_id = ? AND race_id = ?", @year, @user.id, r.id) %>
-          <% @tips = @tips + Tip.joins(:race).where("races.year = ? AND races.ical_dtstart < ? AND user_id != ? AND race+id = ?", @year, Time.current, @user.id, r.id) %>
+          <% if r.ical_dtstart >= Time.now then %>
+            <% @tips = Tip.joins(:race).where("races.year = ? AND user_id = ? AND race_id = ?", @year, @user.id, r.id) %>
+          <% else %>
+            <% @tips = Tip.joins(:race).where("races.year = ? AND race_id = ?", @year, r.id) %>
+          <% end %>
           <% @tips.where(race_id: r.id).each do |tip| %>
             <tr>
               <td><%= tip.user.name %></td>
