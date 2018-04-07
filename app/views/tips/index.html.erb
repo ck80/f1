@@ -60,11 +60,11 @@
         </thead>
         <tbody>
           <% if r.ical_dtstart >= Time.now then %>
-            <% @tips = Tip.joins(:race).where("races.year = ? AND user_id = ? AND race_id = ?", @year, @user.id, r.id) %>
+            <% @tips = Tip.joins(:race).where("races.year = ? AND user_id = ? AND race_id = ?", @year, current_user.id, r.id) %>
           <% else %>
             <% @tips = Tip.joins(:race).where("races.year = ? AND race_id = ?", @year, r.id) %>
           <% end %>
-          <% @tips.where(race_id: r.id).each do |tip| %>
+          <% @tips.each do |tip| %>
             <tr>
               <td><%= tip.user.name %></td>
               <td style="text-align:center"><%= tip.race.race_number %></td>
