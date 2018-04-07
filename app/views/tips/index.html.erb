@@ -8,7 +8,7 @@
   });
 });
 </script>
-<% @race=Race.where(year: @year) %>
+<% @race=Race.where(year: @year).order(race_number: :asc) %>
 <% @next_race= Race.where("ical_dtstart >= ?", Time.now).order(ical_dtstart: :asc).first%>
 
 <div id="TipControls" class="carousel slide" data-ride="carousel" data-interval="false">
