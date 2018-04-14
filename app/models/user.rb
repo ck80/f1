@@ -7,6 +7,8 @@ class User < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   has_many :leaderboards
   has_many :tips, dependent: :destroy
+  has_many :user_infos #, inverse_of: :users
+  accepts_nested_attributes_for :user_infos, reject_if: proc { |attributes| attributes[:season].blank?}, allow_destroy: true
   after_create :send_admin_mail
   
   def send_admin_mail

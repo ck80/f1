@@ -10,5 +10,10 @@
   <%= @user.email %>
 </p>
 
+<p>
+  <strong>Fees Paid:</strong>
+  <%= @user.user_infos.find_by(@season = @year).fee_paid if @user.user_infos.exists? %>
+</p>
+
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>

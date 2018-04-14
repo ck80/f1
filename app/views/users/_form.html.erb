@@ -26,6 +26,17 @@
     <%= form.check_box :approved %>
   </div>
 
+  <div class="field">
+    <%= form.fields_for :user_infos do |user_infos_form| %>
+    <%= form.label :season %>
+    <%= user_infos_form.text_field :season %>
+    <%= form.label :fee_paid %>
+    <%= user_infos_form.text_field :fee_paid %>
+    </p>
+    <% end %>
+
+  </div>
+
   <div class="actions">
     <%= form.submit %>
   </div>
