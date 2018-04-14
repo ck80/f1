@@ -5,8 +5,10 @@
   <thead>
     <tr>
       <th>User ID</th>
-	  <th>Name</th>
+	    <th>Name</th>
       <th>Email</th>
+      <th>Approved</th>
+      <th>Fees Paid</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -18,6 +20,7 @@
 		    <td><%= user.name %></td>
         <td><%= user.email %></td>
         <td><%= user.approved %></td>
+        <td><%= user.user_infos.find_by!(@season = @year).fee_paid if user.user_infos.exists? %></td>
         <td><%= link_to 'Show', user %></td>
         <td><%= link_to 'Edit', edit_user_path(user) %></td>
         <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
