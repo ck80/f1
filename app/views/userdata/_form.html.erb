@@ -1,0 +1,32 @@
+<%= form_with(model: userdatum, local: true) do |form| %>
+  <% if userdatum.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(userdatum.errors.count, "error") %> prohibited this userdatum from being saved:</h2>
+
+      <ul>
+      <% userdatum.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :user_id %>
+    <%= form.select :user_id, options_for_select(@users.map{ |u| [u.name, u.id] }, {:include_blank => 'name of your blank prompt'}) %>
+  </div>
+
+  <div class="field">
+    <%= form.label :season %>
+    <%= form.number_field :season, id: :userdatum_season %>
+  </div>
+
+  <div class="field">
+    <%= form.label :fee_paid %>
+    <%= form.number_field :fee_paid, id: :userdatum_fee_paid %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

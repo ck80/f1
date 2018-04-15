@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180402042704) do
+ActiveRecord::Schema.define(version: 20180415111540) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -27,6 +27,21 @@ ActiveRecord::Schema.define(version: 20180402042704) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admins_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
+  end
+
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer "priority", default: 0, null: false
+    t.integer "attempts", default: 0, null: false
+    t.text "handler", null: false
+    t.text "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string "locked_by"
+    t.string "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
   create_table "drivers", force: :cascade do |t|
@@ -118,6 +133,14 @@ ActiveRecord::Schema.define(version: 20180402042704) do
     t.string "circuit"
     t.integer "laps"
     t.string "svg"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "userdata", force: :cascade do |t|
+    t.string "user_id"
+    t.string "season"
+    t.integer "fee_paid"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

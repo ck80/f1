@@ -18,11 +18,11 @@
   </thead>
   <tbody>
   <% #User.where(approved: true).order(name: :asc).each do |u| %>
-  <% User.joins(:user_infos).where(approved: true).order(name: :asc).each do |u| %>
+  <% User.joins(:userdatum).where(approved: true).order(name: :asc).each do |u| %>
     <tr>
       <td><%= u.name %></td>
       <td><%= Tip.joins(:race).where(user_id: u.id, 'races.year' => @year).sum(:race_total_points) %></td>
-      <% if u.user_infos.where('user_infos.season' => @year).first.fee_paid > 0 then %>
+      <% if u.userdatum.where(season: @year).first.fee_paid > 0 then %>
       <td style=background-color:lightgreen ></td>
       <% else %>
       <td style=background-color:yellow ></td>
@@ -48,6 +48,7 @@
     <p>Fetch drivers by championship: <%= link_to 'Fetch Drivers by Championship', home_fetch_drivers_by_championship_path, method: :post %></p>
     <p>Fetch results tool (please be patient as this can take some time to complete): <%= link_to 'Fetch Results', home_fetch_results_action_path, method: :post %></p>
     <p>Update race tip points tool: <%= link_to 'Update Race Tip Points', home_update_race_tip_points_path, method: :post %></p>
+    <p>Update User Data and Tipping Fees: <%= link_to 'Update User Data', userdata_path %></p>
   <% else %>
     <p></p>
     <h2>ADMIN Section:</h2>
