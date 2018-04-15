@@ -12,7 +12,7 @@ class UserdataController < ApplicationController
   # GET /userdata
   # GET /userdata.json
   def index
-    @userdata = Userdatum.joins(:user).all
+    @userdata = Userdatum.all
   end
 
   # GET /userdata/1
