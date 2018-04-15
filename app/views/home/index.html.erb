@@ -18,7 +18,7 @@
   </thead>
   <tbody>
   <% #User.where(approved: true).order(name: :asc).each do |u| %>
-  <% User.joins(:userdatum).where(approved: true).order(name: :asc).each do |u| %>
+  <% User.where(approved: true).order(name: :asc).each do |u| %>
     <tr>
       <td><%= u.name %></td>
       <td><%= Tip.joins(:race).where(user_id: u.id, 'races.year' => @year).sum(:race_total_points) %></td>
