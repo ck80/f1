@@ -17,11 +17,11 @@
     </tr>
   </thead>
   <tbody>
-  <% #User.where(approved: true).order(name: :asc).each do |u| %>
   <% User.where(approved: true).order(name: :asc).each do |u| %>
     <tr>
       <td><%= u.name %></td>
       <td><%= Tip.joins(:race).where(user_id: u.id, 'races.year' => @year).sum(:race_total_points) %></td>
+      <!-- need to add a check for the below to cater for nul value which is currently erroring, e.g. if user does not have any value in the userdata table for the below query -->
       <% if u.userdatum.where(season: @year).first.fee_paid > 0 then %>
       <td style=background-color:lightgreen ></td>
       <% else %>
