@@ -12,7 +12,7 @@
 
 <p>
   <strong>Fees Paid:</strong>
-  <%= @user.user_infos.find_by(@season = @year).fee_paid if @user.user_infos.exists? %>
+  <%= @user.userdatum.find_by(@season = @year).fee_paid if @user.userdatum.exists? %>
 </p>
 
 <%= link_to 'Edit', edit_user_path(@user) %> |

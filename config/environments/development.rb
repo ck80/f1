@@ -29,6 +29,10 @@ Rails.application.configure do
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true
 
+  # Use a real queuing backend for Active Job (and separate queues per environment)
+  config.active_job.queue_adapter     = :delayed_job
+  config.active_job.queue_name_prefix = "f1_#{Rails.env}"
+
   config.action_mailer.perform_caching = false
 
   # Print deprecation notices to the Rails logger.
@@ -70,11 +74,10 @@ Rails.application.configure do
 config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 config.action_mailer.delivery_method = :smtp
 config.action_mailer.raise_delivery_errors = true
-config.action_mailer.perform_deliveries = true
 config.action_mailer.default :charset => "utf-8"
 
 # Send email in development mode.
-config.action_mailer.perform_deliveries = true
+config.action_mailer.perform_deliveries = false
 
 # Enable web console whitelist IPs
 config.web_console.whitelisted_ips = %w( 172.20.0.1 127.0.0.1 192.168.1.0/24 10.0.0.0/16 )
