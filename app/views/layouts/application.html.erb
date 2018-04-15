@@ -96,7 +96,7 @@ a:hover {
             <div class="col" style="margin-left:15px">
               </br><h5 class="text-white">Next Race</h5>
               <h6 class="text-white">Race <%= @next_race.race_number %> | <%= @next_race.country %></h6></br>
-              <h6 class="text-white">Qualifing Session:</h6>
+              <h6 class="text-white">Qualifying Session:</h6>
               <h6 class="text-white"><%= @next_race.ical_dtstart.in_time_zone("Sydney").strftime("%a, %B %e %-l:%M %p %Z") %></h6>
             </div>
           </div>
@@ -112,7 +112,7 @@ a:hover {
             <div class="col" style="margin-left:15px">
               </br><h5 class="text-white">Upcoming Race</h5>
               <h6 class="text-white">Race <%= @next_next_race.race_number %> | <%= @next_next_race.country %></h6></br>
-              <h6 class="text-white">Qualifing Session:</h6>
+              <h6 class="text-white">Qualifying Session:</h6>
               <h6 class="text-white"><%= @next_next_race.ical_dtstart.in_time_zone("Sydney").strftime("%a, %B %e %-l:%M %p %Z") %></h6>
             </div>
           </div>
