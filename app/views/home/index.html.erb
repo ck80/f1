@@ -24,8 +24,10 @@
       <% if u.userdatum.where(season: @year).present? then %>
         <% if u.userdatum.where(season: @year).first.fee_paid > 0 then %>
         <td style=background-color:lightgreen ></td>
-        <% end %>
         <% else %>
+          <td style=background-color:yellow ></td>
+        <% end %>
+      <% else %>
         <td style=background-color:yellow ></td>
       <% end %>
     </tr>
