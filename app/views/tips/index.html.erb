@@ -1,13 +1,35 @@
 <h2 align=center><%= @year %> Tips</h2>
 
-<script type="text/javascript" id="js">$(document).ready(function() {
-  // call the tablesorter plugin
-  $("table").tablesorter({
-    // sort on the first column and third column, order asc
-    sortList: [[8,1],[0,1]]
+<script type="text/javascript" id="js">
+$(document).ready(function () {
+  $('.tablesorter').tablesorter({
+    sortList: [[8,1]],
+    widgets: [ 'scroller' ],
+    widgetOptions : {
+      // scroll tbody to top after sorting
+      scroller_upAfterSort: false,
+      // pop table header into view while scrolling up the page
+      scroller_jumpToHeader: false,
+      scroller_height : 300,
+      // set number of columns to fix
+      scroller_fixedColumns : 1,
+      // add a fixed column overlay for styling
+      scroller_addFixedOverlay : true,
+      // add hover highlighting to the fixed column (disable if it causes slowing)
+      scroller_rowHighlight : 'hover',
+      // bar width is now calculated; set a value to override
+      // scroller_barWidth : null
+    }
   });
+  
+  // trigger window resize on carousel slide even to correct table when using tablesorter slider widget
+  $('#TipControls').on('slide.bs.carousel', function () {
+    $(window).resize();
+  });
+
 });
 </script>
+
 
 <style>
 .carousel-control-prev-icon {
@@ -17,6 +39,34 @@
 .carousel-control-next-icon {
     background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
 }
+
+/* Fixed column scroll bar spacer styling */
+.tablesorter-scroller-bar-spacer {
+  background: #eee;
+}
+/* add border to right side (LTR pages) of fixed column */
+.tablesorter-scroller-fixed:after {
+  content: '';
+  border-right: 1px solid #4e95f4;
+  width: 1px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 0;
+  /* set to zero for non-jquery ui themes; use "left" here for RTL pages */
+  right: 0;
+  /* match the margins set to the table to keep the border the same height as the table */
+  margin: 0px 0 0px;
+}
+
+/* OPTIONAL CSS! */
+#fixed-columns-table tbody td {
+  /* force "Notes" column to not wrap, so we get a horizontal scrolling demo! */
+  /* white-space: nowrap; */
+  /* Add min column width, or "Index" column filter gets too narrow to use */
+  min-width: 70px;
+}
+
 </style>
 
 <% @race=Race.where(year: @year).order(race_number: :asc) %>
@@ -26,25 +76,16 @@
   <div class="carousel-inner">
       <% @race.each do |r| %>
       <% if r.race_number == @next_race.race_number then %>
-        <div class="carousel-item active" style="overflow-x:auto;">
+        <div class="carousel-item active">
       <% else %>
-        <div class="carousel-item" style="overflow-x:auto;">
+        <div class="carousel-item">
       <% end %>
       <h5 align=center>Race <%= r.race_number.to_s + " - " + r.country  %></h5>
       
-      <table class="TFtable" data-toggle="table">
-        <thead class="TFtable">
-          <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">User</th>
-          <!--  <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Race</th> -->
-          <!-- <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Country</th> -->
-          <th colspan="3" style="text-align:center; border:#4e95f4 1px solid">Qualificaitons</th>
-          <th colspan="4" style="text-align:center; border:#4e95f4 1px solid">Race</th>
-          <th style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Score</th>
-          <th colspan="3" style="text-align:center; border-left:#4e95f4 1px solid; border-top:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-bottom-style:hidden; border-bottom-color: transparent">Actions</th>
-        </thead>
+      <table class="tablesorter" id="fixed-columns-table">
         <thead class="TFtable">
           <tr class="TFtable">
-            <th style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th>
+            <th style="text-align:center; border:#4e95f4 1px solid">User</th>
             <!-- <th style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th> -->
             <!-- <th style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-left:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th> -->
             <th style="text-align:center; border:#4e95f4 1px solid">Q1</th>
@@ -54,11 +95,11 @@
             <th style="text-align:center; border:#4e95f4 1px solid">R2</th>
             <th style="text-align:center; border:#4e95f4 1px solid">R3</th>
             <th style="text-align:center; border:#4e95f4 1px solid">R10</th>
-            <th style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th>
-            <th colspan="3" style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-left:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th>
+            <th style="text-align:center; border:#4e95f4 1px solid">Points</th>
+            <th style="text-align:center; border:#4e95f4 1px solid">Action</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="TFtable">
           <% if r.ical_dtstart >= Time.now then %>
             <% @tips = Tip.joins(:race).where("races.year = ? AND user_id = ? AND race_id = ?", @year, current_user.id, r.id) %>
           <% else %>
@@ -69,21 +110,15 @@
               <td><%= tip.user.name %></td>
               <!-- <td style="text-align:center"><%= tip.race.race_number %></td> -->
               <!-- <td><%= tip.race.country %></td> -->
-              <td style="color:<%= if tip.qual_first_points == nil then "black" elsif tip.qual_first_points == Point.find_by(item: "q1st").points then "#2a8e01" elsif tip.qual_first_points == 0 then "#e20202" elsif tip.qual_first_points > 0 then "#0792ef" end %>" ><%= tip.qual_first %> | <%= tip.qual_first_points %></td>
-              <td style="color:<%= if tip.qual_second_points == nil then "black" elsif tip.qual_second_points == Point.find_by(item: "q2nd").points then "#2a8e01" elsif tip.qual_second_points == 0 then "#e20202" elsif tip.qual_second_points > 0 then "#0792ef" end %>" ><%= tip.qual_second %> | <%= tip.qual_second_points %></td>
-              <td style="color:<%= if tip.qual_third_points == nil then "black" elsif tip.qual_third_points == Point.find_by(item: "q3rd").points then "#2a8e01" elsif tip.qual_third_points == 0 then "#e20202" elsif tip.qual_third_points > 0 then "#0792ef" end %>" ><%= tip.qual_third %> | <%= tip.qual_third_points %></td>
-              <td style="color:<%= if tip.race_first_points == nil then "black" elsif tip.race_first_points == Point.find_by(item: "r1st").points then "#2a8e01" elsif tip.race_first_points == 0 then "#e20202" elsif tip.race_first_points > 0 then "#0792ef" end %>" ><%= tip.race_first %> | <%= tip.race_first_points %></td>
-              <td style="color:<%= if tip.race_second_points == nil then "black" elsif tip.race_second_points == Point.find_by(item: "r2nd").points then "#2a8e01" elsif tip.race_second_points == 0 then "#e20202" elsif tip.race_second_points > 0 then "#0792ef" end %>" ><%= tip.race_second %> | <%= tip.race_second_points %></td>
-              <td style="color:<%= if tip.race_third_points == nil then "black" elsif tip.race_third_points == Point.find_by(item: "r3rd").points then "#2a8e01" elsif tip.race_third_points == 0 then "#e20202" elsif tip.race_third_points > 0 then "#0792ef" end %>" ><%= tip.race_third %> | <%= tip.race_third_points %></td>
-              <td style="color:<%= if tip.race_tenth_points == nil then "black" elsif tip.race_tenth_points == Point.find_by(item: "r10th_bonus").points then "#2a8e01" elsif tip.race_tenth_points == 0 then "#e20202" elsif tip.race_tenth_points > 0 then "#0792ef" end %>" ><%= tip.race_tenth %> | <%= tip.race_tenth_points %></td>
+              <td style="color:<%= if tip.qual_first_points == nil then "black" elsif tip.qual_first_points == Point.find_by(item: "q1st").points then "#2a8e01" elsif tip.qual_first_points == 0 then "#e20202" elsif tip.qual_first_points > 0 then "#0792ef" end %>" ><%= tip.qual_first %> | </br><%= tip.qual_first_points %></td>
+              <td style="color:<%= if tip.qual_second_points == nil then "black" elsif tip.qual_second_points == Point.find_by(item: "q2nd").points then "#2a8e01" elsif tip.qual_second_points == 0 then "#e20202" elsif tip.qual_second_points > 0 then "#0792ef" end %>" ><%= tip.qual_second %> | </br><%= tip.qual_second_points %></td>
+              <td style="color:<%= if tip.qual_third_points == nil then "black" elsif tip.qual_third_points == Point.find_by(item: "q3rd").points then "#2a8e01" elsif tip.qual_third_points == 0 then "#e20202" elsif tip.qual_third_points > 0 then "#0792ef" end %>" ><%= tip.qual_third %> | </br><%= tip.qual_third_points %></td>
+              <td style="color:<%= if tip.race_first_points == nil then "black" elsif tip.race_first_points == Point.find_by(item: "r1st").points then "#2a8e01" elsif tip.race_first_points == 0 then "#e20202" elsif tip.race_first_points > 0 then "#0792ef" end %>" ><%= tip.race_first %> | </br><%= tip.race_first_points %></td>
+              <td style="color:<%= if tip.race_second_points == nil then "black" elsif tip.race_second_points == Point.find_by(item: "r2nd").points then "#2a8e01" elsif tip.race_second_points == 0 then "#e20202" elsif tip.race_second_points > 0 then "#0792ef" end %>" ><%= tip.race_second %> | </br><%= tip.race_second_points %></td>
+              <td style="color:<%= if tip.race_third_points == nil then "black" elsif tip.race_third_points == Point.find_by(item: "r3rd").points then "#2a8e01" elsif tip.race_third_points == 0 then "#e20202" elsif tip.race_third_points > 0 then "#0792ef" end %>" ><%= tip.race_third %> | </br><%= tip.race_third_points %></td>
+              <td style="color:<%= if tip.race_tenth_points == nil then "black" elsif tip.race_tenth_points == Point.find_by(item: "r10th_bonus").points then "#2a8e01" elsif tip.race_tenth_points == 0 then "#e20202" elsif tip.race_tenth_points > 0 then "#0792ef" end %>" ><%= tip.race_tenth %> | </br><%= tip.race_tenth_points %></td>
               <td style="text-align:center"><%= tip.race_total_points %></td>
-              <% if current_user.admin? %>
-              <td><%= link_to 'Show', tip_path(id: tip) %></td>
-              <% end %>
-              <td><%= if tip.race.ical_dtstart.future? then link_to 'Edit', edit_tip_path(id: tip) else "Closed" end %></td>
-              <% if current_user.admin? %>
-              <td><%= link_to 'Delete', tip_path(id: tip), method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %></td>
-              <% end %>
+              <td><%= if current_user.admin? then link_to 'Edit', edit_tip_path(id: tip) elsif tip.race.ical_dtstart.future? then link_to 'Edit', edit_tip_path(id: tip) else "Closed" end %></td>
             </tr>
           <% end %>
         </tbody>
@@ -100,12 +135,9 @@
     <span class="sr-only">Next</span>
   </a>
 
-  
 </br>
 
 <%= link_to 'New Tip', new_tip_path, class: "btn btn-primary"%>
 
 </br>
 </div>
-
-
