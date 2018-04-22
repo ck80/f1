@@ -17,7 +17,7 @@
   <div class="inner-wrap">
     <div class="field">
       <%= form.label :user %>
-      <% if current_user.admin? && params[:action] != "new" %>
+      <% if current_user.admin? && params[:action] == "new" %>
         <%= form.select :user_id, options_for_select(@users.map{ |u| [u.name, u.id] }, @tip.user_id) %>
       <% elsif params[:action] == "edit" %>
         <%= form.select :user_id, options_for_select([[@tip.user.name, @tip.user_id]], @tip.user_id) %>
