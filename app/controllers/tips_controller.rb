@@ -49,6 +49,7 @@ class TipsController < ApplicationController
     @users = User.all
     @races = Race.where(year: @year).order('race_number ASC')
     @drivers = Driver.where(year: @year).order('abbr_name ASC')
+
   end
 
   # GET /tips/1/edit
@@ -57,6 +58,7 @@ class TipsController < ApplicationController
     @user = current_user
     @races = Race.where(year: @year).order('race_number ASC')
     @drivers = Driver.where(year: @year).order('abbr_name ASC')
+
   end
 
   # POST /tips
@@ -67,6 +69,7 @@ class TipsController < ApplicationController
     @users = User.all
     @races = Race.where(year: @year).order('race_number ASC')
     @drivers = Driver.where(year: @year).order('abbr_name ASC')
+
     respond_to do |format|
       if @tip.save
         format.html { redirect_to tips_path, notice: 'Tip was successfully created.' }
@@ -108,9 +111,9 @@ class TipsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-
+    
     # Never trust parameters from the scary internet, only allow the white list through.
     def tip_params
-      params.require(:tip).permit(:qual_first, :qual_second, :qual_third, :race_first, :race_second, :race_third, :race_tenth, :user_id, :race_id, :updated_by)
+      params.require(:tip).permit(:qual_first, :qual_second, :qual_third, :race_first, :race_second, :race_third, :race_tenth, :user_id, :race_id, :updated_by, :modifier_is_admin)
     end
 end
