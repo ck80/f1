@@ -16,14 +16,14 @@
       <div id="collapse<%= season%>" class="collapse" aria-labelledby="heading<%= season%>" data-parent="#accordion2">
         <div class="card-body">
           <% $i=0 %>
-          <% @race_country = Race.where(year: season) %>
-          <% @race_country.each do |race_country| %>
+          <% @race_country = Race.where(year: season).order('race_number ASC') %>
+          <% @race_country.each do |rc| %>
 
           <div class="card">
             <div class="card-header" id="heading<%= season + "-" + $i.to_s%>">
               <h5 class="mb-0">
                 <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse<%= season + "-" + $i.to_s%>" aria-expanded="false" aria-controls="collapse<%= season + "-" + $i.to_s%>">
-                  <%= "Race " + race_country.race_number.to_s + " | " + race_country.country %>
+                  <%= "Race " + rc.race_number.to_s + " | " + rc.country %>
                 </button>
               </h5>
             </div>
@@ -43,8 +43,8 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <% @race_results = RaceResult.joins(:race).where('races.year' => season, 'races.country' => race_country.country) %>
-                    <% @quali_results = QualiResult.joins(:race).where('races.year' => season, 'races.country' => race_country.country) %>
+                    <% @race_results = RaceResult.joins(:race).where('races.year' => season, 'races.country' => rc.country) %>
+                    <% @quali_results = QualiResult.joins(:race).where('races.year' => season, 'races.country' => rc.country) %>
                     <% $x=0 %>
                     <% while $x < @race_results.length do %>
                     <tr class="TFtable">
@@ -81,13 +81,13 @@
       <div id="collapse<%= season%>" class="collapse" aria-labelledby="heading<%= season%>" data-parent="#accordion4">
         <div class="card-body">
           <% $i=0 %>
-          <% @race_country = Race.where(year: season) %>
-          <% @race_country.each do |race_country| %>
+          <% @race_country = Race.where(year: season).order('race_number ASC') %>
+          <% @race_country.each do |rc| %>
           <div class="card">
             <div class="card-header" id="heading<%= season + "-" + $i.to_s%>">
               <h5 class="mb-0">
                 <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse<%= season + "-" + $i.to_s%>" aria-expanded="false" aria-controls="collapse<%= season + "-" + $i.to_s%>">
-                  <%= race_country.country %>
+                  <%= rc.country %>
                 </button>
               </h5>
             </div>
@@ -107,8 +107,8 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <% @race_results = RaceResult.joins(:race).where('races.year' => season, 'races.country' => race_country.country) %>
-                    <% @quali_results = QualiResult.joins(:race).where('races.year' => season, 'races.country' => race_country.country) %>
+                    <% @race_results = RaceResult.joins(:race).where('races.year' => season, 'races.country' => rc.country) %>
+                    <% @quali_results = QualiResult.joins(:race).where('races.year' => season, 'races.country' => rc.country) %>
                     <% $x=0 %>
                     <% while $x < @race_results.length do %>
                     <tr class="TFtable">

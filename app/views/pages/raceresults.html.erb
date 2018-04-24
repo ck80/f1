@@ -16,7 +16,7 @@
       <div id="collapse<%= season%>" class="collapse" aria-labelledby="heading<%= season%>" data-parent="#accordion2">
         <div class="card-body">
           <% $i=0 %>
-          <% @race_country = Race.where(year: season) %>
+          <% @race_country = Race.where(year: season).order('race_number ASC') %>
           <% @race_country.each do |race_country| %>
 
           <div class="card">
@@ -81,13 +81,13 @@
       <div id="collapse<%= season%>" class="collapse" aria-labelledby="heading<%= season%>" data-parent="#accordion4">
         <div class="card-body">
           <% $i=0 %>
-          <% @race_country = Race.where(year: season) %>
+          <% @race_country = Race.where(year: season).order('race_number ASC') %>
           <% @race_country.each do |race_country| %>
           <div class="card">
             <div class="card-header" id="heading<%= season + "-" + $i.to_s%>">
               <h5 class="mb-0">
                 <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse<%= season + "-" + $i.to_s%>" aria-expanded="false" aria-controls="collapse<%= season + "-" + $i.to_s%>">
-                  <%= race_country.country %>
+                  <%= "Race " + race_country.race_number.to_s + " | " + race_country.country %>
                 </button>
               </h5>
             </div>

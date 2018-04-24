@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Userdata</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>UserID</th>
+      <th>Season</th>
+      <th>Fee_Paid</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @userdata.each do |userdatum| %>
+      <tr>
+        <td><%= userdatum.user_id %></td>
+        <td><%= userdatum.season %></td>
+        <td><%= userdatum.fee_paid %></td>
+        <td><%= link_to 'Show', userdatum %></td>
+        <td><%= link_to 'Edit', edit_userdatum_path(userdatum) %></td>
+        <td><%= link_to 'Destroy', userdatum, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Userdatum', new_userdatum_path %>

@@ -30,4 +30,15 @@
 !.elasticbeanstalk/*.global.yml
 
 # Ignore local variables file
-/config/initializers/dev_variables.rb
+config/initializers/dev_variables.rb
+
+# Ignore encrypted secrets key file.
+config/secrets.yml.key
+
+# Ignore local environments file
+f1appdevenv.env
+f1appprodenv.env
+
+# Ignore local database.yml for mac
+config/database.yml
+config/database.yml.local

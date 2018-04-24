@@ -10,11 +10,14 @@
     </div>
   <% end %>
 
+  <% @next_race= Race.where("ical_dtstart >= ?", Time.now).order(ical_dtstart: :asc).first%>
+
+
   <div class="section" ><span>1</span>Race Details</div>
   <div class="inner-wrap">
     <div class="field">
       <%= form.label :user %>
-      <% if current_user.admin? && params[:action] != "new" %>
+      <% if current_user.admin? && params[:action] == "new" %>
         <%= form.select :user_id, options_for_select(@users.map{ |u| [u.name, u.id] }, @tip.user_id) %>
       <% elsif params[:action] == "edit" %>
         <%= form.select :user_id, options_for_select([[@tip.user.name, @tip.user_id]], @tip.user_id) %>
@@ -27,7 +30,7 @@
       <% if params[:action] == "edit" %>
         <%= form.select :race_id, options_for_select([[@tip.race.country, @tip.race_id]], @tip.race_id) %>
       <% else %>
-        <%= form.select :race_id, options_for_select(@races.map{ |r| [r.country, r.id] }, @tip.race_id) %>
+        <%= form.select :race_id, options_for_select(@races.map{ |r| [r.country, r.id] }, @next_race.id) %>
       <% end %>
     </div>
   </div>

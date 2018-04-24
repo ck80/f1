@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171217030714) do
+ActiveRecord::Schema.define(version: 20180415111540) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -29,6 +29,21 @@ ActiveRecord::Schema.define(version: 20171217030714) do
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
   end
 
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer "priority", default: 0, null: false
+    t.integer "attempts", default: 0, null: false
+    t.text "handler", null: false
+    t.text "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string "locked_by"
+    t.string "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
   create_table "drivers", force: :cascade do |t|
     t.integer "year"
     t.string "name"
@@ -44,7 +59,7 @@ ActiveRecord::Schema.define(version: 20171217030714) do
     t.integer "total_points"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.bigint "user_id"
     t.index ["user_id"], name: "index_leaderboards_on_user_id"
   end
 
@@ -53,6 +68,8 @@ ActiveRecord::Schema.define(version: 20171217030714) do
     t.integer "points"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "quali_position"
+    t.integer "race_position"
   end
 
   create_table "quali_results", force: :cascade do |t|
@@ -67,8 +84,8 @@ ActiveRecord::Schema.define(version: 20171217030714) do
     t.integer "position"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "race_id"
-    t.integer "driver_id"
+    t.bigint "race_id"
+    t.bigint "driver_id"
     t.index ["driver_id"], name: "index_race_results_on_driver_id"
     t.index ["race_id"], name: "index_race_results_on_race_id"
   end
@@ -82,6 +99,7 @@ ActiveRecord::Schema.define(version: 20171217030714) do
     t.string "ical_uid"
     t.datetime "ical_dtstart"
     t.string "ical_summary"
+    t.string "img"
   end
 
   create_table "tips", force: :cascade do |t|
@@ -95,8 +113,8 @@ ActiveRecord::Schema.define(version: 20171217030714) do
     t.integer "points"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
-    t.integer "race_id"
+    t.bigint "user_id"
+    t.bigint "race_id"
     t.string "updated_by"
     t.integer "qual_first_points"
     t.integer "qual_second_points"
@@ -108,6 +126,23 @@ ActiveRecord::Schema.define(version: 20171217030714) do
     t.integer "race_total_points"
     t.index ["race_id"], name: "index_tips_on_race_id"
     t.index ["user_id"], name: "index_tips_on_user_id"
+  end
+
+  create_table "tracks", force: :cascade do |t|
+    t.string "country"
+    t.string "circuit"
+    t.integer "laps"
+    t.string "svg"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "userdata", force: :cascade do |t|
+    t.string "user_id"
+    t.string "season"
+    t.integer "fee_paid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -125,6 +160,13 @@ ActiveRecord::Schema.define(version: 20171217030714) do
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.boolean "admin", default: false
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.boolean "approved", default: false, null: false
+    t.index ["approved"], name: "index_users_on_approved"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
