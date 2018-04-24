@@ -79,7 +79,9 @@
   <div class="button-section">
     <div class="actions">
       <%= form.hidden_field :updated_by, :value => current_user.email %>
+      <%= form.hidden_field :modifier_is_admin, :value => current_user.admin? %>
       <%= form.submit %>
     </div>
   </div>
 <% end %>
+<% console %>
