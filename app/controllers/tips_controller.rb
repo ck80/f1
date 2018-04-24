@@ -27,11 +27,13 @@ class TipsController < ApplicationController
   # GET /tips.json
   def index
     if current_user.admin?
-      @tips = Tip.joins(:race).where('races.year' => @year)
-      @user = User.all
+      @tips = Tip.joins(:race).where('races.year' => @year).order('races.race_number ASC')
+      @users = User.all
     else
-      @tips = Tip.joins(:race).where("races.year = ? AND races.ical_dtstart < ?", @year, Time.current)
       @user = current_user
+      @tips = Tip.joins(:race).where("races.year = ? AND races.ical_dtstart < ? AND user_id != ?", @year, Time.current, @user.id)
+      @tips = @tips + Tip.joins(:race).where("races.year = ? AND user_id = ?", @year, @user.id)
+
     end
   end
 
@@ -45,16 +47,17 @@ class TipsController < ApplicationController
     @tip = Tip.new
     @user = current_user
     @users = User.all
-    @races = Race.where(year: @year)
-    @drivers = Driver.where(year: @year)
+    @races = Race.where(year: @year).order('race_number ASC')
+    @drivers = Driver.where(year: @year).order('abbr_name ASC')
+
   end
 
   # GET /tips/1/edit
   def edit
     @users = User.all
     @user = current_user
-    @races = Race.where(year: @year)
-    @drivers = Driver.where(year: @year)
+    @races = Race.where(year: @year).order('race_number ASC')
+    @drivers = Driver.where(year: @year).order('abbr_name ASC')
 
   end
 
@@ -64,8 +67,9 @@ class TipsController < ApplicationController
     @tip = Tip.new(tip_params)
     @user = current_user
     @users = User.all
-    @races = Race.where(year: @year)
-    @drivers = Driver.where(year: @year)
+    @races = Race.where(year: @year).order('race_number ASC')
+    @drivers = Driver.where(year: @year).order('abbr_name ASC')
+
     respond_to do |format|
       if @tip.save
         format.html { redirect_to tips_path, notice: 'Tip was successfully created.' }
@@ -82,8 +86,8 @@ class TipsController < ApplicationController
   def update
     @users = User.all
     @user = current_user
-    @races = Race.where(year: @year)
-    @drivers = Driver.where(year: @year)
+    @races = Race.where(year: @year).order('race_number ASC')
+    @drivers = Driver.where(year: @year).order('abbr_name ASC')
     respond_to do |format|
       if @tip.update(tip_params)
         format.html { redirect_to tips_path, notice: 'Tip was successfully updated.' }
@@ -107,9 +111,9 @@ class TipsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-
+    
     # Never trust parameters from the scary internet, only allow the white list through.
     def tip_params
-      params.require(:tip).permit(:qual_first, :qual_second, :qual_third, :race_first, :race_second, :race_third, :race_tenth, :user_id, :race_id, :updated_by)
+      params.require(:tip).permit(:qual_first, :qual_second, :qual_third, :race_first, :race_second, :race_third, :race_tenth, :user_id, :race_id, :updated_by, :modifier_is_admin)
     end
 end

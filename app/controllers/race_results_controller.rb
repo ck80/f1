@@ -4,8 +4,8 @@ class RaceResultsController < ApplicationController
   # GET /race_results
   # GET /race_results.json
   def index
-    @race_results = RaceResult.joins(:race, :driver)
-    @quali_results = QualiResult.joins(:race, :driver)
+    @race_results = RaceResult.joins(:race, :driver).order('race_id ASC, position ASC')
+    @quali_results = QualiResult.joins(:race, :driver).order('race_id ASC, position ASC')
 
   end
 

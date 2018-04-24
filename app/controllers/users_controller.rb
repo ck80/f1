@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :check_auth, only: [:index, :show, :new, :edit, :update, :destroy]
 
   # GET /users
   # GET /users.json
@@ -58,6 +59,13 @@ class UsersController < ApplicationController
     end
   end
 
+  def check_auth
+    if current_user.admin? == false
+      flash[:alert] = "You are not permitted to perform this operation."
+      redirect_to(root_path)
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
@@ -66,6 +74,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :email)
+      params.require(:user).permit(:name, :email, :approved, userdatum_attributes: [:id, :fee_paid, :season, :_destroy] )
     end
 end

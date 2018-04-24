@@ -10,7 +10,11 @@ class HomeController < ApplicationController
   end
 
   def index
-    @users = User.all
+    if params[:approved] == "false"
+      @users = User.where(approved: false)
+    else
+      @users = User.all
+    end
   end
   
   def test
@@ -73,80 +77,89 @@ class HomeController < ApplicationController
   end
   
   def update_race_tip_points
-    @tips = Tip.all
+    @tips = Tip.joins(:race).where('races.year': @year)
     
     #calculate quali points
 
-    
     @nestedpointsArray = []
     $i = 0
     @tips.each do |tip|
       @pointsArray = []
+
+      # calculate quali first place selection
       @pointsArray << \
-      if QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_first)).id)).nil?
-        then 0
-      elsif QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_first)).id)).position == 0
-        then 0
-      elsif Point.find_by(item: "q1st").points - (1 - QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_first)).id)).position).abs < 0
-        then 0
-      else Point.find_by(item: "q1st").points - (1 - QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_first)).id)).position).abs
+      if QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_first), year: @year).id)).nil? then 0
+      elsif QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_first), year: @year).id)).position == 0 then 0
+      elsif Point.find_by(item: "q1st").points - (1 - QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_first), year: @year).id)).position).abs < 0 then 0
+      else Point.find_by(item: "q1st").points - (1 - QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_first), year: @year).id)).position).abs
       end
+      
+      # calculate quali second place selection
       @pointsArray << \
-      if QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_second)).id)).nil?
-        then 0
-      elsif QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_second)).id)).position == 0
-        then 0
-      elsif Point.find_by(item: "q2nd").points - (2 - QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_second)).id)).position).abs < 0
-        then 0
-      else Point.find_by(item: "q2nd").points - (2 - QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_second)).id)).position).abs
+      if QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_second), year: @year).id)).nil? then 0
+      elsif QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_second), year: @year).id)).position == 0 then 0
+      elsif Point.find_by(item: "q2nd").points - (2 - QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_second), year: @year).id)).position).abs < 0 then 0
+      else Point.find_by(item: "q2nd").points - (2 - QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_second), year: @year).id)).position).abs
       end
+      
+      # calculate quali third place selection
       @pointsArray << \
-      if QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_third)).id)).nil?
-        then 0
-      elsif QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_third)).id)).position == 0
-        then 0
-      elsif Point.find_by(item: "q3rd").points - (3 - QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_third)).id)).position).abs < 0
-        then 0
-      else Point.find_by(item: "q3rd").points - (3 - QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_third)).id)).position).abs
+      if QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_third), year: @year).id)).nil? then 0
+      elsif QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_third), year: @year).id)).position == 0 then 0
+      elsif Point.find_by(item: "q3rd").points - (3 - QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_third), year: @year).id)).position).abs < 0 then 0
+      else Point.find_by(item: "q3rd").points - (3 - QualiResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.qual_third), year: @year).id)).position).abs
       end
+
+      # calculate race first place selection
+      race_first_points = Point.find_by(race_position: 1).points
+      race_first_driver = RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: tip.race_first, year: @year).id))
+      if RaceResult.find_by(race_id: tip.race_id, driver_id: (Driver.find_by(abbr_name: tip.race_first, year: @year).id)).nil? then selection_race_position = 0 else selection_race_position = RaceResult.find_by(race_id: tip.race_id, driver_id: (Driver.find_by(abbr_name: tip.race_first, year: @year).id)).position end
+      if Point.find_by(race_position: selection_race_position).nil? then selection_race_points = 0 else selection_race_points = Point.find_by(race_position: selection_race_position).points end
       @pointsArray << \
-      if RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_first)).id)).nil?
-        then 0
-      elsif RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_first)).id)).position == 0
-        then 0
-      elsif Point.find_by(item: "r1st").points - (1 - RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_first)).id)).position).abs < 0
-        then 0
-      else Point.find_by(item: "r1st").points - (1 - RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_first)).id)).position).abs
+      if race_first_driver.nil? then 0
+      elsif race_first_driver.position == 0 then 0
+      elsif [selection_race_points, race_first_points].min - (1 - selection_race_position).abs < 0 then 0
+      else [selection_race_points, race_first_points].min - (1 - selection_race_position).abs
       end
+      
+      # calculate race second place selection
+      race_second_points = Point.find_by(race_position: 2).points
+      race_second_driver = RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: tip.race_second, year: @year).id))
+      if RaceResult.find_by(race_id: tip.race_id, driver_id: (Driver.find_by(abbr_name: tip.race_second, year: @year).id)).nil? then selection_race_position = 0 else selection_race_position = RaceResult.find_by(race_id: tip.race_id, driver_id: (Driver.find_by(abbr_name: tip.race_second, year: @year).id)).position end
+      if Point.find_by(race_position: selection_race_position).nil? then selection_race_points = 0 else selection_race_points = Point.find_by(race_position: selection_race_position).points end
       @pointsArray << \
-      if RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_second)).id)).nil?
-        then 0
-      elsif RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_second)).id)).position == 0
-        then 0
-      elsif Point.find_by(item: "r2nd").points - (2 - RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_second)).id)).position).abs < 0
-        then 0
-      else Point.find_by(item: "r2nd").points - (2 - RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_second)).id)).position).abs
+      if race_second_driver.nil? then 0
+      elsif race_second_driver.position == 0 then 0
+      elsif [selection_race_points, race_second_points].min - (2 - selection_race_position).abs < 0 then 0
+      else [selection_race_points, race_second_points].min - (2 - selection_race_position).abs
       end
+
+      # calculate race third place selection
+      race_third_points = Point.find_by(race_position: 3).points
+      race_third_driver = RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: tip.race_third, year: @year).id))
+      if RaceResult.find_by(race_id: tip.race_id, driver_id: (Driver.find_by(abbr_name: tip.race_third, year: @year).id)).nil? then selection_race_position = 0 else selection_race_position = RaceResult.find_by(race_id: tip.race_id, driver_id: (Driver.find_by(abbr_name: tip.race_third, year: @year).id)).position end
+      if Point.find_by(race_position: selection_race_position).nil? then selection_race_points = 0 else selection_race_points = Point.find_by(race_position: selection_race_position).points end
       @pointsArray << \
-      if RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_third)).id)).nil?
-        then 0
-      elsif RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_third)).id)).position == 0
-        then 0
-      elsif Point.find_by(item: "r3rd").points - (3 - RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_third)).id)).position).abs < 0
-        then 0
-      else Point.find_by(item: "r3rd").points - (3 - RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_third)).id)).position).abs
+      if race_third_driver.nil? then 0
+      elsif race_third_driver.position == 0 then 0
+      elsif [selection_race_points, race_third_points].min - (3 - selection_race_position).abs < 0 then 0
+      else [selection_race_points, race_third_points].min - (3 - selection_race_position).abs
       end
+
+      # calculate race tenth bonus selection
+      race_tenth_bonus_points = Point.find_by(race_position: 99).points
+      race_tenth_driver = RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: tip.race_tenth, year: @year).id))
+      if RaceResult.find_by(race_id: tip.race_id, driver_id: (Driver.find_by(abbr_name: tip.race_tenth, year: @year).id)).nil? then selection_race_position = 0 else selection_race_position = RaceResult.find_by(race_id: tip.race_id, driver_id: (Driver.find_by(abbr_name: tip.race_tenth, year: @year).id)).position end
+      if Point.find_by(race_position: selection_race_position).nil? then selection_race_points = 0 else selection_race_points = Point.find_by(race_position: selection_race_position).points end
       @pointsArray << \
-      if RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_tenth)).id)).nil?
-        then 0
-      elsif RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_tenth)).id)).position != 10
-        then 0
-      elsif RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_tenth)).id)).position == 10
-        then 15
+      if RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_tenth), year: @year).id)).nil? then 0
+      elsif RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_tenth), year: @year).id)).position != 10 then 0
+      elsif RaceResult.find_by(race_id: (tip.race_id), driver_id: (Driver.find_by(abbr_name: (tip.race_tenth), year: @year).id)).position == 10 then 15
       end
+
       @pointsHash = {user: tip.user.email, race: tip.race.country, points: @pointsArray, race_points: @pointsArray.sum }
       @nestedpointsArray << @pointsHash
-      tip.update(qual_first_points: (@pointsHash[:points][0]), qual_second_points: (@pointsHash[:points][1]), qual_third_points: (@pointsHash[:points][2]), \
+      tip.update_columns(qual_first_points: (@pointsHash[:points][0]), qual_second_points: (@pointsHash[:points][1]), qual_third_points: (@pointsHash[:points][2]), \
       race_first_points: (@pointsHash[:points][3]), race_second_points: (@pointsHash[:points][4]), race_third_points: (@pointsHash[:points][5]), \
       race_tenth_points: (@pointsHash[:points][6]), race_total_points: (@pointsHash[:points].sum))
       $i +=1  
@@ -252,13 +265,23 @@ class HomeController < ApplicationController
         result.car
         result.driver
         result.team
-        x = Driver.find_by(abbr_name: result.driver).id
-        y = Race.find_by(country: result.race_country).id
+        x = Driver.find_by!(abbr_name: result.driver, year: @year).id
+        y = Race.find_by!(country: result.race_country, year: @year).id
         r = QualiResult.new
         r.position = result.place
         r.race_id = y
         r.driver_id = x
         r.save
+#        if result.place != 0 then
+#          r = QualiResult.find_or_initialize_by(position: result.place, race_id: y)
+#          r.driver_id = x
+#          r.save
+#        else
+#          r = QualiResult.find_or_initialize_by(position: result.place, race_id: y, driver_id: x)
+#          # r.position = result.place
+#          # r.race_id = y
+#          r.save
+#        end
       end
     end
     
@@ -269,13 +292,23 @@ class HomeController < ApplicationController
         result.car
         result.driver
         result.team
-        x = Driver.find_by(abbr_name: result.driver).id
-        y = Race.find_by(country: result.race_country).id
+        x = Driver.find_by!(abbr_name: result.driver, year: @year).id
+        y = Race.find_by!(country: result.race_country, year: @year).id
         r = RaceResult.new
         r.position = result.place
         r.race_id = y
         r.driver_id = x
         r.save
+#        if result.place != 0 then
+#          r = RaceResult.find_by( position: result.place, race_id: y)
+#          r.driver_id = x
+#          r.save
+#        else
+#          r = RaceResult.find_by(position: result.place, race_id: y, driver_id: x)
+#          # r.position = result.place
+#          # r.race_id = y
+#          r.save
+#        end
       end
     end
     # render plain: @allqualiresultsArray #+ @allraceresultsArray
@@ -431,6 +464,36 @@ class HomeController < ApplicationController
 
   end
 
+  def fetch_drivers_by_championship
+    # load HTML parser
+    require 'rubygems'
+    require 'nokogiri'
+    require 'open-uri'
+    
+    # fetch F1 HTML page including list of races
+    page = "https://www.formula1.com/en/championship/drivers.html"
+    doc = Nokogiri::HTML(open(page))
+    section=doc.css('figcaption')
+    driverelement=section.css('h1')
+    teamelement=section.css('p')
+    
+    # put driverelement into an array @resultsArray
+    @driversArray = []
+    driverHash = {}
+    $i = 0
+    while $i < driverelement.length
+      driverHash = {drivername: driverelement[$i].text, driverteam: teamelement[$i].text.split.join(" ") }
+      x = Driver.new
+      x.year = @year
+      x.name = driverHash[:drivername]
+      x.abbr_name = (x.name.split.second + if x.name.split.third.nil? then "" else x.name.split.third end)[0..2].upcase
+      x.team = driverHash[:driverteam]
+      x.save
+      $i +=1
+    end
+
+  end
+
   def fetch_races
     # load HTML parser
     require 'rubygems'
@@ -518,12 +581,60 @@ class HomeController < ApplicationController
     p.points = 15
     p.save
 
+    # r4th points
+    p = Point.new
+    p.item = "r4th"
+    p.points = 12
+    p.save
+
+    # r5th points
+    p = Point.new
+    p.item = "r5th"
+    p.points = 10
+    p.save
+
+    # r5th points
+    p = Point.new
+    p.item = "r5th"
+    p.points = 10
+    p.save
+
+    # r6th points
+    p = Point.new
+    p.item = "r6th"
+    p.points = 8
+    p.save
+
+    # r7th points
+    p = Point.new
+    p.item = "r7th"
+    p.points = 6
+    p.save
+
+    # r8th points
+    p = Point.new
+    p.item = "r8th"
+    p.points = 4
+    p.save
+
+    # r9th points
+    p = Point.new
+    p.item = "r9th"
+    p.points = 2
+    p.save
+
     # r10th points
     p = Point.new
     p.item = "r10th"
-    p.points = 15
+    p.points = 1
     p.save
   
+    # r10th_bonus points
+    p = Point.new
+    p.item = "r10th_bonus"
+    p.points = 15
+    p.save
+
   end
 
 end

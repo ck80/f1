@@ -29,6 +29,10 @@ Rails.application.configure do
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true
 
+  # Use a real queuing backend for Active Job (and separate queues per environment)
+  config.active_job.queue_adapter     = :delayed_job
+  config.active_job.queue_name_prefix = "f1_#{Rails.env}"
+
   config.action_mailer.perform_caching = false
 
   # Print deprecation notices to the Rails logger.
@@ -45,6 +49,9 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
+  # enable for local precompile to work
+  config.assets.prefix = "/dev-assets"
+  
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
@@ -52,7 +59,27 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  # config.action_mailer.default_url_options = { :host => ENV["WEBSITE_DOMAIN"] }
 
-  config.action_mailer.delivery_method = :test
+  config.action_mailer.smtp_settings = {
+    address: "smtp.gmail.com",
+    port: 587,
+    domain: ENV["GMAIL_DOMAIN"],
+    authentication: "plain",
+    enable_starttls_auto: true,
+    user_name: ENV["GMAIL_USERNAME"],
+    password: ENV["GMAIL_PASSWORD"]
+    }
+# ActionMailer Config
+config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+config.action_mailer.delivery_method = :smtp
+config.action_mailer.raise_delivery_errors = true
+config.action_mailer.default :charset => "utf-8"
+
+# Send email in development mode.
+config.action_mailer.perform_deliveries = false
+
+# Enable web console whitelist IPs
+config.web_console.whitelisted_ips = %w( 172.20.0.1 127.0.0.1 192.168.1.0/24 10.0.0.0/16 )
+
 end

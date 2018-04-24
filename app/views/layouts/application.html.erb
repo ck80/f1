@@ -25,7 +25,7 @@ a:hover {
 	</head>
 
 	<body>
-		<nav class="navbar sticky-top navbar-expand-md navbar-dark bg-primary ">
+		<nav class="navbar sticky-top navbar-expand-md navbar-dark <%= 'bg-primary' if Rails.env.development? == false %>" <%= 'style=background-color:red;' if Rails.env.development? %>>
 			<%= link_to "F1 Tips", root_path, style: "color:white", class: "btn btn-inverse"%>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -59,18 +59,90 @@ a:hover {
 			<% end %>
 			</div>
 		</nav>
+    <% if request.path_info.exclude?('users')%>
+    <% if request.path_info.exclude?('tips/new')%>
+		<% if user_signed_in? %>
+    <% @last_race = Race.where("ical_dtstart <= ?", Time.now).order(ical_dtstart: :asc).last %>
+    <% @next_race = Race.where("ical_dtstart >= ?", Time.now).order(ical_dtstart: :asc).first %>
+    <% @next_next_race = Race.where("ical_dtstart >= ?", Time.now).order(ical_dtstart: :asc).second %>
 
-		<% if notice %>
+    <!-- testing carousel format for upcoming races banner -->
+    <div id="TracksControls" class="carousel slide" data-ride="carousel" data-interval="false">
+      <div class="carousel-inner">
+        <div class="carousel-item">
+          <div class="row no-gutters" style="background-image: url(<%= asset_path 'carbon-black.jpg' %>) ">
+            <div class="col">
+              <!-- svg track images originally sourced from http://www.skysports.com/f1/grandprix/azerbaijan/circuit-guide -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="175" viewBox="0 0 500 375" fill=red stroke-width=0 class="f1-svg-track">
+                <path class="f1-svg-track__outline" d="<%= @last_race.img %>"></path>
+              </svg>
+            </div>
+            <div class="col" style="margin-left:15px">
+              </br><h5 class="text-white">Last Race</h5>
+              <h6 class="text-white">Race <%= @last_race.race_number %> | <%= @last_race.country %></h6></br>
+              <h6 class="text-white">Round Winner:</h6>
+              <h6 class="text-white"><%= @last_race.tips.order(race_total_points: :desc).first.user.name %> | <%= @last_race.tips.order(race_total_points: :desc).first.race_total_points %> points</h6>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item active">
+          <div class="row no-gutters" style="background-image: url(<%= asset_path 'carbon-black.jpg' %>) ">
+            <div class="col">
+              <!-- svg track images originally sourced from http://www.skysports.com/f1/grandprix/azerbaijan/circuit-guide -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="175" viewBox="0 0 500 375" fill=red stroke-width=0 class="f1-svg-track">
+                <path class="f1-svg-track__outline" d="<%= @next_race.img %>"></path>
+              </svg>
+            </div>
+            <div class="col" style="margin-left:15px">
+              </br><h5 class="text-white">Next Race</h5>
+              <h6 class="text-white">Race <%= @next_race.race_number %> | <%= @next_race.country %></h6></br>
+              <h6 class="text-white">Qualifying Session:</h6>
+              <h6 class="text-white"><%= @next_race.ical_dtstart.in_time_zone("Sydney").strftime("%a, %B %e %-l:%M %p %Z") %></h6>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="row no-gutters" style="background-image: url(<%= asset_path 'carbon-black.jpg' %>) ">
+            <div class="col">
+              <!-- svg track images originally sourced from http://www.skysports.com/f1/grandprix/azerbaijan/circuit-guide -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="175" viewBox="0 0 500 375" fill=red stroke-width=0 class="f1-svg-track">
+                <path class="f1-svg-track__outline" d="<%= @next_next_race.img %>"></path>
+              </svg>
+            </div>
+            <div class="col" style="margin-left:15px">
+              </br><h5 class="text-white">Upcoming Race</h5>
+              <h6 class="text-white">Race <%= @next_next_race.race_number %> | <%= @next_next_race.country %></h6></br>
+              <h6 class="text-white">Qualifying Session:</h6>
+              <h6 class="text-white"><%= @next_next_race.ical_dtstart.in_time_zone("Sydney").strftime("%a, %B %e %-l:%M %p %Z") %></h6>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#TracksControls" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#TracksControls" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+  </div>
+    
+
+    <% end %>
+    <% end %>
+    <% end %>
+  	<% if notice %>
 			<p class="alert alert-success"><%= notice %></p>
 		<% end %>
 		
 		<% if alert %>
 			<p class="alert alert-danger"><%= alert %></p>
 		<% end %>
-		
-		<div class="container-fluid">
-		<%#= image_tag "f1-cartoon.jpg" %>
-		<%= yield %>
-		</div>
+
+    <div class="container-fluid">
+  		<%= yield %>
+  	</div>
 	</body>
 </html>

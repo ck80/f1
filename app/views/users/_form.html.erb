@@ -21,6 +21,22 @@
     <%= form.text_field :email, id: :user_email %>
   </div>
 
+  <div class="field">
+    <%= form.label :approved %>
+    <%= form.check_box :approved %>
+  </div>
+
+  <div class="field">
+    <%= form.fields_for :userdatum do |userdatum_form| %>
+    <%= form.label :season %>
+    <%= uuserdatum_form.text_field :season %>
+    <%= form.label :fee_paid %>
+    <%= userdatum_form.text_field :fee_paid %>
+    </p>
+    <% end %>
+
+  </div>
+
   <div class="actions">
     <%= form.submit %>
   </div>

@@ -14,7 +14,12 @@
 //= require turbolinks
 //= require jquery3
 //= require jquery_ujs
+//= require jquery-ui
 //= require popper
 //= require bootstrap
 //= require jquery-tablesorter
+//= require jquery-tablesorter/jquery.metadata
+//= require jquery-tablesorter/jquery.tablesorter
+//= require jquery-tablesorter/jquery.tablesorter.widgets
+//= require jquery-tablesorter/widget-scroller.js
 //= require_tree .
