@@ -63,10 +63,9 @@ a:hover {
     <% if request.path_info.exclude?('tips/new')%>
 		<% if user_signed_in? %>
     <% @last_race = Race.where("ical_dtstart <= ?", Time.now).order(ical_dtstart: :asc).last %>
-    <% @next_race = Race.where("ical_dtstart >= ?", Time.now).order(ical_dtstart: :asc).first %>
-    <% @next_next_race = Race.where("ical_dtstart >= ?", Time.now).order(ical_dtstart: :asc).second %>
+    <% @next_race = Race.where("ical_dtstart >= ?", Time.now + 1.day + 3.hours).order(ical_dtstart: :asc).first %>
+    <% @next_next_race = Race.where("ical_dtstart >= ?", Time.now + 1.day + 3.hours).order(ical_dtstart: :asc).second %>
 
-    <!-- testing carousel format for upcoming races banner -->
     <div id="TracksControls" class="carousel slide" data-ride="carousel" data-interval="false">
       <div class="carousel-inner">
         <div class="carousel-item">
