@@ -99,7 +99,9 @@ $(document).ready(function () {
           </tr>
         </thead>
         <tbody class="TFtable">
-          <% if r.ical_dtstart >= Time.now then %>
+          <% if current_user.admin? then %>
+            <% @tips = Tip.joins(:race).where("races.year = ? AND race_id = ?", @year, r.id) %>
+          <% elsif r.ical_dtstart >= Time.now then %>
             <% @tips = Tip.joins(:race).where("races.year = ? AND user_id = ? AND race_id = ?", @year, current_user.id, r.id) %>
           <% else %>
             <% @tips = Tip.joins(:race).where("races.year = ? AND race_id = ?", @year, r.id) %>
@@ -140,3 +142,4 @@ $(document).ready(function () {
 
 </br>
 </div>
+<% console %>
