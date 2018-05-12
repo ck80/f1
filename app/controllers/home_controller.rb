@@ -169,6 +169,90 @@ class HomeController < ApplicationController
     
   end
 
+  # work in progress - use Ergast API for results
+
+  def fetch_last_quali_results_ergast_api
+    # load HTML parser
+    # require 'rubygems'
+    # require 'nokogiri'
+    require 'open-uri'
+
+    @last_quali_round = Race.where("ical_dtstart <= ?", Time.now - 1.day - 3.hours).order(ical_dtstart: :asc).last.race_number.to_s
+    ergestapi = "https://ergast.com/api/f1/" + @year.to_s + "/" + @last_quali_round.to_s + "/qualifying.json"
+    # xml_doc = Nokogiri::XML.parse(open(ergestapi))
+    json_doc = JSON.parse(open(ergestapi).read)
+
+    @resultsArray = []
+
+    json_doc["MRData"]["RaceTable"]["Races"].first["QualifyingResults"].each do |r|
+      race_country = json_doc["MRData"]["RaceTable"]["Races"].first["Circuit"]["Location"]["country"]
+      place = r["position"]
+      car = r["number"]
+      driver_full_name = r["Driver"]["givenName"] + " " + r["Driver"]["familyName"]
+      driver = r["Driver"]["code"]
+      team = r["Constructor"]["name"]
+      @resultsArray << Entry.new(race_country, place, car, driver_full_name, driver, team)
+    end
+
+    # commit results to DB
+    @resultsArray.each do |result|
+      result.race_country
+      result.place
+      result.car
+      result.driver
+      result.team
+      x = Driver.find_by!(abbr_name: result.driver, year: @year).id
+      y = Race.find_by!(country: result.race_country, year: @year).id
+      r = QualiResult.new
+      r.position = result.place
+      r.race_id = y
+      r.driver_id = x
+      r.save
+    end
+
+  end
+
+  def fetch_last_race_results_ergast_api
+    # load HTML parser
+    # require 'rubygems'
+    # require 'nokogiri'
+    require 'open-uri'
+
+    @last_race_round = Race.where("ical_dtstart <= ?", Time.now - 1.day - 3.hours).order(ical_dtstart: :asc).last.race_number.to_s
+    ergestapi = "https://ergast.com/api/f1/" + @year.to_s + "/" + @last_race_round.to_s + "/results.json"
+    # xml_doc = Nokogiri::XML.parse(open(ergestapi))
+    json_doc = JSON.parse(open(ergestapi).read)
+
+    @resultsArray = []
+
+    json_doc["MRData"]["RaceTable"]["Races"].first["Results"].each do |r|
+      race_country = json_doc["MRData"]["RaceTable"]["Races"].first["Circuit"]["Location"]["country"]
+      place = r["position"]
+      car = r["number"]
+      driver_full_name = r["Driver"]["givenName"] + " " + r["Driver"]["familyName"]
+      driver = r["Driver"]["code"]
+      team = r["Constructor"]["name"]
+      @resultsArray << Entry.new(race_country, place, car, driver_full_name, driver, team)
+    end
+
+    # commit results to DB
+    @resultsArray.each do |result|
+      result.race_country
+      result.place
+      result.car
+      result.driver
+      result.team
+      x = Driver.find_by!(abbr_name: result.driver, year: @year).id
+      y = Race.find_by!(country: result.race_country, year: @year).id
+      r = RaceResult.new
+      r.position = result.place
+      r.race_id = y
+      r.driver_id = x
+      r.save
+    end
+
+  end
+
   def fetch_results_action
     # load HTML parser
     require 'rubygems'
