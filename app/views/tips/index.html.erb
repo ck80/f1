@@ -4,6 +4,7 @@
 $(document).ready(function () {
   $('.tablesorter').tablesorter({
     sortList: [[8,1]],
+    headerTemplate : '{content} {icon}',
     widgets: [ 'scroller' ],
     widgetOptions : {
       // scroll tbody to top after sorting
@@ -86,8 +87,6 @@ $(document).ready(function () {
         <thead class="TFtable">
           <tr class="TFtable">
             <th style="text-align:center; border:#4e95f4 1px solid">User</th>
-            <!-- <th style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th> -->
-            <!-- <th style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-left:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th> -->
             <th style="text-align:center; border:#4e95f4 1px solid">Q1</th>
             <th style="text-align:center; border:#4e95f4 1px solid">Q2</th>
             <th style="text-align:center; border:#4e95f4 1px solid">Q3</th>

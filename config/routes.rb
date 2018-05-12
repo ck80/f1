@@ -18,6 +18,8 @@ Rails.application.routes.draw do
     post 'home/account_upgrade'
     post 'home/update_race_tip_points'
     post 'home/update_race_start'
+    post 'home/fetch_last_quali_results_ergast_api'
+    post 'home/fetch_last_race_results_ergast_api'
   end
  # resources :races
  # resources :home
