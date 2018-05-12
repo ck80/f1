@@ -177,7 +177,7 @@ class HomeController < ApplicationController
     # require 'nokogiri'
     require 'open-uri'
 
-    @last_quali_round = Race.where("ical_dtstart <= ?", Time.now - 1.day - 3.hours).order(ical_dtstart: :asc).last.race_number.to_s
+    @last_quali_round = Race.where("ical_dtstart <= ?", Time.now + 1.day + 3.hours).order(ical_dtstart: :asc).last.race_number.to_s
     ergestapi = "https://ergast.com/api/f1/" + @year.to_s + "/" + @last_quali_round.to_s + "/qualifying.json"
     # xml_doc = Nokogiri::XML.parse(open(ergestapi))
     json_doc = JSON.parse(open(ergestapi).read)
@@ -218,7 +218,7 @@ class HomeController < ApplicationController
     # require 'nokogiri'
     require 'open-uri'
 
-    @last_race_round = Race.where("ical_dtstart <= ?", Time.now - 1.day - 3.hours).order(ical_dtstart: :asc).last.race_number.to_s
+    @last_race_round = Race.where("ical_dtstart <= ?", Time.now + 1.day + 3.hours).order(ical_dtstart: :asc).last.race_number.to_s
     ergestapi = "https://ergast.com/api/f1/" + @year.to_s + "/" + @last_race_round.to_s + "/results.json"
     # xml_doc = Nokogiri::XML.parse(open(ergestapi))
     json_doc = JSON.parse(open(ergestapi).read)
