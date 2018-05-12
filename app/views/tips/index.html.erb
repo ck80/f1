@@ -104,7 +104,7 @@ $(document).ready(function () {
           <% elsif r.ical_dtstart >= Time.now then %>
             <% @tips = Tip.joins(:race).where("races.year = ? AND user_id = ? AND race_id = ?", @year, current_user.id, r.id) %>
           <% else %>
-            <% @tips = Tip.joins(:race).where("races.year = ? AND race_id = ?", @year, r.id) %>
+            <% @tips = Tip.joins(:race, :user).where("races.year = ? AND race_id = ? AND users.approved = ?", @year, r.id, true) %>
           <% end %>
           <% @tips.each do |tip| %>
             <tr>
@@ -142,3 +142,4 @@ $(document).ready(function () {
 
 </br>
 </div>
+<% console %>
