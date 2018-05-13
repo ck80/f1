@@ -40,6 +40,17 @@ class HomeController < ApplicationController
     attr_reader :driver
     attr_reader :team
   end
+
+  class ForgottenTip
+  	def initialize(race_country, user_name, race_lowest_points)
+  		@race_country = race_country
+      @user_name = user_name
+      @race_lowest_points = race_lowest_points
+  	end
+    attr_reader :race_country
+    attr_reader :user_name
+    attr_reader :race_lowest_points
+  end
   
   def update_race_start
     # load HTML parser
@@ -75,6 +86,38 @@ class HomeController < ApplicationController
     end
 
   end
+  
+  def update_race_tip_points_forgotten_entries
+    # this function is still WORK IN PROGRESS
+    
+    # get all the users
+    @users=User.where(approved: true)
+    
+    # get all the races
+    @races = Race.where(year: 2018) 
+    
+    # create array to store results
+    @resultsArray = []
+
+    # for each race check there is an entry for each user, record which users don't have tips
+    @races.each do |race|
+      # for each race, get lowest points
+      @race_lowest_points = Tip.where(race_id: race.id).order(race_total_points: :DESC).first.race_total_points
+      @users.each do |user|
+        if race.tips.where(user_id: user.id).exists? then
+        else
+          @resultsArray << ForgottenTip.new(race.country, user.name, @race_lowest_points)
+        end          
+      end
+
+      
+    end
+
+    
+
+
+  end
+
   
   def update_race_tip_points
     @tips = Tip.joins(:race).where('races.year': @year)
@@ -177,7 +220,7 @@ class HomeController < ApplicationController
     # require 'nokogiri'
     require 'open-uri'
 
-    @last_quali_round = Race.where("ical_dtstart <= ?", Time.now - 1.day - 3.hours).order(ical_dtstart: :asc).last.race_number.to_s
+    @last_quali_round = Race.where("ical_dtstart <= ?", Time.now + 1.day + 3.hours).order(ical_dtstart: :asc).last.race_number.to_s
     ergestapi = "https://ergast.com/api/f1/" + @year.to_s + "/" + @last_quali_round.to_s + "/qualifying.json"
     # xml_doc = Nokogiri::XML.parse(open(ergestapi))
     json_doc = JSON.parse(open(ergestapi).read)
@@ -218,7 +261,7 @@ class HomeController < ApplicationController
     # require 'nokogiri'
     require 'open-uri'
 
-    @last_race_round = Race.where("ical_dtstart <= ?", Time.now - 1.day - 3.hours).order(ical_dtstart: :asc).last.race_number.to_s
+    @last_race_round = Race.where("ical_dtstart <= ?", Time.now + 1.day + 3.hours).order(ical_dtstart: :asc).last.race_number.to_s
     ergestapi = "https://ergast.com/api/f1/" + @year.to_s + "/" + @last_race_round.to_s + "/results.json"
     # xml_doc = Nokogiri::XML.parse(open(ergestapi))
     json_doc = JSON.parse(open(ergestapi).read)
