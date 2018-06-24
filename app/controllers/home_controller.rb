@@ -286,7 +286,7 @@ class HomeController < ApplicationController
       result.driver
       result.team
       x = Driver.find_by!(abbr_name: result.driver, year: @year).id
-      y = Race.find_by!(country: result.race_country, year: @year).id
+      y = Race.where("country ILIKE ? AND year = ?", result.race_country, @year).take.id
       r = RaceResult.new
       r.position = result.place
       r.race_id = y
@@ -393,7 +393,7 @@ class HomeController < ApplicationController
         result.driver
         result.team
         x = Driver.find_by!(abbr_name: result.driver, year: @year).id
-        y = Race.find_by!(country: result.race_country, year: @year).id
+        y = Race.where("country ILIKE ? AND year = ?", result.race_country, @year).take.id
         r = QualiResult.new
         r.position = result.place
         r.race_id = y
@@ -420,7 +420,7 @@ class HomeController < ApplicationController
         result.driver
         result.team
         x = Driver.find_by!(abbr_name: result.driver, year: @year).id
-        y = Race.find_by!(country: result.race_country, year: @year).id
+        y = Race.where("country ILIKE ? AND year = ?", result.race_country, @year).take.id
         r = RaceResult.new
         r.position = result.place
         r.race_id = y
