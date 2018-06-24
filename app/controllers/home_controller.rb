@@ -25,17 +25,17 @@ class HomeController < ApplicationController
   end
   
   class Entry
-  	def initialize(race_country, place, car, driver_full_name, driver, team)
-  		@race_country = race_country
+    def initialize(race_country, place, car, driver_full_name, driver, team)
+      @race_country = race_country
       @place = place
       @car = car
       @driver_full_name = driver_full_name
       @driver = driver
       @team = team
-  	end
+    end
     attr_reader :race_country
-  	attr_reader :place
-  	attr_reader :car
+    attr_reader :place
+    attr_reader :car
     attr_reader :driver_full_name
     attr_reader :driver
     attr_reader :team
@@ -245,7 +245,7 @@ class HomeController < ApplicationController
       result.driver
       result.team
       x = Driver.find_by!(abbr_name: result.driver, year: @year).id
-      y = Race.find_by!(country: result.race_country, year: @year).id
+      y = Race.where("country ILIKE ? AND year = ?", result.race_country, @year).take.id
       r = QualiResult.new
       r.position = result.place
       r.race_id = y
