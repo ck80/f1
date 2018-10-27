@@ -1,0 +1,1 @@
+delayedjob: bin/delayed_job run
