@@ -303,7 +303,7 @@ class HomeController < ApplicationController
     require 'open-uri'
     
     # fetch F1 HTML page including list of races
-    page = "https://www.formula1.com/en/championship/races/" + @year + ".html"
+    page = "https://www.formula1.com/en/championship/races/" + @year.to_s + ".html"
     doc = Nokogiri::HTML(open(page))
     section=doc.css('.inner-wrap')
     element=section.css('a')
@@ -320,7 +320,7 @@ class HomeController < ApplicationController
     # pull out countries for each race and drop any non-race items from the array.  We are left with a clean list of countries in @raceArray
     @raceArray = []
     $i = 0
-    while $i < @resultsArray.length-2 # minus 2 to drop non-race elements
+    while $i < @resultsArray.length 
       race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
       @raceArray << race
       $i +=1
@@ -487,6 +487,8 @@ class HomeController < ApplicationController
         seasonstartid = 959 # first race id for season 2017
       elsif @year == "2018" then
         seasonstartid = 979 # first race id for season 2018
+      elsif @year == "2019" then
+        seasonstartid = 1000 # first race id for season 2019
       end
       raceid = seasonstartid + $i
       page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
@@ -627,6 +629,80 @@ class HomeController < ApplicationController
     require 'nokogiri'
     require 'open-uri'
     
+    # fetch F1 HTML page including list of races
+    page = "https://www.formula1.com/en/championship/races/" + @year + ".html"
+    doc = Nokogiri::HTML(open(page))
+    section=doc.css('.inner-wrap')
+    element=section.css('a')
+    
+    # put element into an array @resultsArray
+    @resultsArray = []
+    $i = 0
+    while $i < element.length
+      item = element[$i]["href"]
+      @resultsArray << item
+      $i +=1
+    end
+
+    # pull out countries for each race and drop any non-race items from the array.  We are left with a clean list of countries in @raceArray
+    @raceArray = []
+    $i = 0
+    while $i < @resultsArray.length-(if @year == "2017" then 2 elsif @year == "2018" then 1 end) # drop non-race elements to clean up array
+      race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
+      @raceArray << race
+      $i +=1
+    end
+
+    $i = 1
+    @raceArray.each do |race|
+      x = Race.new
+      x.year = @year
+      x.race_number = $i
+      x.country = race
+      x.save
+      $i +=1
+    end
+
+  end
+
+  def fetch_races_ergast_api
+    require 'open-uri'
+
+    @last_quali_round = Race.where("ical_dtstart <= ?", Time.now + 1.day + 3.hours).order(ical_dtstart: :asc).last.race_number.to_s
+    ergestapi = "https://ergast.com/api/f1/" + @year.to_s + ".json"
+    # xml_doc = Nokogiri::XML.parse(open(ergestapi))
+    json_doc = JSON.parse(open(ergestapi).read)
+
+    @resultsArray = []
+
+    json_doc["MRData"]["RaceTable"]["Races"].first["QualifyingResults"].each do |r|
+      race_country = json_doc["MRData"]["RaceTable"]["Races"].first["Circuit"]["Location"]["country"]
+      place = r["position"]
+      car = r["number"]
+      driver_full_name = r["Driver"]["givenName"] + " " + r["Driver"]["familyName"]
+      driver = r["Driver"]["code"]
+      team = r["Constructor"]["name"]
+      @resultsArray << Entry.new(race_country, place, car, driver_full_name, driver, team)
+    end
+
+    # commit results to DB
+    @resultsArray.each do |result|
+      result.race_country
+      result.place
+      result.car
+      result.driver
+      result.team
+      x = Driver.find_by!(abbr_name: result.driver, year: @year).id
+      y = Race.where("country ILIKE ? AND year = ?", result.race_country, @year).take.id
+      r = QualiResult.new
+      r.position = result.place
+      r.race_id = y
+      r.driver_id = x
+      r.save
+    end
+
+    ### RACES FROM HERE ###
+
     # fetch F1 HTML page including list of races
     page = "https://www.formula1.com/en/championship/races/" + @year + ".html"
     doc = Nokogiri::HTML(open(page))
