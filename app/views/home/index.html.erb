@@ -60,6 +60,7 @@
     <h2>ADMIN Section:</h2>
     <p><%= link_to '2017 Season Admin Page', home_index_path("2017"), method: :get, class: "btn", style: "color:red"%></p>
     <p><%= link_to '2018 Season Admin Page', home_index_path("2018"), method: :get, class: "btn", style: "color:red" %></p>
+    <p><%= link_to '2019 Season Admin Page', home_index_path("2019"), method: :get, class: "btn", style: "color:red" %></p>
 
     <h4>Users Pending Admin Approval</h4>
     <%= link_to "All Users", :action => "index" %> | <%= link_to "Users awaiting approval", :action => "index", :approved => "false" %>
