@@ -11,7 +11,7 @@ node {
     stage('Build image') {
         /* This builds the actual image; synonymous to
          * docker build on the command line */
-
+        echo 'I am logged in as $(whoami)'
         app = docker.build("ck80/f1tips")
     }
 
