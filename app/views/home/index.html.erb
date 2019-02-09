@@ -76,5 +76,5 @@
     </table>
     <p>Debug: @year = <%= @year %></p>
   <% end %>
-  <% console %>
+  <% console if Rails.env.development? == true %>
 <% end %>
