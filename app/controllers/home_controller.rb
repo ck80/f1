@@ -109,7 +109,7 @@ class HomeController < ApplicationController
         end
         $i +=1
       end
-      @event_data.sort_by! { |k| k["event_quali_start"] }.reverse!
+      @event_data.sort_by! { |k| k[:event_quali_start] }
       $i=0
       while $i < @event_data.length
         race = Race.where(year: @year).find_by(race_number: $i+1)
