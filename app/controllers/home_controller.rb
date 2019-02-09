@@ -87,7 +87,7 @@ class HomeController < ApplicationController
       end
     end
     
-    if [2019].include?(@year) then 
+    if [2019].include?(@year.to_i) then 
       #cal_file = open("https://www.f1calendar.com/download/f1-calendar.ics")
       #cal_file = open("https://www.google.com/calendar/ical/lp%40f1-fansite.com/public/basic.ics")
       cal_file = open("https://calendar.google.com/calendar/ical/ekqk1nbdusr1baon1ic42oeeik%40group.calendar.google.com/public/basic.ics")
