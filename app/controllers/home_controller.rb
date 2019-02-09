@@ -60,31 +60,66 @@ class HomeController < ApplicationController
     # load ical parser
     require 'icalendar'
     
-    cal_file = open("https://www.formula1.com/sp/static/f1/" + @year + "/calendar/ical.ics")
-    cals = Icalendar.parse(cal_file)
-    cal = cals.first
+    if [2017,2018].include?(@year) then 
+      cal_file = open("https://www.formula1.com/sp/static/f1/" + @year.to_s + "/calendar/ical.ics") 
+      cals = Icalendar::Calendar.parse(cal_file)
+      cal = cals.first
+      
+      @event_data = []
+      $i = 3
+      while $i < cal.events.length
+        event_uid = cal.events[$i].uid
+        event_summary = cal.events[$i].summary.force_encoding(Encoding::UTF_8) #force encoding to utf-8 to resolve issue due to ical ascii-8 format
+        event_quali_start = cal.events[$i].dtstart
+        h = {event_uid: event_uid, event_summary: event_summary, event_quali_start: event_quali_start}
+        @event_data << h
+        $i +=5
+      end
+  
+      $i=0
+      while $i < @event_data.length
+        race = Race.where(year: @year).find_by(race_number: $i+1)
+        race.ical_uid = @event_data[$i][:event_uid]
+        race.ical_dtstart = @event_data[$i][:event_quali_start].to_datetime
+        race.ical_summary = @event_data[$i][:event_summary]
+        race.save
+        $i+=1
+      end
+    end
     
-    @event_data = []
-    $i = 3
-    while $i < cal.events.length
-      event_uid = cal.events[$i].uid
-      event_summary = cal.events[$i].summary.force_encoding(Encoding::UTF_8) #force encoding to utf-8 to resolve issue due to ical ascii-8 format
-      event_quali_start = cal.events[$i].dtstart
-      h = {event_uid: event_uid, event_summary: event_summary, event_quali_start: event_quali_start}
-      @event_data << h
-      $i +=5
-    end
+    if [2019].include?(@year) then 
+      #cal_file = open("https://www.f1calendar.com/download/f1-calendar.ics")
+      #cal_file = open("https://www.google.com/calendar/ical/lp%40f1-fansite.com/public/basic.ics")
+      cal_file = open("https://calendar.google.com/calendar/ical/ekqk1nbdusr1baon1ic42oeeik%40group.calendar.google.com/public/basic.ics")
+      cals = Icalendar::Calendar.parse(cal_file)
 
-    $i=0
-    while $i < @event_data.length
-      race = Race.where(year: @year).find_by(race_number: $i+1)
-      race.ical_uid = @event_data[$i][:event_uid]
-      race.ical_dtstart = @event_data[$i][:event_quali_start].to_datetime
-      race.ical_summary = @event_data[$i][:event_summary]
-      race.save
-      $i+=1
-    end
+      cal = cals.first
 
+      @event_data = []
+      $i = 0
+      while $i < cal.events.length - 1
+        if cal.events[$i].dtstart >= Time.now then
+          if cal.events[$i].summary.include? "qualifying" then
+            event_uid = cal.events[$i].uid
+            event_summary = cal.events[$i].summary.force_encoding(Encoding::UTF_8) #force encoding to utf-8 to resolve issue due to ical ascii-8 format
+            event_quali_start = cal.events[$i].dtstart
+            h = {event_uid: event_uid, event_summary: event_summary, event_quali_start: event_quali_start}
+            @event_data << h
+          end
+        end
+        $i +=1
+      end
+      @event_data.sort_by! { |k| k["event_quali_start"] }.reverse!
+      $i=0
+      while $i < @event_data.length
+        race = Race.where(year: @year).find_by(race_number: $i+1)
+        race.ical_uid = @event_data[$i][:event_uid]
+        race.ical_dtstart = @event_data[$i][:event_quali_start].to_datetime
+        race.ical_summary = @event_data[$i][:event_summary]
+        race.save
+        $i+=1
+      end
+    end
   end
   
   def update_race_tip_points_forgotten_entries
