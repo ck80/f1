@@ -699,6 +699,18 @@ class HomeController < ApplicationController
     end
 
   end
+  
+  def fetch_track_svg
+    require 'nokogiri'
+    require 'open-uri'
+    @races = Race.where(year: @year)
+    @races.each do |race|
+      page = "https://www.skysports.com/f1/grandprix/" + race.country.downcase + "/circuit-guide"
+      doc = Nokogiri::HTML(open(page))
+      race.img=doc.xpath("//svg").children.last.values.last
+      race.img.save
+    end
+  end
 
   def fetch_races_ergast_api
     require 'open-uri'
