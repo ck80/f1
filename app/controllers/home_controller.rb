@@ -705,10 +705,18 @@ class HomeController < ApplicationController
     require 'open-uri'
     @races = Race.where(year: @year)
     @races.each do |race|
-      page = "https://www.skysports.com/f1/grandprix/" + race.country.downcase + "/circuit-guide"
-      doc = Nokogiri::HTML(open(page))
+      page = "https://www.skysports.com/f1/grandprix/" + race.country.downcase.split(" ").join("-") + "/circuit-guide"
+      begin  
+        doc = Nokogiri::HTML(open(page))
+      rescue Timeout::Error
+        puts "The request for a page at #{page} timed out...skipping."
+        next
+      rescue OpenURI::HTTPError => error
+        puts "The request for a page at #{page} returned an error. #{error.message}"
+        next
+      end
       race.img=doc.xpath("//svg").children.last.values.last
-      race.img.save
+      race.save
     end
   end
 
