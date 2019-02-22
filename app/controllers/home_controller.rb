@@ -705,7 +705,13 @@ class HomeController < ApplicationController
     require 'open-uri'
     @races = Race.where(year: @year)
     @races.each do |race|
-      page = "https://www.skysports.com/f1/grandprix/" + race.country.downcase.split(" ").join("-") + "/circuit-guide"
+      if race.country = "United States" then
+        page = "https://www.skysports.com/f1/grandprix/" + race.country.downcase.split(" ").join("") + "/circuit-guide"
+      elsif race.country = "Abu Dhabi" then
+        page = "https://www.skysports.com/f1/grandprix/" + "unitedarabemirates" + "/circuit-guide"
+      else
+        page = "https://www.skysports.com/f1/grandprix/" + race.country.downcase.split(" ").join("-") + "/circuit-guide"
+      end
       begin  
         doc = Nokogiri::HTML(open(page))
       rescue Timeout::Error

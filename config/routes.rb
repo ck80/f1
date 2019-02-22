@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     post 'home/fetch_results'
     post 'home/fetch_drivers'
     post 'home/fetch_races'
+    post 'home/fetch_track_svg'
     post 'home/fetch_drivers_by_races'
     post 'home/fetch_drivers_by_championship'
     post 'home/update_points_table'
