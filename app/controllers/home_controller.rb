@@ -705,13 +705,15 @@ class HomeController < ApplicationController
     require 'open-uri'
     @races = Race.where(year: @year)
     @races.each do |race|
-      if race.country = "United States" then
+      puts "race country #{race.country}"
+      if race.country == "United States" then
         page = "https://www.skysports.com/f1/grandprix/" + race.country.downcase.split(" ").join("") + "/circuit-guide"
-      elsif race.country = "Abu Dhabi" then
+      elsif race.country == "Abu Dhabi" then
         page = "https://www.skysports.com/f1/grandprix/" + "unitedarabemirates" + "/circuit-guide"
       else
         page = "https://www.skysports.com/f1/grandprix/" + race.country.downcase.split(" ").join("-") + "/circuit-guide"
       end
+      doc = Nokogiri::HTML(open(page))
       begin  
         doc = Nokogiri::HTML(open(page))
       rescue Timeout::Error
@@ -721,7 +723,7 @@ class HomeController < ApplicationController
         puts "The request for a page at #{page} returned an error. #{error.message}"
         next
       end
-      race.img=doc.xpath("//svg").children.last.values.last
+      race.img=doc.at_css("path.f1-svg-track__outline").attributes["d"].value
       race.save
     end
   end
