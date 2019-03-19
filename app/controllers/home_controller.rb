@@ -373,6 +373,8 @@ class HomeController < ApplicationController
         seasonstartid = 959 # first race id for season 2017
       elsif @year == "2018" then
         seasonstartid = 979 # first race id for season 2018
+      elsif @year == "2019" then
+        seasonstartid = 1000 # first race id for season 2019
       end
       raceid = seasonstartid + $i
       page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
