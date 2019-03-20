@@ -71,7 +71,7 @@
       <tr>
         <td><%= user.email %>
         <td><%= user.approved %>
-        <td><%= button_to "Edit", edit_user_path(user) %>
+        <td><%= button_to "Edit", edit_user_path(user), method: :get, class: "btn" %>
       </tr>
     <% end %>
     </table>
