@@ -52,7 +52,7 @@
     <p>Fetch drivers by championship: <%= button_to 'Fetch Drivers by Championship', home_fetch_drivers_by_championship_path, method: :post %></p>
     <p>Fetch results tool (please be patient as this can take some time to complete): <%= button_to 'Fetch Results', home_fetch_results_action_path, method: :post %></p>
     <p>Update race tip points tool: <%= button_to 'Update Race Tip Points', home_update_race_tip_points_path, method: :post %></p>
-    <p>Update User Data and Tipping Fees: <%= button_to 'Update User Data', userdata_path %></p>
+    <p>Update User Data and Tipping Fees: <%= button_to 'Update User Data', userdata_path, method: :get %></p>
     <p>Fetch last quali results by ergast API tool: <%= button_to 'Fetch Results', home_fetch_last_quali_results_ergast_api_path, method: :post %></p>
     <p>Fetch last race results by ergast API tool: <%= button_to 'Fetch Results', home_fetch_last_race_results_ergast_api_path, method: :post %></p>
 
