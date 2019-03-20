@@ -6,6 +6,7 @@
   <thead>
     <tr>
       <th>UserID</th>
+      <th>User Name</th>
       <th>Season</th>
       <th>Fee_Paid</th>
       <th colspan="3"></th>
@@ -16,6 +17,7 @@
     <% @userdata.each do |userdatum| %>
       <tr>
         <td><%= userdatum.user_id %></td>
+        <td><%= userdatum.user.name %></td>
         <td><%= userdatum.season %></td>
         <td><%= userdatum.fee_paid %></td>
         <td><%= link_to 'Show', userdatum %></td>
