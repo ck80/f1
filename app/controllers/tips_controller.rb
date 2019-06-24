@@ -46,7 +46,7 @@ class TipsController < ApplicationController
   def new
     @tip = Tip.new
     @user = current_user
-    @users = User.all
+    @users = User.where(approved: true).where('name ASC')
     @races = Race.where(year: @year).order('race_number ASC')
     @drivers = Driver.where(year: @year).order('abbr_name ASC')
 
@@ -54,8 +54,8 @@ class TipsController < ApplicationController
 
   # GET /tips/1/edit
   def edit
-    @users = User.all
     @user = current_user
+    @users = User.where(approved: true).where('name ASC')
     @races = Race.where(year: @year).order('race_number ASC')
     @drivers = Driver.where(year: @year).order('abbr_name ASC')
 
