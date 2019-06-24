@@ -19,7 +19,7 @@ gem 'puma'
 gem 'sassc'
 
 # bootstrap
-gem 'bootstrap', '~> 4.0.0'
+gem "bootstrap", ">= 4.3.1"
 gem 'sprockets-rails', :require => 'sprockets/railtie'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -46,12 +46,12 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 gem 'bootstrap_form', '~> 2.7'
-gem 'devise', '~> 4.2'
+gem "devise", ">= 4.6.0"
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
 # Web scraping Gems
-gem 'nokogiri'
+gem "nokogiri", ">= 1.8.5"
 # gem 'csv'
 # gem 'find'
 gem 'sanitize', '~> 4.6.3'
