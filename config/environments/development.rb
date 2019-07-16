@@ -80,6 +80,6 @@ config.action_mailer.default :charset => "utf-8"
 config.action_mailer.perform_deliveries = false
 
 # Enable web console whitelist IPs
-config.web_console.whitelisted_ips = %w( 172.20.0.1 127.0.0.1 192.168.1.0/24 10.0.0.0/16 )
+config.web_console.whitelisted_ips = %w( 172.20.0.1 172.22.0.0/16 127.0.0.1 192.168.1.0/24 10.0.0.0/16)
 
 end

@@ -15,7 +15,7 @@ default: &default
 development:
   <<: *default
   adapter: postgresql
-  host: 192.168.1.10
+  host: host.docker.internal
   username: postgres
   pool: 5
   database: myapp_development
