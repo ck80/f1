@@ -131,3 +131,67 @@
     </div>
   </div>
 </div>
+<div class="accordion" id="accordion5">
+  <div class="card">
+    <% season = "2019" %>
+    <div class="card-header" id="heading<%season%>">
+      <h5 class="mb-0">
+        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse<%=season%>" data-parent="accordion5" aria-expanded="false" aria-controls="collapse<%=season%>">
+          Season <%=season%>
+        </button>
+      </h5>
+    </div>
+    <div class="accordion" id="accordion6">
+      <div id="collapse<%= season%>" class="collapse" aria-labelledby="heading<%= season%>" data-parent="#accordion6">
+        <div class="card-body">
+          <% $i=0 %>
+          <% @race_country = Race.where(year: season).order('race_number ASC') %>
+          <% @race_country.each do |race_country| %>
+          <div class="card">
+            <div class="card-header" id="heading<%= season + "-" + $i.to_s%>">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse<%= season + "-" + $i.to_s%>" aria-expanded="false" aria-controls="collapse<%= season + "-" + $i.to_s%>">
+                  <%= "Race " + race_country.race_number.to_s + " | " + race_country.country %>
+                </button>
+              </h5>
+            </div>
+            <div id="collapse<%= season+"-"+$i.to_s %>" class="collapse" aria-labelledby="heading<%= season + "-" + $i.to_s%>" data-parent="#accordion5">
+              <div class="card-body">
+                <table class="TFtable">
+                  <thead class="TFtable">
+                    <tr class="TFtable">
+                      <th colspan=2 style="text-align:center; border:#4e95f4 1px solid">Qualifiers</th>
+                      <th colspan=2 style="text-align:center; border:#4e95f4 1px solid">Race</th>
+                    </tr>
+                    <tr class="TFtable">
+                      <th style="text-align:center; border:#4e95f4 1px solid">Pos</th>
+                      <th style="text-align:center; border:#4e95f4 1px solid">Driver</th>
+                      <th style="text-align:center; border:#4e95f4 1px solid">Pos</th>
+                      <th style="text-align:center; border:#4e95f4 1px solid">Driver</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @race_results = RaceResult.joins(:race).where('races.year' => season, 'races.country' => race_country.country).sort %>
+                    <% @quali_results = QualiResult.joins(:race).where('races.year' => season, 'races.country' => race_country.country).sort %>
+                    <% $x=0 %>
+                    <% while $x < @race_results.length do %>
+                    <tr class="TFtable">
+                      <td><%= if @quali_results[$x].nil? then "N/A" elsif @quali_results[$x].position == 0 then "DNF" else @quali_results[$x].position end %></td>
+                      <td><%= if @quali_results[$x].nil? then "N/A" else @quali_results[$x].driver.abbr_name + " | " + @quali_results[$x].driver.name end %></td>
+                      <td><%= if @race_results[$x].position == 0 then "DNF" else @race_results[$x].position end %></td>
+                      <td><%= @race_results[$x].driver.abbr_name + " | " + @race_results[$x].driver.name%></td>
+                    </tr>
+                    <% $x+=1 %>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <% $i+=1 %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -36,40 +36,46 @@
 </table>
 
 <% if User.find_by(admin: true).nil? %>
-<p>STEP 1: Account upgrade tool: <%= link_to 'Account Upgrade', home_account_upgrade_path, method: :post %></p>
+<p>STEP 1: Account upgrade tool: <%= button_to 'Account Upgrade', home_account_upgrade_path, method: :post %></p>
 <% end %>
 
 <% if current_user.admin? %>
   <% if params[:year].present? then %>
     <p></p>
     <h2>Season <%= @year %> ADMIN Section:</h2>
-    <p>STEP 2: Fetch drivers tool: <%= link_to 'Fetch Drivers', home_fetch_drivers_path, method: :post %></p>
-    <p>STEP 3: Fetch races tool: <%= link_to 'Fetch Races', home_fetch_races_path, method: :post %></p>
-    <p>STEP 4: Update race start date / time tool: <%= link_to 'Update Race Start Date/Time Data', home_update_race_start_path, method: :post %></p>
-    <p>STEP 5: Update Points Table tool: <%= link_to 'Update Points Table', home_update_points_table_path, method: :post %></p>
-    <p>Fetch drivers by races tool: <%= link_to 'Fetch Drivers by Races', home_fetch_drivers_by_races_path, method: :post %></p>
-    <p>Fetch drivers by championship: <%= link_to 'Fetch Drivers by Championship', home_fetch_drivers_by_championship_path, method: :post %></p>
-    <p>Fetch results tool (please be patient as this can take some time to complete): <%= link_to 'Fetch Results', home_fetch_results_action_path, method: :post %></p>
-    <p>Update race tip points tool: <%= link_to 'Update Race Tip Points', home_update_race_tip_points_path, method: :post %></p>
-    <p>Update User Data and Tipping Fees: <%= link_to 'Update User Data', userdata_path %></p>
+    <p>STEP 2: Fetch drivers tool: <%= button_to 'Fetch Drivers', home_fetch_drivers_path, method: :post %></p>
+    <p>STEP 3: Fetch races tool: <%= button_to 'Fetch Races', home_fetch_races_path, method: :post %></p>
+    <p>STEP 3b: Fetch track svg images: <%= button_to 'Fetch Track SVG', home_fetch_track_svg_path, method: :post %></p>
+    <p>STEP 4: Update race start date / time tool: <%= button_to 'Update Race Start Date/Time Data', home_update_race_start_path, method: :post %></p>
+    <p>STEP 5: Update Points Table tool: <%= button_to 'Update Points Table', home_update_points_table_path, method: :post %></p>
+    <p>Fetch drivers by races tool: <%= button_to 'Fetch Drivers by Races', home_fetch_drivers_by_races_path, method: :post %></p>
+    <p>Fetch drivers by championship: <%= button_to 'Fetch Drivers by Championship', home_fetch_drivers_by_championship_path, method: :post %></p>
+    <p>Fetch results tool (please be patient as this can take some time to complete): <%= button_to 'Fetch Results', home_fetch_results_action_path, method: :post %></p>
+    <p>Update race tip points tool: <%= button_to 'Update Race Tip Points', home_update_race_tip_points_path, method: :post %></p>
+    <p>Update User Data and Tipping Fees: <%= button_to 'Update User Data', userdata_path, method: :get %></p>
+    <p>Fetch last quali results by ergast API tool: <%= button_to 'Fetch Results', home_fetch_last_quali_results_ergast_api_path, method: :post %></p>
+    <p>Fetch last race results by ergast API tool: <%= button_to 'Fetch Results', home_fetch_last_race_results_ergast_api_path, method: :post %></p>
+
   <% else %>
     <p></p>
     <h2>ADMIN Section:</h2>
-    <p><%= link_to '2017 Season Admin Page', home_index_path("2017"), method: :get, class: "btn", style: "color:red"%></p>
-    <p><%= link_to '2018 Season Admin Page', home_index_path("2018"), method: :get, class: "btn", style: "color:red" %></p>
+    <p><%= button_to '2017 Season Admin Page', home_index_path("2017"), method: :get, class: "btn", style: "color:red"%></p>
+    <p><%= button_to '2018 Season Admin Page', home_index_path("2018"), method: :get, class: "btn", style: "color:red" %></p>
+    <p><%= button_to '2019 Season Admin Page', home_index_path("2019"), method: :get, class: "btn", style: "color:red" %></p>
 
     <h4>Users Pending Admin Approval</h4>
-    <%= link_to "All Users", :action => "index" %> | <%= link_to "Users awaiting approval", :action => "index", :approved => "false" %>
+    <%= button_to "All Users", :action => "index" %> | <%= button_to "Users awaiting approval", :action => "index", :approved => "false" %>
 
     <table class="TFtable" data-toggle="table">
     <% @users.each do |user| %>
       <tr>
         <td><%= user.email %>
         <td><%= user.approved %>
-        <td><%= link_to "Edit", edit_user_path(user) %>
+        <td><%= button_to "Edit", edit_user_path(user), method: :get, class: "btn" %>
       </tr>
     <% end %>
     </table>
     <p>Debug: @year = <%= @year %></p>
   <% end %>
+  <% console if Rails.env.development? == true %>
 <% end %>

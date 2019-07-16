@@ -4,13 +4,14 @@
 $(document).ready(function () {
   $('.tablesorter').tablesorter({
     sortList: [[8,1]],
+    headerTemplate : '{content} {icon}',
     widgets: [ 'scroller' ],
     widgetOptions : {
       // scroll tbody to top after sorting
       scroller_upAfterSort: false,
       // pop table header into view while scrolling up the page
       scroller_jumpToHeader: false,
-      scroller_height : 300,
+      scroller_height : 400,
       // set number of columns to fix
       scroller_fixedColumns : 1,
       // add a fixed column overlay for styling
@@ -64,14 +65,14 @@ $(document).ready(function () {
   /* force "Notes" column to not wrap, so we get a horizontal scrolling demo! */
   /* white-space: nowrap; */
   /* Add min column width, or "Index" column filter gets too narrow to use */
-  min-width: 70px;
+  min-width: 60px;
 }
 
 </style>
 
 <% @race=Race.where(year: @year).order(race_number: :asc) %>
-<% @next_race= Race.where("ical_dtstart >= ?", Time.now).order(ical_dtstart: :asc).first%>
-
+<% @next_race= Race.where("ical_dtstart >= ?", Time.now - 1.day - 3.hours).order(ical_dtstart: :asc).first%>
+<% if @next_race.nil? == true then @next_race = Race.order(ical_dtstart: :asc).last end %>
 <div id="TipControls" class="carousel slide" data-ride="carousel" data-interval="false">
   <div class="carousel-inner">
       <% @race.each do |r| %>
@@ -86,8 +87,6 @@ $(document).ready(function () {
         <thead class="TFtable">
           <tr class="TFtable">
             <th style="text-align:center; border:#4e95f4 1px solid">User</th>
-            <!-- <th style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-right:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th> -->
-            <!-- <th style="text-align:center; border-left:#4e95f4 1px solid; border-bottom:#4e95f4 1px solid; border-left:#4e95f4 1px solid; border-top-style:hidden; border-top-color: transparent"></th> -->
             <th style="text-align:center; border:#4e95f4 1px solid">Q1</th>
             <th style="text-align:center; border:#4e95f4 1px solid">Q2</th>
             <th style="text-align:center; border:#4e95f4 1px solid">Q3</th>
@@ -100,10 +99,12 @@ $(document).ready(function () {
           </tr>
         </thead>
         <tbody class="TFtable">
-          <% if r.ical_dtstart >= Time.now then %>
+          <% if current_user.admin? then %>
+            <% @tips = Tip.joins(:race).where("races.year = ? AND race_id = ?", @year, r.id) %>
+          <% elsif r.ical_dtstart >= Time.now then %>
             <% @tips = Tip.joins(:race).where("races.year = ? AND user_id = ? AND race_id = ?", @year, current_user.id, r.id) %>
           <% else %>
-            <% @tips = Tip.joins(:race).where("races.year = ? AND race_id = ?", @year, r.id) %>
+            <% @tips = Tip.joins(:race, :user).where("races.year = ? AND race_id = ? AND users.approved = ?", @year, r.id, true) %>
           <% end %>
           <% @tips.each do |tip| %>
             <tr>
@@ -138,6 +139,6 @@ $(document).ready(function () {
 </br>
 
 <%= link_to 'New Tip', new_tip_path, class: "btn btn-primary"%>
-
+<% console if Rails.env.development? == true %>
 </br>
 </div>

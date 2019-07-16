@@ -42,3 +42,5 @@ f1appprodenv.env
 # Ignore local database.yml for mac
 config/database.yml
 config/database.yml.local
+.DS_Store
+app/.DS_Store

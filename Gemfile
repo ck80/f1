@@ -16,9 +16,10 @@ gem 'pg', '~> 0.18'
 gem 'puma'
 # Use SCSS for stylesheets
 # gem 'sass-rails', '~> 5.0'
+gem 'sassc'
 
 # bootstrap
-gem 'bootstrap', '~> 4.0.0'
+gem "bootstrap", ">= 4.3.1"
 gem 'sprockets-rails', :require => 'sprockets/railtie'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -29,6 +30,8 @@ gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 
 # gem 'therubyracer', platforms: :ruby
+
+gem 'mini_racer'
 
 gem 'pry-rails', :group => :development
 
@@ -43,12 +46,12 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 gem 'bootstrap_form', '~> 2.7'
-gem 'devise', '~> 4.2'
+gem "devise", ">= 4.6.0"
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
 # Web scraping Gems
-gem 'nokogiri'
+gem "nokogiri", ">= 1.8.5"
 # gem 'csv'
 # gem 'find'
 gem 'sanitize', '~> 4.6.3'
