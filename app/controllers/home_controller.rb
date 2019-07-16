@@ -98,7 +98,7 @@ class HomeController < ApplicationController
       @event_data = []
       $i = 0
       while $i < cal.events.length - 1
-        if cal.events[$i].dtstart >= Time.now then
+        if cal.events[$i].dtstart >= Time.now.beginning_of_year then
           if cal.events[$i].summary.include? "qualifying" then
             event_uid = cal.events[$i].uid
             event_summary = cal.events[$i].summary.force_encoding(Encoding::UTF_8) #force encoding to utf-8 to resolve issue due to ical ascii-8 format
@@ -711,6 +711,8 @@ class HomeController < ApplicationController
       if race.country == "United States" then
         page = "https://www.skysports.com/f1/grandprix/" + race.country.downcase.split(" ").join("") + "/circuit-guide"
       elsif race.country == "Abu Dhabi" then
+        page = "https://www.skysports.com/f1/grandprix/" + "unitedarabemirates" + "/circuit-guide"
+      elsif race.country == "United Arab Emerates" then
         page = "https://www.skysports.com/f1/grandprix/" + "unitedarabemirates" + "/circuit-guide"
       else
         page = "https://www.skysports.com/f1/grandprix/" + race.country.downcase.split(" ").join("-") + "/circuit-guide"
