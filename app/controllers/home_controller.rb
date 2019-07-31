@@ -715,7 +715,7 @@ class HomeController < ApplicationController
         page = "https://www.skysports.com/f1/grandprix/" + race.country.downcase.split(" ").join("") + "/circuit-guide"
       elsif race.country == "Abu Dhabi" then
         page = "https://www.skysports.com/f1/grandprix/" + "unitedarabemirates" + "/circuit-guide"
-      elsif race.country == "United Arab Emerates" then
+      elsif race.country == "United Arab Emirates" then
         page = "https://www.skysports.com/f1/grandprix/" + "unitedarabemirates" + "/circuit-guide"
       else
         page = "https://www.skysports.com/f1/grandprix/" + race.country.downcase.split(" ").join("-") + "/circuit-guide"
