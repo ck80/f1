@@ -377,6 +377,9 @@ class HomeController < ApplicationController
         seasonstartid = 1000 # first race id for season 2019
       end
       raceid = seasonstartid + $i
+      if @country == "United Arab Emerates" then
+        @country == "abu-dhabi"
+      end
       page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
       doc = Nokogiri::HTML(open(page))   
       
