@@ -356,7 +356,7 @@ class HomeController < ApplicationController
     @raceArray = []
     $i = 0
     while $i < @resultsArray.length 
-      if @resultsArray[$i].include?("/en/racing/") # filter out erroneous entries in the array
+      if @resultsArray[$i].include?("/en/racing/" + @year.to_s + "/") # filter out erroneous entries in the array
         race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
         @raceArray << race
       end
