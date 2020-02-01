@@ -607,21 +607,18 @@ class HomeController < ApplicationController
     require 'open-uri'
     
     # fetch F1 HTML page including list of races
-    page = "https://www.formula1.com/en/results.html/" + @year + "/drivers.html"
+    # using drivers results page - page = "https://www.formula1.com/en/results.html/" + @year + "/drivers.html"
+    page = "https://www.formula1.com/en/drivers.html"
     doc = Nokogiri::HTML(open(page))
-    section=doc.css('.table-wrap')
-    teamelement=section.css('a')
-    
+    driverlist=doc.css('.listing-items--wrapper').css('.col-12')
     # put driverelement into an array @resultsArray
     @driversArray = []
     driverHash = {}
     $i = 0
-    while $i < teamelement.length
-      if $i.even?
-        driverHash = {driverfirstname: teamelement[$i].css('span')[0].text, driverlastname: teamelement[$i].css('span')[1].text, drivershortname: teamelement[$i].css('span')[2].text, driverteam: teamelement[$i+1].text}
-      end
+    while $i < driverlist.length
+      driverHash = {driverfirstname: driverlist.css('.listing-item--name')[$i].children[1].text, driverlastname: driverlist.css('.listing-item--name')[$i].children[3].text, drivershortname: driverlist.css('.listing-item--name')[$i].children[3].text.upcase.strip[0..2], driverteam: driverlist.css('.listing-item--team')[$i].text}
       @driversArray << driverHash
-      $i +=2
+      $i +=1
     end
 
     @driversArray.each do |driver|
