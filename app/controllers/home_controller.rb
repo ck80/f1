@@ -121,7 +121,7 @@ class HomeController < ApplicationController
       end
     end
 
-    if [2020].include?(year.to_i) then
+    if [2020].include?(@year.to_i) then
       cal_file = open("http://www.formula1.com/calendar/Formula_1_Official_Calendar.ics")
       cals = Icalendar::Calendar.parse(cal_file)
       cal = cals.first
