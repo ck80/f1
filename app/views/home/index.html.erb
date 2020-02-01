@@ -70,6 +70,7 @@
       <tr>
         <td><%= user.email %>
         <td><%= user.approved %>
+        <td><%= user.created_at.first.created_at.strftime("%d/%m/%y") %>
         <td><%= button_to "Edit", edit_user_path(user), method: :get, class: "btn" %>
       </tr>
     <% end %>
