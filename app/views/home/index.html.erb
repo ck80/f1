@@ -66,7 +66,7 @@
     <%= button_to "All Users", :action => "index" %> | <%= button_to "Users awaiting approval", :action => "index", :approved => "false" %>
 
     <table class="TFtable" data-toggle="table">
-    <% @users.each do |user| %>
+    <% @users.sort_by { |k| k[:created_at] }.reverse.each do |user| %>
       <tr>
         <td><%= user.email %>
         <td><%= user.approved %>
