@@ -54,7 +54,7 @@ gem "devise", ">= 4.6.0"
 gem "nokogiri", ">= 1.8.5"
 # gem 'csv'
 # gem 'find'
-gem 'sanitize', '~> 4.6.3'
+gem 'sanitize', '~> 5.1.0'
 
 # icalendar parsing
 gem 'icalendar', '~> 2.3'
