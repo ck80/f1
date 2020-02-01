@@ -689,7 +689,7 @@ class HomeController < ApplicationController
     # pull out countries for each race and drop any non-race items from the array.  We are left with a clean list of countries in @raceArray
     @raceArray = []
     $i = 0
-    while $i < @resultsArray.length-(if @year == "2017" then 2 elsif @year == "2018" then 1 elsif 0 end) # drop non-race elements to clean up array
+    while $i < @resultsArray.length-(if @year == "2017" then 2 elsif @year == "2018" then 1 else 0 end) # drop non-race elements to clean up array
       race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
       @raceArray << race
       $i +=1
