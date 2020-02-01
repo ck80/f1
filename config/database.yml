@@ -15,8 +15,8 @@ default: &default
 development:
   <<: *default
   adapter: postgresql
-#  host: <!-- %= ENV.fetch("DB_HOST") % -->
-  host: localhost
+  host: <%= ENV.fetch("DB_HOST") %>
+  # host: host.docker.internal
   username: postgres
   pool: 5
   database: myapp_development
