@@ -120,6 +120,35 @@ class HomeController < ApplicationController
         $i+=1
       end
     end
+
+    if [2020].include?(year.to_i) then
+      cal_file = open("http://www.formula1.com/calendar/Formula_1_Official_Calendar.ics")
+      cals = Icalendar::Calendar.parse(cal_file)
+      cal = cals.first
+
+      @event_data = []
+      $i = 3
+      while $i < cal.events.length
+        event_uid = cal.events[$i].uid
+        event_summary = cal.events[$i].summary.force_encoding(Encoding::UTF_8) #force encoding to utf-8 to resolve issue due to ical ascii-8 format
+        event_quali_start = cal.events[$i].dtstart
+        h = {event_uid: event_uid, event_summary: event_summary, event_quali_start: event_quali_start}
+        @event_data << h
+        $i +=5
+      end
+  
+      $i=0
+      while $i < @event_data.length
+        race = Race.where(year: @year).find_by(race_number: $i+1)
+        race.ical_uid = @event_data[$i][:event_uid]
+        race.ical_dtstart = @event_data[$i][:event_quali_start].to_datetime
+        race.ical_summary = @event_data[$i][:event_summary]
+        race.save
+        $i+=1
+      end
+
+    end
+
   end
   
   def update_race_tip_points_forgotten_entries
