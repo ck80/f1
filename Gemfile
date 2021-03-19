@@ -23,7 +23,7 @@ gem "bootstrap", ">= 4.3.1"
 gem 'sprockets-rails', :require => 'sprockets/railtie'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'jquery-tablesorter', '~> 1.25'
+gem 'jquery-tablesorter', '~> 1.27'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
