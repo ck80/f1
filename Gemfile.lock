@@ -91,7 +91,7 @@ GEM
       activesupport (>= 4.2.0)
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
-    icalendar (2.5.3)
+    icalendar (2.7.1)
       ice_cube (~> 0.16)
     ice_cube (0.16.3)
     jbuilder (2.9.1)
@@ -104,6 +104,7 @@ GEM
       railties (>= 3.2, < 6)
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
+    json (2.5.1)
     libv8 (7.3.492.27.1)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -165,6 +166,8 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
+    recaptcha (5.7.0)
+      json
     responders (2.4.1)
       actionpack (>= 4.2.0, < 6.0)
       railties (>= 4.2.0, < 6.0)
@@ -235,7 +238,7 @@ DEPENDENCIES
   delayed_job_active_record
   devise (>= 4.6.0)
   figaro
-  icalendar (~> 2.3)
+  icalendar (~> 2.7)
   jbuilder (~> 2.5)
   jquery-rails
   jquery-tablesorter (~> 1.25)
@@ -247,6 +250,7 @@ DEPENDENCIES
   pry-rails
   puma
   rails (~> 5.1.4)
+  recaptcha
   sanitize (~> 5.1.0)
   sassc
   selenium-webdriver
