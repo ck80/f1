@@ -14,7 +14,7 @@
 
 development:
   adapter: postgresql
-  host: localhost
+  host: <%= ENV['HOST_DB'] %>
   username: postgres
   pool: 5
   database: myapp_development
@@ -22,7 +22,7 @@ development:
 #  database: db/myapp_development.sqlite3
 #  pool: 5
 #  timeout: 5000
-
+  url: <%= ENV['DATABASE_URL'] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
