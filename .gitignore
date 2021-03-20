@@ -44,6 +44,3 @@ config/database.yml
 config/database.yml.local
 .DS_Store
 app/.DS_Store
-
-# Ignore Gemfile.lock
-Gemfile.lock
