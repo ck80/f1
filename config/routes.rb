@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   resources :userdata
   devise_for :users, :controllers => {:registrations => "users/registrations"}
@@ -40,6 +41,5 @@ Rails.application.routes.draw do
   get '/pages/:page', to: 'pages#show'
  # get '/(:year)/tips', to: 'tips#index'
 
-  root 'home#index'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  root to: "home#index"
 end

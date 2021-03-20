@@ -4,7 +4,7 @@
 # Ensure the SQLite 3 gem is defined in your Gemfile
 # gem 'sqlite3'
 #
-default: &default
+# default: &default
 #  adapter: postgresql
 #  encoding: unicode
 #  host: db
@@ -13,10 +13,8 @@ default: &default
 #  pool: 5
 
 development:
-  <<: *default
   adapter: postgresql
-  host: <%= ENV.fetch("DB_HOST") %>
-  # host: host.docker.internal
+  host: localhost
   username: postgres
   pool: 5
   database: myapp_development
@@ -30,11 +28,9 @@ development:
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  <<: *default
   database: myapp_test
 
 production:
-  <<: *default
   adapter: postgresql
   host: 192.168.1.10
   username: postgres

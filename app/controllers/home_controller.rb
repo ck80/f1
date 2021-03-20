@@ -122,12 +122,39 @@ class HomeController < ApplicationController
     end
 
     if [2020].include?(@year.to_i) then
-      cal_file = open("http://www.formula1.com/calendar/Formula_1_Official_Calendar.ics")
+      cal_file = URI.open("http://www.formula1.com/calendar/Formula_1_Official_Calendar.ics")
       cals = Icalendar::Calendar.parse(cal_file)
       cal = cals.first
 
       @event_data = []
       $i = 3
+      while $i < cal.events.length
+        event_uid = cal.events[$i].uid
+        event_summary = cal.events[$i].summary.force_encoding(Encoding::UTF_8) #force encoding to utf-8 to resolve issue due to ical ascii-8 format
+        event_quali_start = cal.events[$i].dtstart
+        h = {event_uid: event_uid, event_summary: event_summary, event_quali_start: event_quali_start}
+        @event_data << h
+        $i +=5
+      end
+  
+      $i=0
+      while $i < @event_data.length
+        race = Race.where(year: @year).find_by(race_number: $i+1)
+        race.ical_uid = @event_data[$i][:event_uid]
+        race.ical_dtstart = @event_data[$i][:event_quali_start].to_datetime
+        race.ical_summary = @event_data[$i][:event_summary]
+        race.save
+        $i+=1
+      end
+
+    end
+    if [2021].include?(@year.to_i) then
+      cal_file = URI.open("http://www.formula1.com/calendar/Formula_1_Official_Calendar.ics")
+      cals = Icalendar::Calendar.parse(cal_file)
+      cal = cals.first
+
+      @event_data = []
+      $i = 7
       while $i < cal.events.length
         event_uid = cal.events[$i].uid
         event_summary = cal.events[$i].summary.force_encoding(Encoding::UTF_8) #force encoding to utf-8 to resolve issue due to ical ascii-8 format
@@ -276,7 +303,7 @@ class HomeController < ApplicationController
     
   end
 
-  # work in progress - use Ergast API for results
+    # work in progress - use Ergast API for results
 
   def fetch_last_quali_results_ergast_api
     # load HTML parser
@@ -368,7 +395,7 @@ class HomeController < ApplicationController
     
     # fetch F1 HTML page including list of races
     page = "https://www.formula1.com/en/championship/races/" + @year.to_s + ".html"
-    doc = Nokogiri::HTML(open(page))
+    doc = Nokogiri::HTML(URI.open(page))
     section=doc.css('.inner-wrap')
     element=section.css('a')
     
@@ -412,7 +439,7 @@ class HomeController < ApplicationController
         @country == "abu-dhabi"
       end
       page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
-      doc = Nokogiri::HTML(open(page))   
+      doc = Nokogiri::HTML(URI.open(page))   
       
       table=doc.css('table.resultsarchive-table')
       rows=table.css('tr')
@@ -432,7 +459,7 @@ class HomeController < ApplicationController
       @allqualiresultsArray << @qualiresultsArray
       
       page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/race-result.html"
-      doc = Nokogiri::HTML(open(page))   
+      doc = Nokogiri::HTML(URI.open(page))   
     
       table=doc.css('table.resultsarchive-table')
       rows=table.css('tr')
@@ -470,16 +497,16 @@ class HomeController < ApplicationController
         r.race_id = y
         r.driver_id = x
         r.save
-#        if result.place != 0 then
-#          r = QualiResult.find_or_initialize_by(position: result.place, race_id: y)
-#          r.driver_id = x
-#          r.save
-#        else
-#          r = QualiResult.find_or_initialize_by(position: result.place, race_id: y, driver_id: x)
-#          # r.position = result.place
-#          # r.race_id = y
-#          r.save
-#        end
+       # if result.place != 0 then
+       #   r = QualiResult.find_or_initialize_by(position: result.place, race_id: y)
+       #   r.driver_id = x
+       #   r.save
+       # else
+       #   r = QualiResult.find_or_initialize_by(position: result.place, race_id: y, driver_id: x)
+       #   # r.position = result.place
+       #   # r.race_id = y
+       #   r.save
+       # end
       end
     end
     
@@ -497,16 +524,16 @@ class HomeController < ApplicationController
         r.race_id = y
         r.driver_id = x
         r.save
-#        if result.place != 0 then
-#          r = RaceResult.find_by( position: result.place, race_id: y)
-#          r.driver_id = x
-#          r.save
-#        else
-#          r = RaceResult.find_by(position: result.place, race_id: y, driver_id: x)
-#          # r.position = result.place
-#          # r.race_id = y
-#          r.save
-#        end
+        # if result.place != 0 then
+        #   r = RaceResult.find_by( position: result.place, race_id: y)
+        #   r.driver_id = x
+        #   r.save
+        # else
+        #   r = RaceResult.find_by(position: result.place, race_id: y, driver_id: x)
+        #   # r.position = result.place
+        #   # r.race_id = y
+        #   r.save
+        # end
       end
     end
     # render plain: @allqualiresultsArray #+ @allraceresultsArray
@@ -524,7 +551,7 @@ class HomeController < ApplicationController
     
     # fetch F1 HTML page including list of races
     page = "https://www.formula1.com/en/championship/races/" + @year + ".html"
-    doc = Nokogiri::HTML(open(page))
+    doc = Nokogiri::HTML(URI.open(page))
     section=doc.css('.inner-wrap')
     element=section.css('a')
     
@@ -563,7 +590,7 @@ class HomeController < ApplicationController
       end
       raceid = seasonstartid + $i
       page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
-      doc = Nokogiri::HTML(open(page))   
+      doc = Nokogiri::HTML(URI.open(page))   
       
       table=doc.css('table.resultsarchive-table')
       rows=table.css('tr')
@@ -583,7 +610,7 @@ class HomeController < ApplicationController
       @allqualiresultsArray << @qualiresultsArray
       
       page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/race-result.html"
-      doc = Nokogiri::HTML(open(page))   
+      doc = Nokogiri::HTML(URI.open(page))   
     
       table=doc.css('table.resultsarchive-table')
       rows=table.css('tr')
@@ -626,7 +653,7 @@ class HomeController < ApplicationController
         d.save
       end
     end
-  # render plain: @allqualiresultsArray #+ @allraceresultsArray
+    # render plain: @allqualiresultsArray #+ @allraceresultsArray
   end
 
   def fetch_drivers
@@ -638,7 +665,7 @@ class HomeController < ApplicationController
     # fetch F1 HTML page including list of races
     # using drivers results page - page = "https://www.formula1.com/en/results.html/" + @year + "/drivers.html"
     page = "https://www.formula1.com/en/drivers.html"
-    doc = Nokogiri::HTML(open(page))
+    doc = Nokogiri::HTML(URI.open(page))
     driverlist=doc.css('.listing-items--wrapper').css('.col-12')
     # put driverelement into an array @resultsArray
     @driversArray = []
@@ -669,7 +696,7 @@ class HomeController < ApplicationController
     
     # fetch F1 HTML page including list of races
     page = "https://www.formula1.com/en/championship/drivers.html"
-    doc = Nokogiri::HTML(open(page))
+    doc = Nokogiri::HTML(URI.open(page))
     section=doc.css('figcaption')
     driverelement=section.css('h1')
     teamelement=section.css('p')
@@ -699,40 +726,73 @@ class HomeController < ApplicationController
     
     # fetch F1 HTML page including list of races
     page = "https://www.formula1.com/en/championship/races/" + @year + ".html"
-    doc = Nokogiri::HTML(open(page))
+    doc = Nokogiri::HTML(URI.open(page))
     section=doc.css('.inner-wrap')
     element=section.css('a')
-    
-    # put element into an array @resultsArray
-    @resultsArray = []
-    $i = 0
-    while $i < element.length
-      item = element[$i]["href"]
-      @resultsArray << item
-      $i +=1
-    end
 
-    # pull out countries for each race and drop any non-race items from the array.  We are left with a clean list of countries in @raceArray
-    @raceArray = []
-    $i = 0
-    while $i < @resultsArray.length 
-      if @resultsArray[$i].include?("/en/racing/" + @year.to_s + "/") # filter out erroneous entries in the array
-        race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
-        @raceArray << race
+    if [2018,2019,2020].include?(@year.to_i) then
+      # put element into an array @resultsArray
+      @resultsArray = []
+      $i = 0
+      while $i < element.length
+        item = element[$i]["href"]
+        @resultsArray << item
+        $i +=1
       end
-      $i +=1
-    end
+      # pull out countries for each race and drop any non-race items from the array.  We are left with a clean list of countries in @raceArray
+      @raceArray = []
+      $i = 0
+      while $i < @resultsArray.length 
+        if @resultsArray[$i].include?("/en/racing/" + @year.to_s + "/") # filter out erroneous entries in the array
+          race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
+          @raceArray << race
+        end
+        $i +=1
+      end
 
-    $i = 1
-    @raceArray.each do |race|
-      x = Race.new
-      x.year = @year
-      x.race_number = $i
-      x.country = race
-      x.save
-      $i +=1
+      $i = 1
+      @raceArray.each do |race|
+        x = Race.new
+        x.year = @year
+        x.race_number = $i
+        x.country = race
+        x.save
+        $i +=1
+      end
     end
+  
+    if [2021].include?(@year.to_i) then
+      # put element into an array @resultsArray
+      @resultsArray = []
+      $i = 0
+      while $i < element.length
+        item = element[$i]["href"]
+        @resultsArray << item
+        $i +=1
+      end
+      # pull out countries for each race and drop any non-race items from the array.  We are left with a clean list of countries in @raceArray
+      @raceArray = []
+      $i = 1
+      while $i < @resultsArray.length 
+        if @resultsArray[$i].include?("/en/racing/" + @year.to_s + "/") # filter out erroneous entries in the array
+          if @resultsArray[$i].exclude?("Pre-Season-Test")
+            race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
+            @raceArray << race
+          end
+        end
+        $i +=1
+      end
 
+      $i = 1
+      @raceArray.each do |race|
+        x = Race.new
+        x.year = @year
+        x.race_number = $i
+        x.country = race
+        x.save
+        $i +=1
+      end
+    end
   end
   
   def fetch_track_svg
@@ -747,21 +807,30 @@ class HomeController < ApplicationController
         page = "https://www.skysports.com/f1/grandprix/" + "unitedarabemirates" + "/circuit-guide"
       elsif race.country == "United Arab Emirates" then
         page = "https://www.skysports.com/f1/grandprix/" + "unitedarabemirates" + "/circuit-guide"
+      elsif race.country.downcase.split(" ").join("-") == "pre-season-test" then
+        page = "https://www.skysports.com/f1/grandprix/" + "unitedarabemirates" + "/circuit-guide"
+      elsif race.country == "EmiliaRomagna" then
+        page = "https://www.skysports.com/f1/grandprix/" + "emilia-romagna" + "/circuit-guide"
       else
         page = "https://www.skysports.com/f1/grandprix/" + race.country.downcase.split(" ").join("-") + "/circuit-guide"
       end
-      doc = Nokogiri::HTML(open(page))
+      doc = Nokogiri::HTML(URI.open(page))
       begin  
-        doc = Nokogiri::HTML(open(page))
-      rescue Timeout::Error
-        puts "The request for a page at #{page} timed out...skipping."
+        doc = Nokogiri::HTML(URI.open(page))
+        rescue Timeout::Error
+          puts "The request for a page at #{page} timed out...skipping."
         next
-      rescue OpenURI::HTTPError => error
-        puts "The request for a page at #{page} returned an error. #{error.message}"
+        rescue OpenURI::HTTPError => error
+          puts "The request for a page at #{page} returned an error. #{error.message}"
         next
       end
-      race.img=doc.at_css("path.f1-svg-track__outline").attributes["d"].value
-      race.save
+      #race.img=doc.at_css("path.f1-svg-track__outline").attributes["d"].value
+      begin
+        race.img=doc.at_css("path.f1-svg-track__outline").attributes["d"].value
+      rescue NoMethodError => error
+        puts "the request for SVG for track #{race.country} returned an error.  #{error.message}"
+      end
+      race.save      
     end
   end
 
@@ -805,7 +874,7 @@ class HomeController < ApplicationController
 
     # fetch F1 HTML page including list of races
     page = "https://www.formula1.com/en/championship/races/" + @year + ".html"
-    doc = Nokogiri::HTML(open(page))
+    doc = Nokogiri::HTML(URI.open(page))
     section=doc.css('.inner-wrap')
     element=section.css('a')
     

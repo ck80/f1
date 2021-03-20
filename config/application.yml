@@ -13,3 +13,5 @@
 development:
   # db_host: host.docker.internal #use this one for when postgres is running in a container and you want to access it from the host machine running OSX
   # db_host: 192.168.1.10 #use this one when running postgres on a linux host
+  db_host: localhost
+  APP_DATABASE_USERNAME: postgres

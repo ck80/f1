@@ -86,7 +86,7 @@ class QualiResultsController < ApplicationController
     seasonstartid = 958 # first race id less 1 to allow for adding raceno to build url
     raceid = seasonstartid + Race.where(country: @country).pluck(:race_number).first
     page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
-    doc = Nokogiri::HTML(open(page))   
+    doc = Nokogiri::HTML(URI.open(page))   
     
     table=doc.css('table.resultsarchive-table')
     rows=table.css('tr')
