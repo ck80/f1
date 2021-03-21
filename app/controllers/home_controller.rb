@@ -154,7 +154,7 @@ class HomeController < ApplicationController
       cal = cals.first
 
       @event_data = []
-      $i = 7
+      $i = 6
       while $i < cal.events.length
         event_uid = cal.events[$i].uid
         event_summary = cal.events[$i].summary.force_encoding(Encoding::UTF_8) #force encoding to utf-8 to resolve issue due to ical ascii-8 format
