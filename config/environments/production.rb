@@ -66,6 +66,13 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
 
+  # Action Mailer
+  config.action_mailer.default_url_options = { host: ENV['WEBSITE_DOMAIN'] } # for absolute urls in email
+  config.action_mailer.asset_host = ENV['WEBSITE_DOMAIN'] # for image URLs in HTML email
+
+  # Allow generating absolute urls with routing url helpers.
+  Rails.application.routes.default_url_options[:host] = ENV['WEBSITE_DOMAIN']
+
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true

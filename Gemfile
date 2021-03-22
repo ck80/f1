@@ -18,6 +18,10 @@ gem 'puma'
 # gem 'sass-rails', '~> 5.0'
 gem 'sassc'
 
+# add dotenv-rails
+gem 'dotenv'
+gem 'dotenv-rails', require: 'dotenv/rails-now'
+
 # bootstrap
 gem 'bootstrap', '~> 4.6.0'
 gem 'sprockets-rails', :require => 'sprockets/railtie'
@@ -47,6 +51,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'bcrypt', '~> 3.1.7'
 gem 'bootstrap_form', '~> 2.7'
 gem 'devise', '~> 4.7', '>= 4.7.3'
+gem 'recaptcha'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
@@ -66,10 +71,9 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'delayed_job_active_record'
 
 # add figaro for environment variables
-gem 'figaro'
+# gem 'figaro'
 
-# add rechaptcha
-gem 'recaptcha'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
