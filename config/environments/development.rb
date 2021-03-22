@@ -31,6 +31,14 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
+
+  # Action Mailer
+  config.action_mailer.default_url_options = { host: ENV['WEBSITE_DOMAIN'] } # for absolute urls in email
+  config.action_mailer.asset_host = ENV['WEBSITE_DOMAIN'] # for image URLs in HTML email
+
+  # Allow generating absolute urls with routing url helpers.
+  Rails.application.routes.default_url_options[:host] = ENV['WEBSITE_DOMAIN']
+
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 

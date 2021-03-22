@@ -36,11 +36,12 @@ config/initializers/dev_variables.rb
 config/secrets.yml.key
 
 # Ignore local environments file
-f1appdevenv.env
-f1appprodenv.env
+.env*
 
 # Ignore local database.yml for mac
 config/database.yml
 config/database.yml.local
+
+# Ignore mac stuff
 .DS_Store
 app/.DS_Store
