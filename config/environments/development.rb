@@ -28,19 +28,39 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
+  
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-
   # Action Mailer
   config.action_mailer.default_url_options = { host: ENV['WEBSITE_DOMAIN'] } # for absolute urls in email
-  config.action_mailer.asset_host = ENV['WEBSITE_DOMAIN'] # for image URLs in HTML email
+  # config.action_mailer.asset_host = ENV['WEBSITE_DOMAIN'] # for image URLs in HTML email
+  config.action_mailer.smtp_settings = {
+    address: "smtp.gmail.com",
+    port: 587,
+    domain: ENV["GMAIL_DOMAIN"],
+    authentication: "plain",
+    enable_starttls_auto: true,
+    user_name: ENV["GMAIL_USERNAME"],
+    password: ENV["GMAIL_PASSWORD"]
+    }
 
+  # ActionMailer Config
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.default :charset => "utf-8"
+
+  # Send email in development mode.
+  config.action_mailer.perform_deliveries = false
+
+# Enable web console whitelist IPs
+config.web_console.whitelisted_ips = %w( 172.20.0.1 172.22.0.0/16 127.0.0.1 192.168.1.0/24 10.0.0.0/16)
   # Allow generating absolute urls with routing url helpers.
   Rails.application.routes.default_url_options[:host] = ENV['WEBSITE_DOMAIN']
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
 
   config.action_mailer.perform_caching = false
 
