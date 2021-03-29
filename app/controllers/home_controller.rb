@@ -433,6 +433,10 @@ class HomeController < ApplicationController
         seasonstartid = 979 # first race id for season 2018
       elsif @year == "2019" then
         seasonstartid = 1000 # first race id for season 2019
+      elsif @year == "2020" then
+        seasonstartid = 1045 # first race id for season 2020
+      elsif @year == "2021" then
+        seasonstartid = 1064 # first race id for season 2021
       end
       raceid = seasonstartid + $i
       if @country == "United Arab Emerates" then
