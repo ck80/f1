@@ -413,8 +413,10 @@ class HomeController < ApplicationController
     $i = 0
     while $i < @resultsArray.length 
       if @resultsArray[$i].include?("/en/racing/" + @year.to_s + "/") # filter out erroneous entries in the array
-        race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
-        @raceArray << race
+        if @resultsArray[$i].exclude?("Pre-Season-Test")
+          race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
+          @raceArray << race
+        end
       end
       $i +=1
     end
@@ -591,6 +593,10 @@ class HomeController < ApplicationController
         seasonstartid = 979 # first race id for season 2018
       elsif @year == "2019" then
         seasonstartid = 1000 # first race id for season 2019
+      elsif @year == "2020" then
+        seasonstartid = 1045 # first race id for season 2020
+      elsif @year == "2021" then
+        seasonstartid = 1064 # first race id for season 2021
       end
       raceid = seasonstartid + $i
       page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
@@ -748,8 +754,10 @@ class HomeController < ApplicationController
       $i = 0
       while $i < @resultsArray.length 
         if @resultsArray[$i].include?("/en/racing/" + @year.to_s + "/") # filter out erroneous entries in the array
-          race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
-          @raceArray << race
+          if @resultsArray[$i].exclude?("Pre-Season-Test")
+            race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
+            @raceArray << race
+          end
         end
         $i +=1
       end
