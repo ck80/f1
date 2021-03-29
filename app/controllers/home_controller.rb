@@ -335,7 +335,7 @@ class HomeController < ApplicationController
       result.car
       result.driver
       result.team
-      x = Driver.find_by!(abbr_name: result.driver, year: @year).id
+      x = Driver.find_by!(abbr_name: if result.driver.include?("RAI") then "RÄI" else result.driver end, year: @year).id
       y = Race.where("country ILIKE ? AND year = ?", result.race_country, @year).take.id
       r = QualiResult.new
       r.position = result.place
@@ -376,7 +376,7 @@ class HomeController < ApplicationController
       result.car
       result.driver
       result.team
-      x = Driver.find_by!(abbr_name: result.driver, year: @year).id
+      x = Driver.find_by!(abbr_name: if result.driver.include?("RAI") then "RÄI" else result.driver end, year: @year).id
       y = Race.where("country ILIKE ? AND year = ?", result.race_country, @year).take.id
       r = RaceResult.new
       r.position = result.place
@@ -496,7 +496,7 @@ class HomeController < ApplicationController
         result.car
         result.driver
         result.team
-        x = Driver.find_by!(abbr_name: result.driver, year: @year).id
+        x = Driver.find_by!(abbr_name: if result.driver.include?("RAI") then "RÄI" else result.driver end, year: @year).id
         y = Race.where("country ILIKE ? AND year = ?", result.race_country, @year).take.id
         r = QualiResult.new
         r.position = result.place
@@ -523,7 +523,7 @@ class HomeController < ApplicationController
         result.car
         result.driver
         result.team
-        x = Driver.find_by!(abbr_name: result.driver, year: @year).id
+        x = Driver.find_by!(abbr_name: if result.driver.include?("RAI") then "RÄI" else result.driver end, year: @year).id
         y = Race.where("country ILIKE ? AND year = ?", result.race_country, @year).take.id
         r = RaceResult.new
         r.position = result.place
@@ -873,7 +873,7 @@ class HomeController < ApplicationController
       result.car
       result.driver
       result.team
-      x = Driver.find_by!(abbr_name: result.driver, year: @year).id
+      x = Driver.find_by!(abbr_name: if result.driver.include?("RAI") then "RÄI" else result.driver end, year: @year).id
       y = Race.where("country ILIKE ? AND year = ?", result.race_country, @year).take.id
       r = QualiResult.new
       r.position = result.place
