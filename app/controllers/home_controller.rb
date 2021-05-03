@@ -175,13 +175,9 @@ class HomeController < ApplicationController
       end
 
     end
-
     
-
-
   end
 
-  
   def update_race_tip_points_forgotten_entries
     # this function is still WORK IN PROGRESS
     
