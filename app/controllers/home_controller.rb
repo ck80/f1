@@ -335,7 +335,7 @@ class HomeController < ApplicationController
       result.car
       result.driver
       result.team
-      x = Driver.find_by!(abbr_name: if result.driver.include?("RAI") then "RÄI" else result.driver end, year: @year).id
+      x = Driver.find_by!(abbr_name: if result.driver.include?("RAI") then "RÄI" elsif result.driver.include?("MSC") then "SCH" else result.driver end, year: @year).id
       y = Race.where("country ILIKE ? AND year = ?", result.race_country, @year).take.id
       r = QualiResult.new
       r.position = result.place
@@ -376,7 +376,7 @@ class HomeController < ApplicationController
       result.car
       result.driver
       result.team
-      x = Driver.find_by!(abbr_name: if result.driver.include?("RAI") then "RÄI" else result.driver end, year: @year).id
+      x = Driver.find_by!(abbr_name: if result.driver.include?("RAI") then "RÄI" elsif result.driver.include?("MSC") then "SCH" else result.driver end, year: @year).id
       y = Race.where("country ILIKE ? AND year = ?", result.race_country, @year).take.id
       r = RaceResult.new
       r.position = result.place
@@ -496,7 +496,7 @@ class HomeController < ApplicationController
         result.car
         result.driver
         result.team
-        x = Driver.find_by!(abbr_name: if result.driver.include?("RAI") then "RÄI" else result.driver end, year: @year).id
+        x = Driver.find_by!(abbr_name: if result.driver.include?("RAI") then "RÄI" elsif result.driver.include?("MSC") then "SCH" else result.driver end, year: @year).id
         y = Race.where("country ILIKE ? AND year = ?", result.race_country, @year).take.id
         r = QualiResult.new
         r.position = result.place
@@ -523,7 +523,7 @@ class HomeController < ApplicationController
         result.car
         result.driver
         result.team
-        x = Driver.find_by!(abbr_name: if result.driver.include?("RAI") then "RÄI" else result.driver end, year: @year).id
+        x = Driver.find_by!(abbr_name: if result.driver.include?("RAI") then "RÄI" elsif result.driver.include?("MSC") then "SCH" else result.driver end, year: @year).id
         y = Race.where("country ILIKE ? AND year = ?", result.race_country, @year).take.id
         r = RaceResult.new
         r.position = result.place
@@ -545,6 +545,163 @@ class HomeController < ApplicationController
     # render plain: @allqualiresultsArray #+ @allraceresultsArray
   end
 
+  def fetch_latest_race_results_action #This section is WIP to optimise results collection
+    # load HTML parser
+    require 'rubygems'
+    require 'nokogiri'
+    require 'open-uri'
+    
+    # fetch F1 HTML page including list of races
+    page = "https://www.formula1.com/en/championship/races/" + @year.to_s + ".html"
+    doc = Nokogiri::HTML(URI.open(page))
+    section=doc.css('.inner-wrap')
+    element=section.css('a')
+    
+    # put element into an array @resultsArray
+    @resultsArray = []
+    $i = 0
+    while $i < element.length
+      item = element[$i]["href"]
+      @resultsArray << item
+      $i +=1
+    end
+
+    # pull out countries for each race and drop any non-race items from the array.  We are left with a clean list of countries in @raceArray
+    @raceArray = []
+    $i = 0
+    while $i < @resultsArray.length 
+      if @resultsArray[$i].include?("/en/racing/" + @year.to_s + "/") # filter out erroneous entries in the array
+        if @resultsArray[$i].exclude?("Pre-Season-Test")
+          race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
+          @raceArray << race
+        end
+      end
+      $i +=1
+    end
+    
+    # now fetch qualification and race results for each race and store in @allqualiresultsArray and @allraceresultsArray
+    @allqualiresultsArray = []
+    @allraceresultsArray = []
+    $i = 0
+    while $i < @raceArray.length
+      
+      @quali_results = QualiResult.joins(:race, :driver)
+      @country = @raceArray[$i]
+      if @year == "2017" then
+        seasonstartid = 959 # first race id for season 2017
+      elsif @year == "2018" then
+        seasonstartid = 979 # first race id for season 2018
+      elsif @year == "2019" then
+        seasonstartid = 1000 # first race id for season 2019
+      elsif @year == "2020" then
+        seasonstartid = 1045 # first race id for season 2020
+      elsif @year == "2021" then
+        seasonstartid = 1064 # first race id for season 2021
+      end
+      raceid = seasonstartid + $i
+      if @country == "United Arab Emerates" then
+        @country == "abu-dhabi"
+      end
+      page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
+      doc = Nokogiri::HTML(URI.open(page))   
+      
+      table=doc.css('table.resultsarchive-table')
+      rows=table.css('tr')
+      
+      @qualiresultsArray = []
+      $j = 1
+      while $j < rows.length
+        race_country = @country
+        place = rows[$j].css('td')[1].text
+        car = rows[$j].css('td')[2].text
+        driver_full_name = rows[$j].css('td')[3].css('span')[0].text + " " + rows[$j].css('td')[3].css('span')[1].text          
+        driver = rows[$j].css('td')[3].text.split.last
+        team = rows[$j].css('td')[4].text
+        @qualiresultsArray << Entry.new(race_country, place, car, driver_full_name, driver, team)
+        $j +=1
+      end
+      @allqualiresultsArray << @qualiresultsArray
+      
+      page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/race-result.html"
+      doc = Nokogiri::HTML(URI.open(page))   
+    
+      table=doc.css('table.resultsarchive-table')
+      rows=table.css('tr')
+    
+      @raceresultsArray = []  
+      $j = 1
+      while $j < rows.length
+        race_country = @country
+        place = rows[$j].css('td')[1].text
+        car = rows[$j].css('td')[2].text
+        driver_full_name = rows[$j].css('td')[3].css('span')[0].text + " " + rows[$j].css('td')[3].css('span')[1].text
+        driver = rows[$j].css('td')[3].text.split.last
+        team = rows[$j].css('td')[4].text
+        @raceresultsArray << Entry.new(race_country, place, car, driver_full_name, driver, team)
+        $j +=1
+      end
+      @allraceresultsArray << @raceresultsArray  
+      $i +=1
+    end
+    
+    # render plain: @allqualiresultsArray 
+    
+    # commit results to DB
+    @allqualiresultsArray.each do |race|
+      race.each do |result|
+        result.race_country
+        result.place
+        result.car
+        result.driver
+        result.team
+        x = Driver.find_by!(abbr_name: if result.driver.include?("RAI") then "RÄI" elsif result.driver.include?("MSC") then "SCH" else result.driver end, year: @year).id
+        y = Race.where("country ILIKE ? AND year = ?", result.race_country, @year).take.id
+        r = QualiResult.new
+        r.position = result.place
+        r.race_id = y
+        r.driver_id = x
+        r.save
+       # if result.place != 0 then
+       #   r = QualiResult.find_or_initialize_by(position: result.place, race_id: y)
+       #   r.driver_id = x
+       #   r.save
+       # else
+       #   r = QualiResult.find_or_initialize_by(position: result.place, race_id: y, driver_id: x)
+       #   # r.position = result.place
+       #   # r.race_id = y
+       #   r.save
+       # end
+      end
+    end
+    
+    @allraceresultsArray.each do |race|
+      race.each do |result|
+        result.race_country
+        result.place
+        result.car
+        result.driver
+        result.team
+        x = Driver.find_by!(abbr_name: if result.driver.include?("RAI") then "RÄI" elsif result.driver.include?("MSC") then "SCH" else result.driver end, year: @year).id
+        y = Race.where("country ILIKE ? AND year = ?", result.race_country, @year).take.id
+        r = RaceResult.new
+        r.position = result.place
+        r.race_id = y
+        r.driver_id = x
+        r.save
+        # if result.place != 0 then
+        #   r = RaceResult.find_by( position: result.place, race_id: y)
+        #   r.driver_id = x
+        #   r.save
+        # else
+        #   r = RaceResult.find_by(position: result.place, race_id: y, driver_id: x)
+        #   # r.position = result.place
+        #   # r.race_id = y
+        #   r.save
+        # end
+      end
+    end
+    # render plain: @allqualiresultsArray #+ @allraceresultsArray
+  end
 
   def fetch_drivers_by_races
     ## added this function to ensure drivers not listed on drivers URL are added to Driver table
@@ -873,7 +1030,7 @@ class HomeController < ApplicationController
       result.car
       result.driver
       result.team
-      x = Driver.find_by!(abbr_name: if result.driver.include?("RAI") then "RÄI" else result.driver end, year: @year).id
+      x = Driver.find_by!(abbr_name: if result.driver.include?("RAI") then "RÄI" elsif result.driver.include?("MSC") then "SCH" else result.driver end, year: @year).id
       y = Race.where("country ILIKE ? AND year = ?", result.race_country, @year).take.id
       r = QualiResult.new
       r.position = result.place
