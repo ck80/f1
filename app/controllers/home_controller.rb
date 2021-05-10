@@ -421,7 +421,7 @@ class HomeController < ApplicationController
     while $i < @raceArray.length
       @quali_results = QualiResult.joins(:race, :driver)
       
-      racename = @raceArray[$i][3]
+      @racename = @raceArray[$i][3]
       raceid = @raceArray[$i][4]
       @country = @raceArray[$i][5]
       
@@ -435,7 +435,7 @@ class HomeController < ApplicationController
       $j = 1
       
       while $j < rows.length
-        race_country = racename
+        race_country = @racename
         place = rows[$j].css('td')[1].text
         car = rows[$j].css('td')[2].text
         driver_full_name = rows[$j].css('td')[3].css('span')[0].text + " " + rows[$j].css('td')[3].css('span')[1].text          
@@ -455,7 +455,7 @@ class HomeController < ApplicationController
       @raceresultsArray = []  
       $j = 1
       while $j < rows.length
-        race_country = @country
+        race_country = @racename
         place = rows[$j].css('td')[1].text
         car = rows[$j].css('td')[2].text
         driver_full_name = rows[$j].css('td')[3].css('span')[0].text + " " + rows[$j].css('td')[3].css('span')[1].text
