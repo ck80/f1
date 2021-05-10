@@ -444,6 +444,9 @@ class HomeController < ApplicationController
       if @country == "United Arab Emerates" then
         @country == "abu-dhabi"
       end
+      if @year == "2021" and @country == "Spain" then
+        raceid=1086
+      end
       page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
       doc = Nokogiri::HTML(URI.open(page))   
       
@@ -602,6 +605,9 @@ class HomeController < ApplicationController
       if @country == "United Arab Emerates" then
         @country == "abu-dhabi"
       end
+      if @year == "2021" and @country == "Spain" then
+        raceid=1086
+      end
       page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
       doc = Nokogiri::HTML(URI.open(page))   
       
@@ -756,6 +762,12 @@ class HomeController < ApplicationController
         seasonstartid = 1064 # first race id for season 2021
       end
       raceid = seasonstartid + $i
+      if @country == "United Arab Emerates" then
+        @country == "abu-dhabi"
+      end
+      if @year == "2021" and @country == "Spain" then
+        raceid=1086
+      end
       page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
       doc = Nokogiri::HTML(URI.open(page))   
       
