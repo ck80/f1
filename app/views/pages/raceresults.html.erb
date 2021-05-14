@@ -7,13 +7,13 @@
     <% season = (Time.now.year - 1).to_s %>
     <div class="card-header" id="heading<%season%>">
       <h5 class="mb-0">
-        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse<%=season%>" data-parent="accordion1" aria-expanded="false" aria-controls="collapse<%=season%>">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse<%=season%>" aria-expanded="false" aria-controls="collapse<%=season%>">
           <%=season%> - Last Season
         </button>
       </h5>
     </div>
     <div class="accordion" id="accordion2">
-      <div id="collapse<%= season%>" class="collapse" aria-labelledby="heading<%= season%>" data-parent="#accordion2">
+      <div id="collapse<%=season%>" class="collapse" aria-labelledby="heading<%=season%>" data-parent="#accordion2">
         <div class="card-body">
           <% $i=0 %>
           <% @race_country = Race.where(year: season).order('race_number ASC') %>
@@ -72,7 +72,7 @@
     <% season = Time.now.year.to_s %>
     <div class="card-header" id="heading<%season%>">
       <h5 class="mb-0">
-        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse<%=season%>" data-parent="accordion3" aria-expanded="false" aria-controls="collapse<%=season%>">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse<%=season%>" aria-expanded="false" aria-controls="collapse<%=season%>">
           <%=season%> - Curret Season
         </button>
       </h5>
