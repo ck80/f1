@@ -23,7 +23,7 @@ gem 'dotenv'
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 
 # bootstrap
-gem 'bootstrap', '~> 4.6.0'
+gem 'bootstrap', '~> 5.0.1'
 gem 'sprockets-rails', :require => 'sprockets/railtie'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
