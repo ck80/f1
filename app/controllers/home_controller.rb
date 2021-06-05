@@ -154,14 +154,20 @@ class HomeController < ApplicationController
       cal = cals.first
 
       @event_data = []
-      $i = 6
+      $i = 0
       while $i < cal.events.length
-        event_uid = cal.events[$i].uid
-        event_summary = cal.events[$i].summary.force_encoding(Encoding::UTF_8) #force encoding to utf-8 to resolve issue due to ical ascii-8 format
-        event_quali_start = cal.events[$i].dtstart
-        h = {event_uid: event_uid, event_summary: event_summary, event_quali_start: event_quali_start}
-        @event_data << h
-        $i +=5
+        if cal.events[$i].uid.include? "Qualifying@" then
+          if cal.events[$i].status.include? "CONFIRMED" then
+            event_uid = cal.events[$i].uid
+            event_loc = cal.events[$i].location
+            event_status = cal.events[$i].status
+            event_summary = cal.events[$i].summary.force_encoding(Encoding::UTF_8) #force encoding to utf-8 to resolve issue due to ical ascii-8 format
+            event_quali_start = cal.events[$i].dtstart
+            h = {event_uid: event_uid, event_loc: event_loc, event_status: event_status, event_summary: event_summary, event_quali_start: event_quali_start}
+            @event_data << h
+          end
+        end
+        $i+=1
       end
   
       $i=0
@@ -724,7 +730,7 @@ class HomeController < ApplicationController
     require 'open-uri'
     
     # fetch F1 HTML page including list of races
-    page = "https://www.formula1.com/en/championship/races/" + @year + ".html"
+    page = "https://www.formula1.com/en/championship/races/" + @year.to_s + ".html"
     doc = Nokogiri::HTML(URI.open(page))
     section=doc.css('.inner-wrap')
     element=section.css('a')
