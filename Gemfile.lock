@@ -111,7 +111,7 @@ GEM
       railties (>= 3.2)
     erubi (1.10.0)
     execjs (2.7.0)
-    ffi (1.15.0)
+    ffi (1.15.3)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     i18n (1.8.9)
@@ -133,7 +133,7 @@ GEM
     libv8 (8.4.255.0)
     libv8 (8.4.255.0-x86_64-darwin-19)
     libv8 (8.4.255.0-x86_64-linux)
-    listen (3.5.0)
+    listen (3.6.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     loofah (2.9.0)
@@ -200,7 +200,7 @@ GEM
       rake (>= 0.8.7)
       thor (~> 1.0)
     rake (13.0.3)
-    rb-fsevent (0.10.4)
+    rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     recaptcha (5.7.0)
@@ -281,7 +281,7 @@ DEPENDENCIES
   jquery-rails
   jquery-tablesorter (~> 1.27)
   jquery-ui-rails
-  listen (>= 3.0.5, < 3.6)
+  listen (>= 3.0.5, < 3.7)
   mini_racer
   nokogiri (>= 1.8.5)
   pg (~> 1.2)
