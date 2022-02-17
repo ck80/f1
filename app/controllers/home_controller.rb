@@ -148,7 +148,7 @@ class HomeController < ApplicationController
       end
 
     end
-    if [2021].include?(@year.to_i) then
+    if [2021,2022].include?(@year.to_i) then
       cal_file = URI.open("http://www.formula1.com/calendar/Formula_1_Official_Calendar.ics")
       cals = Icalendar::Calendar.parse(cal_file)
       cal = cals.first
@@ -584,6 +584,8 @@ class HomeController < ApplicationController
         seasonstartid = 1045 # first race id for season 2020
       elsif @year == "2021" then
         seasonstartid = 1064 # first race id for season 2021
+      elsif @year == "2022" then
+        seasonstartid = 1124 # first race id for season 2022
       end
       raceid = seasonstartid + $i
       if @country == "United Arab Emerates" then
@@ -768,7 +770,7 @@ class HomeController < ApplicationController
       end
     end
   
-    if [2021].include?(@year.to_i) then
+    if [2021,2022].include?(@year.to_i) then
       # put element into an array @resultsArray
       @resultsArray = []
       $i = 0
