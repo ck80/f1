@@ -148,7 +148,7 @@ class HomeController < ApplicationController
       end
 
     end
-    if [2021,2022].include?(@year.to_i) then
+    if [2021].include?(@year.to_i) then
       cal_file = URI.open("http://www.formula1.com/calendar/Formula_1_Official_Calendar.ics")
       cals = Icalendar::Calendar.parse(cal_file)
       cal = cals.first
@@ -176,6 +176,57 @@ class HomeController < ApplicationController
         race.ical_uid = @event_data[$i][:event_uid]
         race.ical_dtstart = @event_data[$i][:event_quali_start].to_datetime
         race.ical_summary = @event_data[$i][:event_summary]
+        race.save
+        $i+=1
+      end
+
+    end
+
+    if [2022].include?(@year.to_i) then
+      # fetch F1 HTML page including list of races
+      page = "https://www.formula1.com/en/racing/2022.html"
+      doc = Nokogiri::HTML(URI.open(page))
+      races = doc.css('.event-list').css('a')
+      
+      @racePages = []
+      races.each do |race|
+        # need to compare if race["href"].split("/").last.split(".").first.gsub("_", " ") matches to a race in the DB Races.country where year=2022 then create URL to collect quali_start_tiem   
+        if Race.where(year: 2022, country: race["href"].split("/").last.split(".").first.gsub("_", " ")).exists?
+          then
+            @racePages << "https://www.formula1.com" + race["href"]
+        end
+      end
+      
+
+      # race = doc.css('.event-list').css('a')[7]["href"]
+
+      # scrape each page for quali and race start time
+      $i = 0
+      while $i < @racePages.length
+        page = @racePages[$i]
+        begin
+          doc = Nokogiri::HTML(URI.open(page))
+          rescue Timeout::Error
+            puts "The request for a page at #{page} timed out...skipping."
+          next
+          rescue OpenURI::HTTPError => error
+            puts "The request for a page at #{page} returned an error. #{error.message}"
+          next
+        end
+        begin
+          start_time_quali=nil
+          start_time_quali=doc.css('.js-qualifying')[0]["data-start-time"].to_datetime
+        rescue ArgumentError => error
+          puts "the request for race start time for #{race.country} returned an error.  #{error.message}"
+        end
+
+        event_title=doc.css('.f1--s').last.text
+        # start_time_race=doc.css('.js-race')[0]["data-start-time"].to_datetime
+        # need to commit times to the database against the speficic race
+        race = Race.where(year: @year).find_by(race_number: $i+1)
+        # race.ical_uid = @event_data[$i][:event_uid]
+        race.ical_dtstart = start_time_quali
+        race.ical_summary = event_title
         race.save
         $i+=1
       end
@@ -548,19 +599,31 @@ class HomeController < ApplicationController
     section=doc.css('.inner-wrap')
     element=section.css('a')
     
-    # put element into an array @resultsArray
+    # put element into an array @resultsArray (old)
+    # @resultsArray = []
+    # $i = 0
+    # while $i < element.length
+    #   item = element[$i]["href"]
+    #   @resultsArray << item
+    #   $i +=1
+    # end
+
+    # put element into an array @resultsArray (updated)
     @resultsArray = []
     $i = 0
     while $i < element.length
-      item = element[$i]["href"]
-      @resultsArray << item
+      if element[$i]["data-meetingkey"].blank?
+      else
+        item = element[$i]["href"]
+        @resultsArray << item
+      end
       $i +=1
     end
 
     # pull out countries for each race and drop any non-race items from the array.  We are left with a clean list of countries in @raceArray
     @raceArray = []
     $i = 0
-    while $i < @resultsArray.length-2 # minus 2 to drop non-race elements
+    while $i < @resultsArray.length
       race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
       @raceArray << race
       $i +=1
@@ -732,10 +795,11 @@ class HomeController < ApplicationController
     require 'open-uri'
     
     # fetch F1 HTML page including list of races
-    page = "https://www.formula1.com/en/championship/races/" + @year.to_s + ".html"
-    doc = Nokogiri::HTML(URI.open(page))
-    section=doc.css('.inner-wrap')
-    element=section.css('a')
+    # page = "https://www.formula1.com/en/championship/races/" + @year.to_s + ".html"
+    # doc = Nokogiri::HTML(URI.open(page))
+    # section=doc.css('.inner-wrap')
+    # element=section.css('a')
+    element=Nokogiri::HTML(URI.open("https://www.formula1.com/en/championship/races/" + @year.to_s + ".html")).css('.inner-wrap').css('a')
 
     if [2018,2019,2020].include?(@year.to_i) then
       # put element into an array @resultsArray
@@ -771,35 +835,19 @@ class HomeController < ApplicationController
     end
   
     if [2021,2022].include?(@year.to_i) then
-      # put element into an array @resultsArray
-      @resultsArray = []
       $i = 0
+      $r = 1
       while $i < element.length
-        item = element[$i]["href"]
-        @resultsArray << item
-        $i +=1
-      end
-      # pull out countries for each race and drop any non-race items from the array.  We are left with a clean list of countries in @raceArray
-      @raceArray = []
-      $i = 1
-      while $i < @resultsArray.length 
-        if @resultsArray[$i].include?("/en/racing/" + @year.to_s + "/") # filter out erroneous entries in the array
-          if @resultsArray[$i].exclude?("Pre-Season-Test")
-            race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
-            @raceArray << race
-          end
+        if element[$i]["data-meetingkey"].blank?
+        else
+          x = Race.new
+          x.year = @year
+          x.race_number = $r
+          x.country = element[$i]["href"].split("/").last.split(".").first.gsub("_", " ")
+          x.save
+          $r +=1
         end
-        $i +=1
-      end
-
-      $i = 1
-      @raceArray.each do |race|
-        x = Race.new
-        x.year = @year
-        x.race_number = $i
-        x.country = race
-        x.save
-        $i +=1
+          $i +=1
       end
     end
   end
@@ -823,7 +871,7 @@ class HomeController < ApplicationController
       else
         page = "https://www.skysports.com/f1/grandprix/" + race.country.downcase.split(" ").join("-") + "/circuit-guide"
       end
-      doc = Nokogiri::HTML(URI.open(page))
+      # doc = Nokogiri::HTML(URI.open(page))
       begin  
         doc = Nokogiri::HTML(URI.open(page))
         rescue Timeout::Error
