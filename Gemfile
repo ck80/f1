@@ -49,7 +49,7 @@ gem 'jbuilder', '~> 2.11'
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.17'
-gem 'bootstrap_form', '~> 4.5'
+gem 'bootstrap_form', '~> 5.0'
 gem 'devise', '~> 4.8'
 gem 'recaptcha'
 # Use Capistrano for deployment
