@@ -98,6 +98,7 @@ $(document).ready(function () {
           </tr>
         </thead>
         <tbody class="TFtable">
+          <% begin %>
           <% if current_user.admin? then %>
             <% @tips = Tip.joins(:race).where("races.year = ? AND race_id = ?", @year, r.id) %>
           <% elsif r.ical_dtstart >= Time.now then %>
@@ -105,6 +106,9 @@ $(document).ready(function () {
           <% else %>
             <% @tips = Tip.joins(:race, :user).where("races.year = ? AND race_id = ? AND users.approved = ?", @year, r.id, true) %>
           <% end %>
+          <% rescue NoMethodError => error %>
+            <% puts "the quali start time for #{r.country} returned an error.  #{error.message}" %>
+          <% end %>  
           <% @tips.each do |tip| %>
             <tr>
               <td><%= tip.user.name %></td>
