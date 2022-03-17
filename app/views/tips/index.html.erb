@@ -101,8 +101,10 @@ $(document).ready(function () {
           <% begin %>
           <% if current_user.admin? then %>
             <% @tips = Tip.joins(:race).where("races.year = ? AND race_id = ?", @year, r.id) %>
-          <% elsif r.ical_dtstart >= Time.now then %>
-            <% @tips = Tip.joins(:race).where("races.year = ? AND user_id = ? AND race_id = ?", @year, current_user.id, r.id) %>
+          <% elsif r.try(:ical_dtstart).present? then %>
+            <% if r.ical_dtstart >= Time.now then %>
+              <% @tips = Tip.joins(:race).where("races.year = ? AND user_id = ? AND race_id = ?", @year, current_user.id, r.id) %>
+            <% end %>
           <% else %>
             <% @tips = Tip.joins(:race, :user).where("races.year = ? AND race_id = ? AND users.approved = ?", @year, r.id, true) %>
           <% end %>
