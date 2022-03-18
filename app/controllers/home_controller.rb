@@ -215,7 +215,11 @@ class HomeController < ApplicationController
         end
         begin
           start_time_quali=nil
-          start_time_quali=doc.css('.js-qualifying')[0]["data-start-time"].to_datetime
+          start_time_quali_local=nil
+          start_time_quali_offset=nil
+          start_time_quali_local=doc.css('.js-qualifying')[0]["data-start-time"]
+          start_time_quali_offset=doc.css('.js-qualifying')[0]["data-gmt-offset"]
+          start_time_quali=(start_time_quali_local+start_time_quali_offset).to_datetime
         rescue ArgumentError => error
           puts "the request for race start time for #{race.country} returned an error.  #{error.message}"
         end
