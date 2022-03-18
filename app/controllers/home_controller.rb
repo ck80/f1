@@ -219,11 +219,12 @@ class HomeController < ApplicationController
           start_time_quali_offset=nil
           start_time_quali_local=doc.css('.js-qualifying')[0]["data-start-time"]
           start_time_quali_offset=doc.css('.js-qualifying')[0]["data-gmt-offset"]
-          start_time_quali=(start_time_quali_local+start_time_quali_offset).to_datetime
+          start_time_quali_local.to_datetime
         rescue ArgumentError => error
           puts "the request for race start time for #{race.country} returned an error.  #{error.message}"
+        else
+          start_time_quali=(start_time_quali_local+start_time_quali_offset).to_datetime
         end
-
         event_title=doc.css('.f1--s').last.text
         # start_time_race=doc.css('.js-race')[0]["data-start-time"].to_datetime
         # need to commit times to the database against the speficic race
