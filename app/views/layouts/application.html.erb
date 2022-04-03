@@ -28,7 +28,7 @@ a:hover {
 	<body>
 		<nav class="navbar sticky-top navbar-expand-md navbar-dark <%= 'bg-primary' if Rails.env.development? == false %>" <%= 'style=background-color:red;' if Rails.env.development? %>>
 			<%= link_to "F1 Tips", root_path, style: "color:white", class: "btn btn-inverse"%>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
