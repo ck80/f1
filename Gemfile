@@ -48,7 +48,7 @@ gem 'jbuilder', '~> 2.11'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.17'
+gem 'bcrypt', '~> 3.1.18'
 gem 'bootstrap_form', '~> 5.0'
 gem 'devise', '~> 4.8'
 gem 'recaptcha'
