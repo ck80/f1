@@ -667,7 +667,7 @@ class HomeController < ApplicationController
       page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
       doc = Nokogiri::HTML(URI.open(page))   
       
-      table=doc.css('table.resultsarchive-table')
+      table=doc.css('table')
       rows=table.css('tr')
       
       @qualiresultsArray = []
@@ -676,8 +676,8 @@ class HomeController < ApplicationController
         race_country = @country
         place = rows[$j].css('td')[1].text
         car = rows[$j].css('td')[2].text
-        driver_full_name = rows[$j].css('td')[3].css('span')[0].text + " " + rows[$j].css('td')[3].css('span')[1].text          
-        driver = rows[$j].css('td')[3].text.split.last
+        driver_full_name = rows[$j].css('td')[3].elements[0].text + " " + rows[$j].css('td')[3].elements[1].text
+        driver = rows[$j].css('td')[3].elements[2].text
         team = rows[$j].css('td')[4].text
         @qualiresultsArray << Entry.new(race_country, place, car, driver_full_name, driver, team)
         $j +=1
@@ -696,8 +696,8 @@ class HomeController < ApplicationController
         race_country = @country
         place = rows[$j].css('td')[1].text
         car = rows[$j].css('td')[2].text
-        driver_full_name = rows[$j].css('td')[3].css('span')[0].text + " " + rows[$j].css('td')[3].css('span')[1].text
-        driver = rows[$j].css('td')[3].text.split.last
+        driver_full_name = rows[$j].css('td')[3].elements[0].text + " " + rows[$j].css('td')[3].elements[1].text
+        driver = rows[$j].css('td')[3].elements[2].text
         team = rows[$j].css('td')[4].text
         @raceresultsArray << Entry.new(race_country, place, car, driver_full_name, driver, team)
         $j +=1
