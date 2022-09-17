@@ -59,7 +59,7 @@ gem 'recaptcha'
 gem "nokogiri", ">= 1.8.5"
 # gem 'csv'
 # gem 'find'
-gem 'sanitize', '~> 5.2.1'
+gem 'sanitize', '~> 6.0.0'
 
 # icalendar parsing
 gem 'icalendar', '~> 2.7'
