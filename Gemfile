@@ -62,7 +62,7 @@ gem "nokogiri", ">= 1.8.5"
 gem 'sanitize', '~> 5.2.1'
 
 # icalendar parsing
-gem 'icalendar', '~> 2.7'
+gem 'icalendar', '~> 2.8'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
