@@ -636,6 +636,7 @@ class HomeController < ApplicationController
         @driversArray << [driver_car, driver_team, driver_fullname, driver_shortname]
         $j +=1
       end
+      $i +=1
     end
     @driversArray = @driversArray.uniq
     
@@ -648,7 +649,7 @@ class HomeController < ApplicationController
       d.team = driver.driver_team
       d.save
     end
-    
+
     # render plain: @allqualiresultsArray #+ @allraceresultsArray
   end
 
