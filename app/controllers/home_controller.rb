@@ -601,133 +601,54 @@ class HomeController < ApplicationController
     # fetch F1 HTML page including list of races
     page = "https://www.formula1.com/en/championship/races/" + @year + ".html"
     doc = Nokogiri::HTML(URI.open(page))
-    section=doc.css('.inner-wrap')
+    section=doc.css('div.completed-events')
     element=section.css('a')
     
-    # put element into an array @resultsArray (old)
-    # @resultsArray = []
-    # $i = 0
-    # while $i < element.length
-    #   item = element[$i]["href"]
-    #   @resultsArray << item
-    #   $i +=1
-    # end
-
     # put element into an array @resultsArray (updated)
     @resultsArray = []
     $i = 0
     while $i < element.length
       if element[$i]["data-meetingkey"].blank?
       else
-        item = element[$i]["href"]
-        @resultsArray << item
+        race_round = element[$i]['data-roundtext']
+        race_country = element[$i]['data-racecountryname']
+        race_meetingkey = element[$i]['data-meetingkey']
+        @resultsArray << [race_round, race_country, race_meetingkey]
       end
       $i +=1
     end
 
-    # pull out countries for each race and drop any non-race items from the array.  We are left with a clean list of countries in @raceArray
-    @raceArray = []
     $i = 0
     while $i < @resultsArray.length
-      race = @resultsArray[$i].split("/").last.split(".").first.gsub("_", " ") # gsub replaces underscores with spaces to tidy up
-      @raceArray << race
-      $i +=1
-    end
-    
-    # now fetch qualification and race results for each race and store in @allqualiresultsArray and @allraceresultsArray
-    @allqualiresultsArray = []
-    @allraceresultsArray = []
-    $i = 0
-    while $i < @raceArray.length
-      
-      @quali_results = QualiResult.joins(:race, :driver)
-      @country = @raceArray[$i]
-      if @year == "2017" then
-        seasonstartid = 959 # first race id for season 2017
-      elsif @year == "2018" then
-        seasonstartid = 979 # first race id for season 2018
-      elsif @year == "2019" then
-        seasonstartid = 1000 # first race id for season 2019
-      elsif @year == "2020" then
-        seasonstartid = 1045 # first race id for season 2020
-      elsif @year == "2021" then
-        seasonstartid = 1064 # first race id for season 2021
-      elsif @year == "2022" then
-        seasonstartid = 1124 # first race id for season 2022
-      end
-      raceid = seasonstartid + $i
-      if @country == "United Arab Emerates" then
-        @country == "abu-dhabi"
-      end
-      if @year == "2021" and @country == "Spain" then
-        raceid = 1086
-      elsif @year == "2021" and @country == "Monaco" then
-        raceid = 1067
-      end
-      page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
-      doc = Nokogiri::HTML(URI.open(page))   
-      
-      table=doc.css('table')
-      rows=table.css('tr')
-      
-      @qualiresultsArray = []
-      $j = 1
-      while $j < rows.length
-        race_country = @country
-        place = rows[$j].css('td')[1].text
-        car = rows[$j].css('td')[2].text
-        driver_full_name = rows[$j].css('td')[3].elements[0].text + " " + rows[$j].css('td')[3].elements[1].text
-        driver = rows[$j].css('td')[3].elements[2].text
-        team = rows[$j].css('td')[4].text
-        @qualiresultsArray << Entry.new(race_country, place, car, driver_full_name, driver, team)
-        $j +=1
-      end
-      @allqualiresultsArray << @qualiresultsArray
-      
-      page = "https://www.formula1.com/en/results.html/#{@year}/races/#{raceid}/#{@country.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/race-result.html"
+      page = "https://www.formula1.com/en/results.html/#{@year}/races/#{@resultsArray[$i][2]}/#{@resultsArray[$i][1].downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
       doc = Nokogiri::HTML(URI.open(page))   
     
-      table=doc.css('table.resultsarchive-table')
-      rows=table.css('tr')
+      rows=doc.css('table').css('tbody').css('tr')
     
-      @raceresultsArray = []  
-      $j = 1
-      while $j < rows.length
-        race_country = @country
-        place = rows[$j].css('td')[1].text
-        car = rows[$j].css('td')[2].text
-        driver_full_name = rows[$j].css('td')[3].elements[0].text + " " + rows[$j].css('td')[3].elements[1].text
-        driver = rows[$j].css('td')[3].elements[2].text
-        team = rows[$j].css('td')[4].text
-        @raceresultsArray << Entry.new(race_country, place, car, driver_full_name, driver, team)
+      @driversArray = []
+      
+      $j = 0
+      while $j < rows.count
+        driver_car = rows[$j].css('td')[2].text
+        driver_team = rows[$j].css('td')[4].text
+        driver_fullname = rows[$j].css('td')[3].elements[0].text + " " + rows[$j].css('td')[3].elements[1].text
+        driver_shortname =  rows[$j].css('td')[3].elements[2].text
+        @driversArray << [driver_car, driver_team, driver_fullname, driver_shortname]
         $j +=1
       end
-      @allraceresultsArray << @raceresultsArray  
-      $i +=1
     end
-
+    @driversArray = @driversArray.uniq
+    
     # commit results to DB
-    @allqualiresultsArray.each do |race|
-      race.each do |result|
-        d = Driver.new
-        d.year = @year
-        d.name = result.driver_full_name
-        d.abbr_name = result.driver
-        d.team = result.team
-        d.save
-      end
+    @driversArray.each do |driver|
+      d = Driver.new
+      d.year = @year
+      d.name = driver.driver_fullname
+      d.abbr_name = driver.driver_shortname
+      d.team = driver.driver_team
+      d.save
     end
-  
-    @allraceresultsArray.each do |race|
-      race.each do |result|
-        d = Driver.new
-        d.year = @year
-        d.name = result.driver_full_name
-        d.abbr_name = result.driver
-        d.team = result.team
-        d.save
-      end
-    end
+    
     # render plain: @allqualiresultsArray #+ @allraceresultsArray
   end
 
