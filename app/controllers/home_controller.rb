@@ -606,6 +606,7 @@ class HomeController < ApplicationController
     
     # put element into an array @resultsArray (updated)
     @resultsArray = []
+    @driversArray = []
     $i = 0
     while $i < element.length
       if element[$i]["data-meetingkey"].blank?
@@ -621,12 +622,10 @@ class HomeController < ApplicationController
 
     $i = 0
     while $i < @resultsArray.length
-      page = "https://www.formula1.com/en/results.html/#{@year}/races/#{@resultsArray[$i][2]}/#{@resultsArray[$i][3].downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/race-result.html"
+      page = "https://www.formula1.com/en/results.html/#{@year}/races/#{@resultsArray[$i][2]}/#{@resultsArray[$i][3].split("/").last.split(".").first.gsub("_", "-").downcase}/race-result.html"
       doc = Nokogiri::HTML(URI.open(page))   
-    
+      
       rows=doc.css('table').css('tbody').css('tr')
-    
-      @driversArray = []
       
       $j = 0
       while $j < rows.count
@@ -645,9 +644,9 @@ class HomeController < ApplicationController
     @driversArray.each do |driver|
       d = Driver.new
       d.year = @year
-      d.name = driver.driver_fullname
-      d.abbr_name = driver.driver_shortname
-      d.team = driver.driver_team
+      d.name = driver[2]
+      d.abbr_name = driver[3]
+      d.team = driver[1]
       d.save
     end
 
