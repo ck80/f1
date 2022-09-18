@@ -613,14 +613,15 @@ class HomeController < ApplicationController
         race_round = element[$i]['data-roundtext']
         race_country = element[$i]['data-racecountryname']
         race_meetingkey = element[$i]['data-meetingkey']
-        @resultsArray << [race_round, race_country, race_meetingkey]
+        race_href = element[$i]['href']
+        @resultsArray << [race_round, race_country, race_meetingkey, race_href]
       end
       $i +=1
     end
 
     $i = 0
     while $i < @resultsArray.length
-      page = "https://www.formula1.com/en/results.html/#{@year}/races/#{@resultsArray[$i][2]}/#{@resultsArray[$i][1].downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/qualifying.html"
+      page = "https://www.formula1.com/en/results.html/#{@year}/races/#{@resultsArray[$i][2]}/#{@resultsArray[$i][3].downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}/race-result.html"
       doc = Nokogiri::HTML(URI.open(page))   
     
       rows=doc.css('table').css('tbody').css('tr')
