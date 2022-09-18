@@ -14,8 +14,8 @@
 
 development:
   adapter: postgresql
-  # host: <%= ENV['DB_HOST'] %>
-  host: 192.168.1.10
+  host: <%= ENV['DB_HOST'] %>
+  # host: 192.168.1.10
   username: postgres
   pool: 5
   database: myapp_development
